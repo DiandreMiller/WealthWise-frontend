@@ -1,0 +1,58 @@
+Apps that Provide similar services:
+
+Budgeting Apps:
+1. Mint:
+
+Tracks income and expenses.
+Categorizes spending and calculates disposable income.
+Offers insights into spending trends and saving opportunities.
+
+2. You Need a Budget (YNAB):
+
+Focuses on proactive budgeting with income and expense tracking.
+Helps users achieve financial goals and reduce debt.
+
+3. PocketGuard:
+
+Shows disposable income after accounting for bills and savings goals.
+Provides insights into spending habits.
+
+
+Investment Apps with Budgeting Features:
+
+4. Personal Capital:
+
+Combines financial planning with investment tracking.
+Offers a comprehensive dashboard for budgeting, net worth, and investment portfolio analysis.
+Provides advice on low-risk and high-risk investment opportunities.
+
+5. Wealthfront:
+
+Automated investment platform that includes budgeting and savings tools.
+Recommends investments based on user profiles and risk tolerance.
+
+6. Acorns:
+
+Focuses on micro-investing by rounding up purchases and investing the spare change.
+Includes features for setting and tracking financial goals.
+
+Apps Incorporating AI Recommendations:
+7. Betterment:
+
+Uses AI to provide personalized investment recommendations.
+Focuses on risk tolerance and financial goals.
+
+8. Robo-Advisors (e.g., Wealthsimple, Ellevest):
+
+Tailored investment advice based on disposable income and user preferences.
+Often integrated with education tools for financial literacy.
+
+Testing and Planning Platforms:
+9. Plaid (API Platform):
+
+Provides secure financial data aggregation.
+Used by many fintech apps for connecting user bank accounts to track income and expenses.
+
+10. YNAB API:
+
+Developers can extend or create new functionalities for budgeting and financial planning.

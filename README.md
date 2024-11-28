@@ -61,8 +61,8 @@ Welcome to my **Budgeting and Investment Recommendation App**! This project aims
 ## Deployment
 The app is deployed with **frontend** and **backend** hosted separately. Links to live environments and deployment details will be provided here:
 
-- **Frontend**: [Frontend Deployment Link](#)
-- **Backend**: [Backend Deployment Link](#)
+- **Frontend**: [Frontend Deployment Link](https://icapital-frontend.netlify.app/)
+- **Backend**: [Backend Deployment Link](https://icapital-financial-planner-backend.onrender.com/)
 
 ---
 

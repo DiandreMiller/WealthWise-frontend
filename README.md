@@ -63,6 +63,7 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 
 - **Frontend**: [Frontend Deployment Link](https://icapital-frontend.netlify.app/)
 - **Backend**: [Backend Deployment Link](https://icapital-financial-planner-backend.onrender.com/)
+- **Trello**: [Trello Link](https://trello.com/b/0KZf9ePw/icapital)
 
 ---
 

@@ -1,21 +1,21 @@
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-md fixed top-0 left-0 w-full z-10">
+    <nav className="bg-black shadow-md fixed top-0 left-0 w-full z-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 flex justify-between items-center py-4">
         {/* Logo Section */}
-        <div className="text-xl font-bold text-gray-800">
+        <div className="text-xl font-bold text-white">
           iCapital
         </div>
 
         {/* Nav Links */}
-        <ul className="flex space-x-8 text-gray-600">
-          <li className="hover:text-gray-900 transition">
+        <ul className="flex space-x-8 text-gray-300">
+          <li className="hover:text-white transition">
             <a href="#home" className="font-medium">Home</a>
           </li>
-          <li className="hover:text-gray-900 transition">
+          <li className="hover:text-white transition">
             <a href="#about" className="font-medium">About</a>
           </li>
-          <li className="hover:text-gray-900 transition">
+          <li className="hover:text-white transition">
             <a href="#contact" className="font-medium">Contact</a>
           </li>
         </ul>

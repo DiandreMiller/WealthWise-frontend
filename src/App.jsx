@@ -14,6 +14,7 @@ import FourOFour from './Pages/FourOFour';
 //Commons
 import Navbar from './Commons/Navbar';
 import Footer from './Commons/Footer';
+import LearnMore from './Pages/LearnMore';
 
 
 function App() {
@@ -27,9 +28,10 @@ function App() {
           <Route  element={<About />} path="/about"/>
           <Route  element={<Contact />} path="/contact"/>
           <Route  element={<Home />} path="/"/>
+          <Route  element={<LearnMore />} path='/learn-more' />
           <Route  element={<Login />} path="/login"/>
           <Route  element={<SignUp />} path="/signup"/>
-          <Route  element={<FourOFour />} path="*" />
+          <Route  element={<FourOFour />} path="/*" />
         </Routes>
         <Footer />
       </BrowserRouter>

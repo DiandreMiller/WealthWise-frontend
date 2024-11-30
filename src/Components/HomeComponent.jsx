@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const HomeComponent = () => {
   return (
-    <div className="flex flex-col min-h-screen w-screen bg-[rgb(17,24,39)] text-white overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-[rgb(17,24,39)] text-white">
       {/* Header Section */}
-      <header className="flex flex-col items-center justify-center pt-16">
+      <header className="flex flex-col items-center justify-center pt-32">
         <img src={wealthWise} alt="WealthWise Logo" className="w-48 mb-6" />
         <h1 className="text-4xl font-bold">Welcome to WealthWise</h1>
         <p className="text-lg text-green-500 mt-2">

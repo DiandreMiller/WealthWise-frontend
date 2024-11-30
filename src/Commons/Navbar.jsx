@@ -1,4 +1,5 @@
 import wealthWise from '../assets/wealthWise.png';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
@@ -6,7 +7,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-8 lg:px-16 flex justify-between items-center py-4">
         {/* Logo Section */}
         <div className="flex flex-col items-center">
-          <img src={wealthWise} alt="WealthWise Logo" className="w-12 h-12" />
+          <Link to='/'>
+            <img src={wealthWise} alt="WealthWise Logo" className="w-12 h-12" />
+          </Link>
           <div className="text-xl font-bold text-white mt-2">
             WealthWise
           </div>
@@ -30,7 +33,7 @@ const Navbar = () => {
           {/* Login Button */}
           <button
             className="px-4 py-2 text-white font-medium rounded-md"
-            style={{ backgroundColor: 'rgb(1, 119, 170)' }}
+            style={{ backgroundColor: 'rgb(59, 129, 246)' }}
           >
             Login
           </button>

@@ -20,13 +20,13 @@ const Navbar = () => {
           {/* Nav Links */}
           <ul className="flex space-x-8 text-gray-300">
             <li className="hover:text-white transition">
-              <a href="#home" className="font-medium">Home</a>
+              <a href="/" className="font-medium">Home</a>
             </li>
             <li className="hover:text-white transition">
-              <a href="#about" className="font-medium">About</a>
+              <a href="/about" className="font-medium">About</a>
             </li>
             <li className="hover:text-white transition">
-              <a href="#contact" className="font-medium">Contact</a>
+              <a href="/contact" className="font-medium">Contact</a>
             </li>
           </ul>
 

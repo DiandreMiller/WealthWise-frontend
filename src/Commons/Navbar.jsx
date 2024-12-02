@@ -31,12 +31,16 @@ const Navbar = () => {
           </ul>
 
           {/* Login Button */}
-          <button
-            className="px-4 py-2 text-white font-medium rounded-md"
-            style={{ backgroundColor: 'rgb(59, 129, 246)' }}
-          >
-            Login
-          </button>
+
+          <Link to='/login'>
+
+            <button
+              className="px-4 py-2 text-white font-medium rounded-md"
+              style={{ backgroundColor: 'rgb(59, 129, 246)' }}
+            >
+              Login
+            </button>
+          </Link>
         </div>
       </div>
     </nav>

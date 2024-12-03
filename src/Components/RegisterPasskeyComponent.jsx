@@ -44,7 +44,7 @@ const RegisterPasskeyComponent = ({ registerPasskey }) => {
 
       // Verify the credential with the backend
       await axios.post(`${backEndUrl}/verify-passkey`, {userId, email, credential });
-      navigate('/movies');  
+      navigate('/dashboard');  
     } catch (err) {
       console.error('Error during passkey registration:', err);
       setError('Failed to register passkey. Please try again.');

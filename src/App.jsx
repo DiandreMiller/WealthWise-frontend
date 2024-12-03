@@ -213,6 +213,7 @@ const loginUser = async (userData) => {
         <Route element={<Home />} path='/' />
         <Route element={<About />} path='/about' />
         {/* <Route element={<ForgotPasswordPage />} path='/forgot-password' /> */}
+        <Route element={<Contact />} path='/contact' />
         <Route element={<LearnMore />} path='/learn-more' />
         <Route
           element={<LoginAndSignUp userError={userError} formik={formik} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}

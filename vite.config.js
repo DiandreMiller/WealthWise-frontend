@@ -1,7 +1,23 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
+
 export default defineConfig({
   plugins: [react()],
-})
+  resolve: {
+    alias: {
+      '@components': '/src/Components',
+      '@pages': '/src/Pages',
+    },
+    dedupe: ['react', 'react-dom'],
+  },
+  base: '/',
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+  },
+  server: {
+    hmr: true,
+    open: true,
+  },
+});

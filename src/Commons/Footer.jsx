@@ -14,7 +14,7 @@ const Footer = () => {
             <a href="#terms" className="text-gray-300 hover:text-white text-sm transition">
               Terms of Service
             </a>
-            <a href="#contact" className="text-gray-300 hover:text-white text-sm transition">
+            <a href="/contact" className="text-gray-300 hover:text-white text-sm transition">
               Contact Us
             </a>
           </div>

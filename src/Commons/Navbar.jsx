@@ -32,7 +32,7 @@ const Navbar = () => {
 
           {/* Login Button */}
 
-          <Link to='/login'>
+          <Link to='/login-signup'>
 
             <button
               className="px-4 py-2 text-white font-medium rounded-md"

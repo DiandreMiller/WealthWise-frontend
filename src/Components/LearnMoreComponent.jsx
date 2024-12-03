@@ -27,13 +27,13 @@ const LearnMoreComponent = () => {
             WealthWise is here to guide you every step of the way.
           </p>
           <div className="flex justify-center space-x-4">
-            <a href="/sign-up">
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded transition-all duration-300">
+            <a href="/signup">
+              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 w-40">
                 Get Started
               </button>
             </a>
             <a href="/login">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded transition-all duration-300">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 w-40">
                 Login
               </button>
             </a>

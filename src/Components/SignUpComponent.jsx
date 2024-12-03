@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 const SignUpComponent = ({ formik, userError, togglePasswordVisibility, showPassword, toggleForm }) => {

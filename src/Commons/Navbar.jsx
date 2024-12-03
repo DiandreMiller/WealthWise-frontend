@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types';
 import wealthWise from '../assets/wealthWise.png';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ onLogOut }) => {
+
   return (
     <nav className="bg-black shadow-md fixed top-0 left-0 w-full z-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 flex justify-between items-center py-4">
@@ -32,19 +34,20 @@ const Navbar = () => {
 
           {/* Login Button */}
 
-          <Link to='/login-signup'>
-
-            <button
-              className="px-4 py-2 text-white font-medium rounded-md"
-              style={{ backgroundColor: 'rgb(59, 129, 246)' }}
-            >
-              Login
-            </button>
-          </Link>
+          <button
+            onClick={onLogOut}
+            className="px-4 py-2 bg-red-500 text-white font-medium rounded-md"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </nav>
   );
+};
+
+Navbar.propTypes = {
+  onLogOut: PropTypes.func.isRequired
 };
 
 export default Navbar;

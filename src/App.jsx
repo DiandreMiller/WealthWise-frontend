@@ -26,6 +26,7 @@ import LoginAndSignUp from './Pages/LoginAndSignUp';
 import FourOFour from './Pages/FourOFour';
 import LearnMore from './Pages/LearnMore';
 import Dashboard from './Pages/Dashboard';
+import RegisterPasskey from './Pages/RegisterPasskey';
 
 
 const AppContent = () => {
@@ -162,7 +163,7 @@ const loginUser = async (userData) => {
           response = await loginUser(userData);
         } else {
           response = await signUpUser(sanitizedValues);
-          navigate('/movies');
+          navigate('/dashboard');
           return;
         }
 
@@ -185,7 +186,7 @@ const loginUser = async (userData) => {
           if (!hasRegisteredPasskey) {
             navigate('/register-passkey', {state: {userId: response.userId, email: sanitizedValues.email}});
           } else {
-            navigate('/movies');
+            navigate('/dashboard');
           }
         }
       } catch (error) {
@@ -217,11 +218,11 @@ const loginUser = async (userData) => {
           element={<LoginAndSignUp userError={userError} formik={formik} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}
           path='/login-signup'
         />
-        {/* <Route
+        <Route
           element={<RegisterPasskey formik={formik.values} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}
           path='/register-passkey'
-        /> */}
-        <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/movies' />
+        />
+        <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard' />
         <Route element={<FourOFour />} path='*' />
       </Routes>
       <Footer />

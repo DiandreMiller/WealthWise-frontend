@@ -1,11 +1,11 @@
-import LogInAndSignUpComponent from '../Components/LogInAndSignUpComponent';
+import LoginAndSignUpComponent from '../Components/LoginAndSignUpComponent';
 import PropTypes from 'prop-types';
 
 const LoginAndSignUp = ({ userError, registerPasskey, loginUser, signUpUser, formik }) => {
 
     return (
         <div>
-            <LogInAndSignUpComponent userError={userError} formik={formik} registerPasskey={registerPasskey} loginUser={loginUser} signUpUser={signUpUser}/>
+            <LoginAndSignUpComponent userError={userError} formik={formik} registerPasskey={registerPasskey} loginUser={loginUser} signUpUser={signUpUser}/>
         </div>
     );
 

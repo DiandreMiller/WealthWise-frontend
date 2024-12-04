@@ -17,14 +17,11 @@ const DashboardComponent = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
       <header className="bg-gray-800 p-4">
         <h1 className="text-2xl font-bold">Welcome, {userData.name}!</h1>
       </header>
 
-      {/* Main Content */}
       <main className="p-6">
-        {/* Stats Section */}
         <section className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div className="bg-gray-800 p-6 rounded-lg shadow-md text-center">
             <h2 className="text-lg font-semibold">Current Balance</h2>
@@ -40,7 +37,6 @@ const DashboardComponent = () => {
           </div>
         </section>
 
-        {/* Recent Activities */}
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">Recent Activities</h2>
           <div className="bg-gray-800 p-4 rounded-lg shadow-md">
@@ -67,7 +63,6 @@ const DashboardComponent = () => {
           </div>
         </section>
 
-        {/* Action Buttons */}
         <section className="flex space-x-4 justify-center">
           <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full">
             Add Income

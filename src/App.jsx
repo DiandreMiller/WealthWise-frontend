@@ -134,14 +134,14 @@ const loginUser = async (userData) => {
           dateOfBirth: isLogin ? null : DOMPurify.sanitize(values.dateOfBirth),
           phoneNumber: isLogin ? null : DOMPurify.sanitize(values.phoneNumber),
         };
-
+  
         if (isLogin) {
           if (!sanitizedValues.identifier && sanitizedValues.email) {
             sanitizedValues.identifier = sanitizedValues.email;
             console.log('Email copied to identifier:', sanitizedValues.identifier);
           }
         }
-
+  
         const userData = isLogin
           ? {
               identifier: sanitizedValues.email || sanitizedValues.username || sanitizedValues.phoneNumber,
@@ -154,39 +154,40 @@ const loginUser = async (userData) => {
               dateOfBirth: sanitizedValues.dateOfBirth,
               phoneNumber: sanitizedValues.phoneNumber,
             };
-
+  
         console.log('userData before login:', userData);
-
+  
         let response;
-
+  
         if (isLogin) {
           response = await loginUser(userData);
+          console.log('response 10:', response);
         } else {
           response = await signUpUser(sanitizedValues);
-          navigate('/dashboard');
+          console.log('userId:', response.userId);
+          navigate(`/dashboard/${response.userId}`);
           return;
         }
-
+  
         console.log('Login response:', response);
-
+  
         const { token, expiresIn, hasRegisteredPasskey } = response;
-
+  
         if (token) {
           if (!expiresIn) {
             console.error('Token expiration not found in login response. Cannot set token.');
             throw new Error('Token expiration not found in login response. Cannot set token.');
           }
-
           const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
           console.log('Expiration date:', expirationDate);
           Cookies.set('token', token, { expires: expirationDate, secure: true, sameSite: 'strict' });
           console.log('Token:', token);
           login(token);
-
+  
           if (!hasRegisteredPasskey) {
-            navigate('/register-passkey', {state: {userId: response.userId, email: sanitizedValues.email}});
+            navigate('/register-passkey', { state: { userId: response.userId, email: sanitizedValues.email } });
           } else {
-            navigate('/dashboard');
+            navigate(`/dashboard/${response.userId}`);
           }
         }
       } catch (error) {
@@ -195,8 +196,9 @@ const loginUser = async (userData) => {
       }
     },
   });
+  
 
-    // Define the logout function
+    // Logout function
     const handleLogout = () => {
       logout(); 
       reset(); 
@@ -208,7 +210,7 @@ const loginUser = async (userData) => {
 
   return (
     <>
-      <Navbar onLogOut={handleLogout}/>
+      <Navbar onLogOut={handleLogout} isLogin={isLogin} />
       <Routes>
         <Route element={<Home />} path='/' />
         <Route element={<About />} path='/about' />
@@ -223,7 +225,8 @@ const loginUser = async (userData) => {
           element={<RegisterPasskey formik={formik.values} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}
           path='/register-passkey'
         />
-        <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard' />
+        <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/' />
+        {/* <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/:userId' /> */}
         <Route element={<FourOFour />} path='*' />
       </Routes>
       <Footer />

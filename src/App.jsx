@@ -12,7 +12,7 @@ import { AuthProvider, useAuth } from './authentication/AuthContext';
 import ProtectedRoute from './authentication/ProtectedRoute';
 import validationSchema from './Validations/validationSchema';
 import { base64ToArrayBuffer } from './utils/arrayBufferUtils';
-import { signUpUser, loginUser } from './utils/authUtils';
+// import { signUpUser, loginUser } from './utils/authUtils';
 
 // Commons
 import Navbar from './Commons/Navbar';

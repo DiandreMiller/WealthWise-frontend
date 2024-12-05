@@ -62,7 +62,7 @@ const LoginAndSignUpComponent = ({ formik, userError }) => {
 
         Cookies.set('token', token, { expires: expirationDate, secure: true, sameSite: 'strict' });
         login(token);
-        navigate('/movies');
+        navigate('/dashboard');
     } catch (error) {
         console.error('Error during authentication:', error); 
     }

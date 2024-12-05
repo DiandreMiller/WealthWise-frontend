@@ -88,6 +88,8 @@ const loginUser = async (userData) => {
     }
     const response = await axios.post(`${backEndUrl}/register-passkey`, { userId, email });
     const publicKeyCredentialCreationOptions = response.data;
+    console.log('publicKeyCredentialCreationOptions:', publicKeyCredentialCreationOptions);
+    console.log('Received challenge from backend:', publicKeyCredentialCreationOptions.challenge);
 
     const challengeBuffer = base64ToArrayBuffer(publicKeyCredentialCreationOptions.challenge);
     publicKeyCredentialCreationOptions.challenge = challengeBuffer;
@@ -188,6 +190,7 @@ const loginUser = async (userData) => {
             navigate('/register-passkey', { state: { userId: response.userId, email: sanitizedValues.email } });
           } else {
             navigate(`/dashboard/${response.userId}`);
+            
           }
         }
       } catch (error) {
@@ -225,8 +228,7 @@ const loginUser = async (userData) => {
           element={<RegisterPasskey formik={formik.values} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}
           path='/register-passkey'
         />
-        <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/' />
-        {/* <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/:userId' /> */}
+        <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/:userId' />
         <Route element={<FourOFour />} path='*' />
       </Routes>
       <Footer />

@@ -76,7 +76,7 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 ### **Installation**
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo-name/budgeting-app.git
+   git clone https://github.com/DiandreMiller/icapital-financial-planner-front-end.git
    cd budgeting-app
 
 2. Install dependencies:

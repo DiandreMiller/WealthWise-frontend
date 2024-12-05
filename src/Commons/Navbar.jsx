@@ -1,13 +1,27 @@
 import PropTypes from 'prop-types';
 import wealthWise from '../assets/wealthWise.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = ({ onLogOut }) => {
+const Navbar = ({ onLogOut, isLogin }) => {
+
+
+  const navigate = useNavigate();
+
+  const handleHomeDirect = (event) => {
+    event.preventDefault()
+    console.log('isLogIn:', isLogin);
+
+    if(isLogin) {
+      navigate('/dashboard')
+    } else {
+      navigate('/')
+    }
+  }
 
   return (
     <nav className="bg-black shadow-md fixed top-0 left-0 w-full z-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 flex justify-between items-center py-4">
-        {/* Logo Section */}
+        {/* Logo */}
         <div className="flex flex-col items-center">
           <Link to='/'>
             <img src={wealthWise} alt="WealthWise Logo" className="w-12 h-12" />
@@ -19,10 +33,9 @@ const Navbar = ({ onLogOut }) => {
 
         {/* Navigation and Login */}
         <div className="flex items-center space-x-8">
-          {/* Nav Links */}
           <ul className="flex space-x-8 text-gray-300">
             <li className="hover:text-white transition">
-              <a href="/" className="font-medium">Home</a>
+              <a href="/" onClick={handleHomeDirect} className="font-medium">Home</a>
             </li>
             <li className="hover:text-white transition">
               <a href="/about" className="font-medium">About</a>
@@ -47,7 +60,8 @@ const Navbar = ({ onLogOut }) => {
 };
 
 Navbar.propTypes = {
-  onLogOut: PropTypes.func.isRequired
+  onLogOut: PropTypes.func.isRequired,
+  isLogin: PropTypes.bool.isRequired
 };
 
 export default Navbar;

@@ -9,7 +9,14 @@ const RegisterPasskeyComponent = ({ registerPasskey }) => {
   const [error, setError] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
-  const { userId, email } = location.state || {};
+  // const { userId, email } = location.state || {};
+
+  //For testing
+  const { userId, email } = location.state || { userId: '', email: '' };
+  console.log('register passkey userId:', userId);
+  console.log('register passkey email:', email);
+  console.log('location state:', location.state);
+
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
  
@@ -37,14 +44,16 @@ const RegisterPasskeyComponent = ({ registerPasskey }) => {
 
       // Create the credential using the WebAuthn API
       const credential = await navigator.credentials.create({ publicKey: options });
-    //   console.log('Credential:', credential);
+      console.log('Credential:', credential);
 
-      // Use the registerPasskey prop here
+      // RegisterPasskey prop here
       await registerPasskey({userId, email, credential }); 
 
       // Verify the credential with the backend
       await axios.post(`${backEndUrl}/verify-passkey`, {userId, email, credential });
-      navigate('/dashboard');  
+      //test
+      // navigate('dashboard/51d9e5d5-3841-4f5f-a0d8-1b944c68f0ea')
+      navigate(`/dashboard/${userId}`);  
     } catch (err) {
       console.error('Error during passkey registration:', err);
       setError('Failed to register passkey. Please try again.');

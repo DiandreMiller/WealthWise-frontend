@@ -48,7 +48,7 @@ Tailored investment advice based on disposable income and user preferences.
 Often integrated with education tools for financial literacy.
 
 Testing and Planning Platforms:
-9. Plaid (API Platform):
+9. Plaid (API Platform): -- Most likely to use
 
 Provides secure financial data aggregation.
 Used by many fintech apps for connecting user bank accounts to track income and expenses.

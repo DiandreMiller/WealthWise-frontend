@@ -6,20 +6,22 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 
 
-const LoginAndSignUpComponent = ({ formik, userError }) => {
-  const [isLogin, setIsLogin] = useState(true);
+const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) => {
+  // const [isLogin, setIsLogin] = useState(true);
    // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
 
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleToggle = () => {
-    setIsLogin(!isLogin);
-  };
+  // const handleToggle = () => {
+  //   // toggleState()
+  //   setIsLogin(!isLogin);
+  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -204,7 +206,7 @@ const LoginAndSignUpComponent = ({ formik, userError }) => {
         </form>
         <p className="mt-4">
           {isLogin ? 'Don\'t have an account?' : 'Already have an account?'}
-          <button onClick={handleToggle} className="text-blue-400 hover:underline">
+          <button onClick={toggleState} className="text-blue-400 hover:underline">
             {isLogin ? 'Sign Up' : 'Login'}
           </button>
         </p>
@@ -236,7 +238,9 @@ LoginAndSignUpComponent.propTypes = {
       dateOfBirth: PropTypes.string
     })
   }).isRequired,
-  userError: PropTypes.string
+  userError: PropTypes.string,
+  toggleState: PropTypes.func.isRequired,
+  isLogin: PropTypes.bool.isRequired
 };
 
 export default LoginAndSignUpComponent;

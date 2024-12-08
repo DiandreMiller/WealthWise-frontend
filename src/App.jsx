@@ -2,7 +2,7 @@
 
 import './App.css';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import DOMPurify from 'dompurify';
 import Cookies from 'js-cookie';
@@ -165,9 +165,11 @@ const loginUser = async (userData) => {
           response = await loginUser(userData);
           console.log('response 10:', response);
         } else {
+          setIsLogin(isLogin => !isLogin);
+          console.log('login state:', isLogin);
           response = await signUpUser(sanitizedValues);
           console.log('userId:', response.userId);
-          navigate(`/dashboard/${response.userId}`);
+          navigate('/');
           return;
         }
   
@@ -209,7 +211,17 @@ const loginUser = async (userData) => {
       navigate('/'); 
   };
 
-  
+ 
+
+  const handleToggle = () => {
+    setIsLogin(prevIsLogin => !prevIsLogin);
+    console.log('state change');
+    console.log('isLogin:', isLogin);
+  };
+
+  useEffect(() => {
+    console.log('isLogin updated:', isLogin);
+  }, [isLogin]);
 
   return (
     <>
@@ -221,7 +233,7 @@ const loginUser = async (userData) => {
         <Route element={<Contact />} path='/contact' />
         <Route element={<LearnMore />} path='/learn-more' />
         <Route
-          element={<LoginAndSignUp userError={userError} formik={formik} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}
+          element={<LoginAndSignUp userError={userError} formik={formik} toggleState={handleToggle} isLogin={isLogin} />}
           path='/login-signup'
         />
         <Route

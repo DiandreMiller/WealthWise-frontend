@@ -1,11 +1,11 @@
 import LoginAndSignUpComponent from '../Components/LoginAndSignUpComponent';
 import PropTypes from 'prop-types';
 
-const LoginAndSignUp = ({ userError, registerPasskey, loginUser, signUpUser, formik }) => {
+const LoginAndSignUp = ({ formik, userError, toggleState, isLogin }) => {
 
     return (
         <div>
-            <LoginAndSignUpComponent userError={userError} formik={formik} registerPasskey={registerPasskey} loginUser={loginUser} signUpUser={signUpUser}/>
+            <LoginAndSignUpComponent userError={userError} formik={formik} toggleState={toggleState} isLogin={isLogin} />
         </div>
     );
 
@@ -16,7 +16,11 @@ LoginAndSignUp.propTypes = {
     registerPasskey: PropTypes.func,
     loginUser: PropTypes.func,
     signUpUser: PropTypes.func,
-    formik: PropTypes.object
+    formik: PropTypes.object,
+    setIsLogin: PropTypes.func.isRequired,
+    toggleLogin: PropTypes.func.isRequired,
+    toggleState: PropTypes.func.isRequired,
+    isLogin: PropTypes.bool.isRequired
 };
 
 export default LoginAndSignUp;

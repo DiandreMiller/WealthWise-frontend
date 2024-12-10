@@ -221,7 +221,9 @@ useEffect(() => {
               ...prevData,
               expenses: response.data, 
           }));
-          console.log('user expenses:', response.data);
+          console.log('user expenses:', response.data.map((expense) => {
+            console.log('expenses',expense.amount);
+          }));
       } catch (error) {
           console.error("Error fetching user expenses:", error);
       } finally {
@@ -237,7 +239,7 @@ useEffect(() => {
 
  // Function to add expense
  const addExpense = async () => {
-  console.log('user data Expense check:', userData);
+  console.log('user data Expense check:', expenseUser);
   const amount = parseFloat(expenseAmount);
 
   if (isNaN(amount) || amount <= 0 || expenseDescription.trim() === "") {
@@ -258,21 +260,22 @@ useEffect(() => {
       // Send POST request to backend to create a new expense record
       const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
           user_id: userId,
-          amount: amount.toFixed(2), // Ensure a consistent format for amounts
+          amount: amount.toFixed(2), 
           category: expenseDescription,
           date_incurred: dateIncurred,
-          created_at: new Date().toISOString(), // ISO format for consistency
+          created_at: new Date().toISOString(), 
       });
 
       console.log("Response add expense:", response.data);
 
       // Update user data directly
-      setUserData((prevData) => {
-          console.log("prevData:", prevData);
+      setExpenseUser((prevData) => {
+          console.log("prevData before adding expense:", prevData);
+          console.log("Type of prevData:", Array.isArray(prevData) ? "Array" : typeof prevData);
 
           // Add the new expense object
           const newExpense = {
-              id: response.data.id, // Use the ID returned by the backend
+              id: response.data.id, 
               user_id: userId,
               amount: amount.toFixed(2),
               category: expenseDescription,
@@ -282,7 +285,7 @@ useEffect(() => {
           };
           return {
               ...prevData,
-              expenses: [...(prevData.amount || []), newExpense], 
+              expenses: [...(prevData.expenses || []), newExpense], 
               stats: {
                   ...prevData.stats,
                   expenses: (parseFloat(prevData.amount) + parseFloat(amount)).toFixed(2),

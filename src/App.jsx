@@ -41,7 +41,7 @@ const AppContent = () => {
   const signUpUser = async (userData) => {
     try {
       const response = await axios.post(`${backEndUrl}/sign-up`, userData);
-      console.log('Sign-up response:', response.data);
+      // console.log('Sign-up response:', response.data);
       
       if (response.data && response.data.message === "User created") {
         return response.data.user; 
@@ -58,10 +58,10 @@ const AppContent = () => {
 const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${backEndUrl}/sign-in`, userData);
-    console.log('response:', response);
-    console.log('message:', response.data.message);
+    // console.log('response:', response);
+    // console.log('message:', response.data.message);
     if (response.data && response.data.message === "Sign in successful") {
-      console.log('Login response App.js:', response.data);
+      // console.log('Login response App.js:', response.data);
       return {
         token: response.data.token,
         userId: response.data.user.id,
@@ -80,7 +80,7 @@ const loginUser = async (userData) => {
 
 
   const registerPasskey = async (userId, email) => {
-    console.log('Registering passkey with userId:', userId, 'and email:', email);
+    // console.log('Registering passkey with userId:', userId, 'and email:', email);
 
     if (!userId || !email) {
       console.error('User ID or Email is undefined!');
@@ -88,8 +88,8 @@ const loginUser = async (userData) => {
     }
     const response = await axios.post(`${backEndUrl}/register-passkey`, { userId, email });
     const publicKeyCredentialCreationOptions = response.data;
-    console.log('publicKeyCredentialCreationOptions:', publicKeyCredentialCreationOptions);
-    console.log('Received challenge from backend:', publicKeyCredentialCreationOptions.challenge);
+    // console.log('publicKeyCredentialCreationOptions:', publicKeyCredentialCreationOptions);
+    // console.log('Received challenge from backend:', publicKeyCredentialCreationOptions.challenge);
 
     const challengeBuffer = base64ToArrayBuffer(publicKeyCredentialCreationOptions.challenge);
     publicKeyCredentialCreationOptions.challenge = challengeBuffer;
@@ -98,7 +98,7 @@ const loginUser = async (userData) => {
     let credential;
     try {
       credential = await navigator.credentials.create({ publicKey: publicKeyCredentialCreationOptions });
-      console.log('Created credential:', credential);
+      // console.log('Created credential:', credential);
     } catch (error) {
       console.error('Error during credential creation:', error);
       throw error;
@@ -140,7 +140,7 @@ const loginUser = async (userData) => {
         if (isLogin) {
           if (!sanitizedValues.identifier && sanitizedValues.email) {
             sanitizedValues.identifier = sanitizedValues.email;
-            console.log('Email copied to identifier:', sanitizedValues.identifier);
+            // console.log('Email copied to identifier:', sanitizedValues.identifier);
           }
         }
   
@@ -157,23 +157,23 @@ const loginUser = async (userData) => {
               phoneNumber: sanitizedValues.phoneNumber,
             };
   
-        console.log('userData before login:', userData);
+        // console.log('userData before login:', userData);
   
         let response;
   
         if (isLogin) {
           response = await loginUser(userData);
-          console.log('response 10:', response);
+          // console.log('response 10:', response);
         } else {
           setIsLogin(isLogin => !isLogin);
-          console.log('login state:', isLogin);
+          // console.log('login state:', isLogin);
           response = await signUpUser(sanitizedValues);
-          console.log('userId:', response.userId);
+          // console.log('userId:', response.userId);
           navigate('/');
           return;
         }
   
-        console.log('Login response:', response);
+        // console.log('Login response:', response);
   
         const { token, expiresIn, hasRegisteredPasskey } = response;
   
@@ -183,9 +183,9 @@ const loginUser = async (userData) => {
             throw new Error('Token expiration not found in login response. Cannot set token.');
           }
           const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-          console.log('Expiration date:', expirationDate);
+          // console.log('Expiration date:', expirationDate);
           Cookies.set('token', token, { expires: expirationDate, secure: true, sameSite: 'strict' });
-          console.log('Token:', token);
+          // console.log('Token:', token);
           login(token);
   
           if (!hasRegisteredPasskey) {
@@ -215,12 +215,12 @@ const loginUser = async (userData) => {
 
   const handleToggle = () => {
     setIsLogin(prevIsLogin => !prevIsLogin);
-    console.log('state change');
-    console.log('isLogin:', isLogin);
+    // console.log('state change');
+    // console.log('isLogin:', isLogin);
   };
 
   useEffect(() => {
-    console.log('isLogin updated:', isLogin);
+    // console.log('isLogin updated:', isLogin);
   }, [isLogin]);
 
   return (

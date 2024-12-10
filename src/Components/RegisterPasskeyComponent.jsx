@@ -13,9 +13,9 @@ const RegisterPasskeyComponent = ({ registerPasskey }) => {
 
   //For testing
   const { userId, email } = location.state || { userId: '', email: '' };
-  console.log('register passkey userId:', userId);
-  console.log('register passkey email:', email);
-  console.log('location state:', location.state);
+  // console.log('register passkey userId:', userId);
+  // console.log('register passkey email:', email);
+  // console.log('location state:', location.state);
 
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
@@ -44,7 +44,7 @@ const RegisterPasskeyComponent = ({ registerPasskey }) => {
 
       // Create the credential using the WebAuthn API
       const credential = await navigator.credentials.create({ publicKey: options });
-      console.log('Credential:', credential);
+      // console.log('Credential:', credential);
 
       // RegisterPasskey prop here
       await registerPasskey({userId, email, credential }); 

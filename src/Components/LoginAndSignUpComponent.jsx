@@ -1,85 +1,12 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../authentication/AuthContext';
-import Cookies from 'js-cookie';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-
 const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) => {
-  // const [isLogin, setIsLogin] = useState(true);
-   // eslint-disable-next-line no-unused-vars
-  const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [loading, setLoading] = useState(false);
-  // const [isLogin, setIsLogin] = useState(false);
-
-  const navigate = useNavigate();
-  const { login } = useAuth();
-
-  // const handleToggle = () => {
-  //   // toggleState()
-  //   setIsLogin(!isLogin);
-  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  };
-
-
-  const authenticateWithPasskey = async (identifier, password) => {
-    // console.log('Initiating passkey authentication for user input:',identifier); 
-
-    try {
-        // const payload = { identifier, password, username: formik.values.username, email: formik.values.email };
-        // console.log('Payload:', payload);
-        const userIdentifier = identifier || (isLogin ? (formik.values.email || formik.values.username) : '');
-
-        const response = await axios.post(`${import.meta.env.REACT_APP_BACKEND_API}/authenticate-passkey`, { identifier: userIdentifier });
-        const publicKeyCredentialRequestOptions = response.data;
-        // console.log('Public Key Credential Request Options:', publicKeyCredentialRequestOptions);
-
-        const credential = await navigator.credentials.get({ publicKey: publicKeyCredentialRequestOptions });
-        // console.log('Created credential:', credential); 
-
-        const webauthnid = credential.id;
-        const webauthnpublickey = credential.rawId;
-
-        const existingUserResponse = await axios.post(`${import.meta.env.REACT_APP_BACKEND_API}/verify-passkey`, {
-            credential,
-            identifier: userIdentifier,
-            password,
-            userId: publicKeyCredentialRequestOptions.user.id,
-            webauthnid, 
-            webauthnpublickey 
-        });
-
-        // console.log('Verification Response:', existingUserResponse.data); 
-
-        const { token, expiresIn } = existingUserResponse.data;
-        // console.log('Received token:', token); 
-        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
-        // console.log('Token expiration date:', expirationDate); 
-
-        Cookies.set('token', token, { expires: expirationDate, secure: true, sameSite: 'strict' });
-        login(token);
-        navigate('/dashboard');
-    } catch (error) {
-        console.error('Error during authentication:', error); 
-    }
-  };
-
-  const handlePasskeyLogin = async () => {
-    setLoading(true);
-    try {
-        await authenticateWithPasskey(formik.values.identifier, formik.values.password);
-    } catch (error) {
-        console.error('Error during passkey login:', error);
-        setError(error.response?.data?.error || 'Failed to authenticate with passkey. Please try again.');
-    } finally {
-      setLoading(false);
-    }
   };
 
 
@@ -185,24 +112,6 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
           >
             {isLogin ? 'Login' : 'Sign Up'}
           </button>
-  
-          {isLogin ? (
-            <button
-              onClick={handlePasskeyLogin}
-              type="button"
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded w-full mt-4"
-            >
-              Login with Passkey
-            </button>
-          ) : (
-            <button
-              onClick={handlePasskeyLogin}
-              type="button"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full mt-4"
-            >
-              Sign Up with Passkey
-            </button>
-          )}
         </form>
         <p className="mt-4">
           {isLogin ? 'Don\'t have an account?' : 'Already have an account?'}
@@ -213,9 +122,6 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
       </div>
     </div>
   );
-  
-  
-  
 };
 
 LoginAndSignUpComponent.propTypes = {

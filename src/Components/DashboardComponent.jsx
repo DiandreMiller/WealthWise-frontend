@@ -19,7 +19,8 @@ const DashboardComponent = () => {
   const [newActualExpenses, setNewActualExpenses] = useState('');
   const [updatedIncome, setUpdatedIncome] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false);
+  const [showAllIncome, setShowAllIncome] = useState(false);
+  const [showAllExpense, setShowAllExpense] = useState(false);
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
   console.log('backEndUrl dashboard:', backEndUrl);
@@ -531,7 +532,7 @@ const createBudget = async (budgetData) => {
               </tr>
             </thead>
             <tbody>
-              {userData?.slice(0, showAll ? userData.length : 4).reverse().map((income) => (
+              {userData?.slice(0, showAllIncome ? userData.length : 4).reverse().map((income) => (
                 <tr key={income.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">{income.source}</td>
                   <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">{formatCurrency(income.amount)}</td>
@@ -560,9 +561,9 @@ const createBudget = async (budgetData) => {
      </div>
   <button
     className="mt-4 text-blue-500 hover:underline"
-    onClick={() => setShowAll((prevState) => !prevState)}
+    onClick={() => setShowAllIncome((prevState) => !prevState)}
   >
-    {showAll ? "See Less" : "See More"}
+    {showAllIncome ? "See Less" : "See More"}
   </button>
       </div>
 
@@ -579,7 +580,7 @@ const createBudget = async (budgetData) => {
               </tr>
             </thead>
             <tbody>
-              {userData?.slice(0, showAll ? userData.length : 4).reverse().map((income) => (
+              {userData?.slice(0, showAllExpense ? userData.length : 4).reverse().map((income) => (
                 <tr key={income.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">{income.source}</td>
                   <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">{formatCurrency(income.amount)}</td>
@@ -608,9 +609,9 @@ const createBudget = async (budgetData) => {
      </div>
   <button
     className="mt-4 text-blue-500 hover:underline"
-    onClick={() => setShowAll((prevState) => !prevState)}
+    onClick={() => setShowAllExpense((prevState) => !prevState)}
   >
-    {showAll ? "See Less" : "See More"}
+    {showAllExpense ? "See Less" : "See More"}
   </button>
 </div>
 

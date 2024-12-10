@@ -11,6 +11,7 @@ const DashboardComponent = () => {
   const [incomeAmount, setIncomeAmount] = useState("");
   const [expenseDescription, setExpenseDescription] = useState("");
   const [expenseAmount, setExpenseAmount] = useState("");
+  const [expenseUser, setExpenseUser] = useState({ expenses: [] });
   const [newAmount, setNewAmount] = useState('');
   const [newSource, setNewSource] = useState('');
   const [newMonthlyIncomeGoal, setNewMonthlyIncomeGoal] = useState('');
@@ -23,24 +24,8 @@ const DashboardComponent = () => {
   const [showAllExpense, setShowAllExpense] = useState(false);
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
-  console.log('backEndUrl dashboard:', backEndUrl);
 
-
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     try {
-  //       const response = await axios.get(`${backEndUrl}/users/${userId}/budget`);
-  //       setUserData(response.data);
-  //       setUpdatedIncome(response.data);
-  //       console.log('updatedIncome:', response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching user data:", error);
-  //     }
-  //   };
-  
-  //   fetchUserData();
-  // }, [userId, backEndUrl]);
-  
+//Get income
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
@@ -157,8 +142,6 @@ try {
         // Update user data directly
         setUserData((prevData) => {
             console.log("prevData:", prevData);
-
-            // Add the new income object
             const newIncome = {
                 id: response.data.id, 
                 user_id: userId,
@@ -181,7 +164,6 @@ try {
         alert("There was an error adding your income. Please try again.");
     }
 };
-
 
 
 
@@ -229,52 +211,100 @@ try {
 }
 };
 
+//Get Expense
+useEffect(() => {
+  const fetchExpensesData = async () => {
+      setLoading(true);
+      try {
+          const response = await axios.get(`${backEndUrl}/users/${userId}/expenses`);
+          setExpenseUser((prevData) => ({
+              ...prevData,
+              expenses: response.data, 
+          }));
+          console.log('user expenses:', response.data);
+      } catch (error) {
+          console.error("Error fetching user expenses:", error);
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  if (userId && backEndUrl) {
+      fetchExpensesData();
+  }
+}, [userId, backEndUrl]);
+
+
  // Function to add expense
  const addExpense = async () => {
+  console.log('user data Expense check:', userData);
   const amount = parseFloat(expenseAmount);
 
   if (isNaN(amount) || amount <= 0 || expenseDescription.trim() === "") {
-      alert("Please provide valid expense description and amount.");
+      alert("Please provide a valid expense description and amount.");
       return;
   }
 
-  const dateIncurred = new Date().toLocaleDateString('en-CA'); // Format date as 'YYYY-MM-DD'
+  const dateIncurred = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
+
+  console.log("Attempting to add expense with details:", {
+      userId,
+      amount,
+      category: expenseDescription,
+      dateIncurred,
+  });
 
   try {
       // Send POST request to backend to create a new expense record
-      await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
-      user_id: userId,            
-      amount: amount,
-      category: expenseDescription,
-      date_incurred: dateIncurred, 
-  });
+      const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
+          user_id: userId,
+          amount: amount.toFixed(2), // Ensure a consistent format for amounts
+          category: expenseDescription,
+          date_incurred: dateIncurred,
+          created_at: new Date().toISOString(), // ISO format for consistency
+      });
 
-// Update user data directly
-setUserData(prevData => {
-  const newExpenseAmount = prevData.stats.expenses + amount;
-  const newBalance = prevData.stats.balance - amount;
-  const newActivity = { type: "Expense", description: expenseDescription, amount, date: dateIncurred };
+      console.log("Response add expense:", response.data);
 
-  return {
-    ...prevData,
-    stats: {
-      ...prevData.stats,
-      expenses: newExpenseAmount,
-      balance: newBalance,
-    },
-    recentActivities: [newActivity, ...prevData.recentActivities],
-  };
-});
+      // Update user data directly
+      setUserData((prevData) => {
+          console.log("prevData:", prevData);
 
-// Clear inputs and close the form
-setExpenseDescription("");
-setExpenseAmount("");
-setIsAddingExpense(false);
-} catch (error) {
-console.error("Error adding expense:", error);
-alert("There was an error adding your expense. Please try again.");
-}
+          // Add the new expense object
+          const newExpense = {
+              id: response.data.id, // Use the ID returned by the backend
+              user_id: userId,
+              amount: amount.toFixed(2),
+              category: expenseDescription,
+              date_incurred: dateIncurred,
+              created_at: new Date().toISOString(),
+              User: prevData?.User || null,
+          };
+          return {
+              ...prevData,
+              expenses: [...(prevData.expenses || []), newExpense], 
+              stats: {
+                  ...prevData.stats,
+                  expenses: (parseFloat(prevData.stats.expenses) + parseFloat(amount)).toFixed(2),
+                  balance: (parseFloat(prevData.stats.balance) - parseFloat(amount)).toFixed(2),
+              },
+              recentActivities: [
+                  { type: "Expense", description: expenseDescription, amount: amount.toFixed(2), date: dateIncurred },
+                  ...(prevData.recentActivities || []),
+              ],
+          };
+      });
+
+      // Reset form fields
+      setExpenseDescription("");
+      setExpenseAmount("");
+      setIsAddingExpense(false);
+  } catch (error) {
+      console.error("Error adding expense:", error);
+      alert("There was an error adding your expense. Please try again.");
+  }
 };
+
 
 // Function to create a budget
 const createBudget = async (budgetData) => {
@@ -580,21 +610,21 @@ const createBudget = async (budgetData) => {
               </tr>
             </thead>
             <tbody>
-              {userData?.slice(0, showAllExpense ? userData.length : 4).reverse().map((income) => (
-                <tr key={income.id} className="hover:bg-gray-50">
-                  <td className="border border-gray-300 px-4 py-2 text-gray-800">{income.source}</td>
-                  <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">{formatCurrency(income.amount)}</td>
-                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">{income.date_received}</td>
+              {expenseUser.expenses?.slice(0, showAllExpense ? userData.length : 4).reverse().map((expense) => (
+                <tr key={expense.id} className="hover:bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 text-gray-800">{expense.category}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">{formatCurrency(expense.amount)}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">{expense.date_incurred}</td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     <button
                       className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
-                      onClick={() => updateIncome(income.id, newAmount, newSource)}
+                      onClick={() => updateIncome(expense.id, newAmount, newSource)}
                     >
                       Edit
                     </button>
                     <button
                       className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
-                      onClick={() => deleteIncome(income.id)}
+                      onClick={() => deleteIncome(expense.id)}
                     >
                       Delete
                     </button>
@@ -605,7 +635,7 @@ const createBudget = async (budgetData) => {
           </table>
 
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">
-       Total Income: {totalIncome(userData)}
+       Total Expenses: {totalIncome(expenseUser.expenses)}
      </div>
   <button
     className="mt-4 text-blue-500 hover:underline"
@@ -613,15 +643,10 @@ const createBudget = async (budgetData) => {
   >
     {showAllExpense ? "See Less" : "See More"}
   </button>
-</div>
+      </div>
 
     </div>
   );
-  
-  
-  
-  
-  
   
   
   

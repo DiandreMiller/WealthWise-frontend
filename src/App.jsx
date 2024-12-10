@@ -225,7 +225,7 @@ const loginUser = async (userData) => {
 
   return (
     <>
-      <Navbar onLogOut={handleLogout} isLogin={isLogin} />
+      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} />
       <Routes>
         <Route element={<Home />} path='/' />
         <Route element={<About />} path='/about' />

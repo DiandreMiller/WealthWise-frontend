@@ -282,11 +282,11 @@ useEffect(() => {
           };
           return {
               ...prevData,
-              expenses: [...(prevData.expenses || []), newExpense], 
+              expenses: [...(prevData.amount || []), newExpense], 
               stats: {
                   ...prevData.stats,
-                  expenses: (parseFloat(prevData.stats.expenses) + parseFloat(amount)).toFixed(2),
-                  balance: (parseFloat(prevData.stats.balance) - parseFloat(amount)).toFixed(2),
+                  expenses: (parseFloat(prevData.amount) + parseFloat(amount)).toFixed(2),
+                  balance: (parseFloat(prevData.amount) - parseFloat(amount)).toFixed(2),
               },
               recentActivities: [
                   { type: "Expense", description: expenseDescription, amount: amount.toFixed(2), date: dateIncurred },
@@ -562,7 +562,7 @@ const createBudget = async (budgetData) => {
               </tr>
             </thead>
             <tbody>
-              {userData?.slice(0, showAllIncome ? userData.length : 4).reverse().map((income) => (
+              {[...userData]?.reverse().slice(0, showAllIncome ? userData.length : 4).map((income) => (
                 <tr key={income.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">{income.source}</td>
                   <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">{formatCurrency(income.amount)}</td>
@@ -610,7 +610,7 @@ const createBudget = async (budgetData) => {
               </tr>
             </thead>
             <tbody>
-              {expenseUser.expenses?.slice(0, showAllExpense ? userData.length : 4).reverse().map((expense) => (
+              {expenseUser.expenses?.reverse().slice(0, showAllExpense ? userData.length : 4).map((expense) => (
                 <tr key={expense.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">{expense.category}</td>
                   <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">{formatCurrency(expense.amount)}</td>

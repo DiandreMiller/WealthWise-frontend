@@ -25,6 +25,8 @@ const DashboardComponent = () => {
   const [showAllExpense, setShowAllExpense] = useState(false);
   const [isEditingIncome, setIsEditingIncome] = useState(false); 
   const [incomeToEdit, setIncomeToEdit] = useState(null); 
+  const [deletedIncome, setDeleteIncome] = useState(false);
+  const [updateEditedIncome, setUpdateEditedIncome] = useState(false);
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
@@ -48,7 +50,7 @@ const DashboardComponent = () => {
     if (userId && backEndUrl) {
       fetchUserData();
     }
-  }, [userId, backEndUrl, updatedIncome]);
+  }, [userId, backEndUrl, deletedIncome, updateEditedIncome]);
   
   const formatCurrency = (value) => {
     const numberValue = typeof value === 'number' ? value : parseFloat(value);
@@ -108,6 +110,8 @@ const DashboardComponent = () => {
           income: updatedIncomes,
         };
       });
+
+      setUpdateEditedIncome(previous => !previous);
   
       alert("Income updated successfully!");
       setIsEditingIncome(false);
@@ -201,6 +205,8 @@ try {
     const updatedActivities = prevData.recentActivities.filter(
       activity => !(activity.type === "Income" && activity.id === incomeId)
     );
+
+    setDeleteIncome(previous => !previous);
 
     return {
       ...prevData,

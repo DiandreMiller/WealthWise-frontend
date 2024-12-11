@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+import IncomeEditModal from './IncomeEditModal'
 
 const DashboardComponent = () => {
   const { userId } = useParams();
@@ -22,6 +23,8 @@ const DashboardComponent = () => {
   const [loading, setLoading] = useState(true);
   const [showAllIncome, setShowAllIncome] = useState(false);
   const [showAllExpense, setShowAllExpense] = useState(false);
+  const [isEditingIncome, setIsEditingIncome] = useState(false); 
+  const [incomeToEdit, setIncomeToEdit] = useState(null); 
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
@@ -58,7 +61,6 @@ const DashboardComponent = () => {
   }
 
   // Function for total income
-
   const totalIncome = (incomes) => {
     const sumOfIncomes = incomes.reduce((a, b) => a + parseFloat(b.amount), 0);
     return formatCurrency(sumOfIncomes); 
@@ -67,47 +69,54 @@ const DashboardComponent = () => {
   // Function to update income
   const updateIncome = async (incomeId, updatedAmount, updatedSource) => {
     if (!incomeId || isNaN(parseFloat(updatedAmount)) || updatedAmount <= 0 || updatedSource.trim() === "") {
-        alert("Please provide valid income details.");
-        return;
-}
+      alert("Please provide valid income details.");
+      return;
+    }
 
-try {
- //Update Income put request
-  const response = await axios.put(`/users/${userId}/income/${incomeId}`, {
-    amount: updatedAmount,
-    source: updatedSource,
-  });
+    console.log(`User ID: ${userId}`);
+    console.log(`Income ID: ${incomeId}`);
+    console.log('Sending data to update income:', {
+      amount: updatedAmount,
+      source: updatedSource,
+    });
+  
+    try {
+      // Send PUT request to update income
+      const response = await axios.put(`${backEndUrl}/users/${userId}/income/${incomeId}`, {
+        amount: updatedAmount,
+        source: updatedSource,
+      });
+  
+      const updatedIncome = response.data;
+      console.log("Updated income:", updatedIncome);
+  
+      setUserData(prevData => {
 
-  const updatedIncome = response.data;
-  console.log('updatedIncome:', updatedIncome);
+        if(!prevData || !Array.isArray(prevData.income)) {
+          console.error("Invalid income data:", prevData);
+          return prevData;
+        }
 
-  setUserData(prevData => {
-    const updatedActivities = prevData.recentActivities.map(activity =>
-      activity.type === "Income" && activity.id === incomeId
-        ? { ...activity, amount: updatedIncome.amount, description: updatedIncome.source }
-        : activity
-    );
-
-    const newIncome = prevData.stats.income - 
-                      prevData.recentActivities.find(a => a.id === incomeId)?.amount + 
-                      updatedIncome.amount;
-
-    return {
-      ...prevData,
-      stats: {
-        ...prevData.stats,
-        income: newIncome,
-      },
-      recentActivities: updatedActivities,
-    };
-  });
-
-  alert("Income updated successfully!");
-} catch (error) {
-  console.error("Error updating income:", error);
-  alert("There was an error updating your income. Please try again.");
-}
-};
+        const updatedIncomes = prevData.income.map(income =>
+          income.id === incomeId
+            ? { ...income, amount: updatedIncome.amount, source: updatedIncome.source }
+            : income
+        );
+  
+        return {
+          ...prevData,
+          income: updatedIncomes,
+        };
+      });
+  
+      alert("Income updated successfully!");
+      setIsEditingIncome(false);
+    } catch (error) {
+      console.error("Error updating income:", error);
+      alert("There was an error updating your income. Please try again.");
+    }
+  };
+  
 
 
   //Function to add income
@@ -139,7 +148,7 @@ try {
 
         console.log("Response add income:", response);
 
-        // Update user data directly
+        // Update user data 
         setUserData((prevData) => {
             console.log("prevData:", prevData);
             const newIncome = {
@@ -178,7 +187,7 @@ try {
   // Send DELETE request to backend to remove the income record
   await axios.delete(`${backEndUrl}/users/${userId}/income/${incomeId}`);
 
-  // Update the state to remove the deleted income from activities and stats
+  // Update the state to remove the deleted income
   setUserData(prevData => {
     const deletedIncome = prevData.recentActivities.find(
       activity => activity.type === "Income" && activity.id === incomeId
@@ -551,6 +560,18 @@ const createBudget = async (budgetData) => {
           )}
         </div>
       </main>
+
+    {/* Edit Income Modal */}
+      <div>
+        {isEditingIncome && (
+          <IncomeEditModal 
+            income={incomeToEdit}
+            onClose={() => setIsEditingIncome(false)} 
+            onSave={updateIncome}
+            onSubmit={(id, amount, source) => updateIncome(id, amount, source)}
+          />
+        )}
+    </div>
   
       {/* Added Income Section */}
       <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
@@ -573,7 +594,11 @@ const createBudget = async (budgetData) => {
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     <button
                       className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
-                      onClick={() => updateIncome(income.id, newAmount, newSource)}
+                      onClick={() => {
+                        setIncomeToEdit(income); 
+                        setIsEditingIncome(true); 
+                      }}
+                      
                     >
                       Edit
                     </button>

@@ -48,7 +48,7 @@ const DashboardComponent = () => {
     if (userId && backEndUrl) {
       fetchUserData();
     }
-  }, [userId, backEndUrl]);
+  }, [userId, backEndUrl, updatedIncome]);
   
   const formatCurrency = (value) => {
     const numberValue = typeof value === 'number' ? value : parseFloat(value);

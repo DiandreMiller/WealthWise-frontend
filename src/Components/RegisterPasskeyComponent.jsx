@@ -63,7 +63,7 @@ const RegisterPasskeyComponent = ({ registerPasskey }) => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white mt-10">
       <header className="flex flex-col items-center justify-center pt-16">
         <img src={wealthWise} alt="Red Canary" className="w-48 mb-6" />
         <h1 className="text-4xl font-bold">Login With Your Passkey</h1>

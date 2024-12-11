@@ -193,31 +193,32 @@ try {
 
   // Update the state to remove the deleted income
   setUserData(prevData => {
-    const deletedIncome = prevData.recentActivities.find(
-      activity => activity.type === "Income" && activity.id === incomeId
+
+    const income = Array.isArray(prevData.income) ? prevData.income : [];
+
+    const deletedIncome = income.find(
+      activity => activity.id === incomeId
     );
 
-    if (!deletedIncome) return prevData;
+    if (!deletedIncome) {
+      return prevData;
+    }
 
-    const newIncome = prevData.stats.income - deletedIncome.amount;
-    const newBalance = prevData.stats.balance - deletedIncome.amount;
+    const newIncome = income.filter(activity => activity.id !== incomeId);
+    const newBalance = newIncome.reduce((total, item) => total + parseFloat(item.amount),0);
 
-    const updatedActivities = prevData.recentActivities.filter(
-      activity => !(activity.type === "Income" && activity.id === incomeId)
-    );
 
-    setDeleteIncome(previous => !previous);
+    
 
     return {
       ...prevData,
-      stats: {
-        ...prevData.stats,
         income: newIncome,
         balance: newBalance,
-      },
-      recentActivities: updatedActivities,
+     
     };
   });
+
+  setDeleteIncome(previous => !previous);
 
   alert("Income record deleted successfully!");
 } catch (error) {
@@ -417,7 +418,7 @@ const createBudget = async (budgetData) => {
   }
 
   return (
-    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg mt-24">
       <header className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Financial Dashboard</h1>
       </header>

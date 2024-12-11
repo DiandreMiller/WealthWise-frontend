@@ -29,7 +29,7 @@ const Authentication = () => {
         userVerification: 'preferred',  // Optional user verification level
       });
 
-      // Step 3: Send the authentication response to your server for verification
+      // Send the authentication response to your server for verification
       const verificationResponse = await axios.post('/authenticate-passkey', {
         authentication,
       });

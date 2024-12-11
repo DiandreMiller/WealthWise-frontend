@@ -11,7 +11,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+    <div className={`flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white ${!isLogin ? 'mt-12' : ''}`}>
       <div className="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-3xl font-bold mb-6 text-center">
           {isLogin ? 'Login' : 'Sign Up'}

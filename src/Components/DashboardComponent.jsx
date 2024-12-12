@@ -233,43 +233,42 @@ const DashboardComponent = () => {
     if (!incomeId) {
         alert("Invalid income ID.");
         return;
-}
+      }
+      try {
+        // Send DELETE request to backend to remove the income record
+        await axios.delete(`${backEndUrl}/users/${userId}/income/${incomeId}`);
 
-try {
-  // Send DELETE request to backend to remove the income record
-  await axios.delete(`${backEndUrl}/users/${userId}/income/${incomeId}`);
+        // Update the state to remove the deleted income
+        setUserData(prevData => {
 
-  // Update the state to remove the deleted income
-  setUserData(prevData => {
+          const income = Array.isArray(prevData.income) ? prevData.income : [];
 
-    const income = Array.isArray(prevData.income) ? prevData.income : [];
+          const deletedIncome = income.find(
+            activity => activity.id === incomeId
+          );
 
-    const deletedIncome = income.find(
-      activity => activity.id === incomeId
-    );
+          if (!deletedIncome) {
+            return prevData;
+          }
 
-    if (!deletedIncome) {
-      return prevData;
-    }
+          const newIncome = income.filter(activity => activity.id !== incomeId);
+          const newBalance = newIncome.reduce((total, item) => total + parseFloat(item.amount),0);
 
-    const newIncome = income.filter(activity => activity.id !== incomeId);
-    const newBalance = newIncome.reduce((total, item) => total + parseFloat(item.amount),0);
+          return {
+            ...prevData,
+              income: newIncome,
+              balance: newBalance,
+          
+          };
+        });
 
-    return {
-      ...prevData,
-        income: newIncome,
-        balance: newBalance,
-     
-    };
-  });
+        setDeleteIncome(previous => !previous);
 
-  setDeleteIncome(previous => !previous);
-
-  alert("Income record deleted successfully!");
-} catch (error) {
-  console.error("Error deleting income:", error);
-  alert("There was an error deleting your income record. Please try again.");
-}
+        alert("Income record deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting income:", error);
+        alert("There was an error deleting your income record. Please try again.");
+      }
 };
 
 
@@ -395,6 +394,47 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
     console.error("Error updating expense:", error);
     alert("There was an error updating your expense. Please try again.");
   }
+};
+
+//Function to delete Expense:
+const deleteExpense = async (expenseId) => {
+  if (!expenseId) {
+      alert("Invalid expense ID.");
+      return;
+    }
+    try {
+      // Send DELETE request to backend to remove the expense record
+      await axios.delete(`${backEndUrl}/users/${userId}/expenses/${expenseId}`);
+
+      // Update the state to remove the deleted expense
+      setExpenseUser(prevData => {
+        const expenses = Array.isArray(prevData.expenses) ? prevData.expenses : [];
+
+        const deletedExpense = expenses.find(
+          activity => activity.id === expenseId
+        );
+
+        if (!deletedExpense) {
+          return prevData;
+        }
+
+        const newExpenses = expenses.filter(activity => activity.id !== expenseId);
+        const newBalance = newExpenses.reduce((total, item) => total + parseFloat(item.amount), 0);
+
+        return {
+          ...prevData,
+          expenses: newExpenses,
+          balance: newBalance
+        };
+      });
+
+      setDeleteIncome(previous => !previous);
+
+      alert("Income record deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting income:", error);
+      alert("There was an error deleting your income record. Please try again.");
+    }
 };
 
 
@@ -741,7 +781,7 @@ const createBudget = async (budgetData) => {
                     </button>
                     <button
                       className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
-                      onClick={() => deleteIncome(expense.id)}
+                      onClick={() => deleteExpense(expense.id)}
                     >
                       Delete
                     </button>
@@ -764,7 +804,7 @@ const createBudget = async (budgetData) => {
 
     </div>
   );
-   
+  
   
 };
 

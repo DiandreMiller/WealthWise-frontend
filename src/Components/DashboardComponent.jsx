@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
-import IncomeEditModal from './IncomeEditModal'
+import IncomeEditModal from './IncomeEditModal';
+import ExpenseEditModal from './ExpenseEditModal';
 
 const DashboardComponent = () => {
   const { userId } = useParams();
@@ -27,23 +28,22 @@ const DashboardComponent = () => {
   const [incomeToEdit, setIncomeToEdit] = useState(null); 
   const [deletedIncome, setDeleteIncome] = useState(false);
   const [updateEditedIncome, setUpdateEditedIncome] = useState(false);
+  const [isEditingExpense, setIsEditingExpense] = useState(false);
+  const [expenseToEdit, setExpenseToEdit] = useState(null);
+  const [updateEditedExpense, setUpdateEditedExpense] = useState(false);
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
 //Get income
   useEffect(() => {
     const fetchUserData = async () => {
-      setLoading(true);
       try {
         const response = await axios.get(`${backEndUrl}/users/${userId}/income`);
         setUserData(response.data);
-        console.log('user data:', response.data);
+        console.log("User data fetched:", response.data);
         setUpdatedIncome(response.data);
-        console.log('updatedIncome:', response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);  
       }
     };
   
@@ -52,6 +52,56 @@ const DashboardComponent = () => {
     }
   }, [userId, backEndUrl, deletedIncome, updateEditedIncome]);
   
+  //   const fetchExpensesData = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.get(`${backEndUrl}/users/${userId}/expenses`);
+  //       setExpenseUser((prevData) => ({
+  //         ...prevData,
+  //         expenses: response.data || [],
+  //       }));
+  //       console.log("Expenses fetched:", response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching user expenses:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  
+  //   if (userId && backEndUrl) {
+  //     fetchExpensesData();
+  //   }
+  // }, [userId, backEndUrl, updateEditedExpense]);
+
+  //Get Expense
+  useEffect(() => {
+    const fetchExpensesData = async () => {
+        setLoading(true);
+        try {
+            console.log("Fetching expenses...");
+            const response = await axios.get(`${backEndUrl}/users/${userId}/expenses`);
+            console.log("Fetched data:", response.data);
+            const expenses = response.data || [];
+            console.log('Fetched expenses:', expenses);
+
+            setExpenseUser((prevData) => ({
+                ...prevData,
+                expenses: expenses, 
+            }));
+        } catch (error) {
+            console.error("Error fetching user expenses:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (userId && backEndUrl) {
+      console.log("Re-fetching expenses...");
+      fetchExpensesData();
+    }
+  }, [userId, backEndUrl, updateEditedExpense]);
+
+
   const formatCurrency = (value) => {
     const numberValue = typeof value === 'number' ? value : parseFloat(value);
 
@@ -112,6 +162,7 @@ const DashboardComponent = () => {
       });
 
       setUpdateEditedIncome(previous => !previous);
+      console.log('UpdateEditedIncome:', updateEditedIncome);
   
       alert("Income updated successfully!");
       setIsEditingIncome(false);
@@ -121,7 +172,6 @@ const DashboardComponent = () => {
     }
   };
   
-
 
   //Function to add income
   const addIncome = async () => {
@@ -178,8 +228,6 @@ const DashboardComponent = () => {
     }
 };
 
-
-
   // Function to delete income
   const deleteIncome = async (incomeId) => {
     if (!incomeId) {
@@ -207,9 +255,6 @@ try {
     const newIncome = income.filter(activity => activity.id !== incomeId);
     const newBalance = newIncome.reduce((total, item) => total + parseFloat(item.amount),0);
 
-
-    
-
     return {
       ...prevData,
         income: newIncome,
@@ -227,105 +272,133 @@ try {
 }
 };
 
-//Get Expense
-useEffect(() => {
-  const fetchExpensesData = async () => {
-      setLoading(true);
-      try {
-          const response = await axios.get(`${backEndUrl}/users/${userId}/expenses`);
-          setExpenseUser((prevData) => ({
-              ...prevData,
-              expenses: response.data, 
-          }));
-          console.log('user expenses:', response.data.map((expense) => {
-            console.log('expenses',expense.amount);
-          }));
-      } catch (error) {
-          console.error("Error fetching user expenses:", error);
-      } finally {
-          setLoading(false);
-      }
-  };
-
-  if (userId && backEndUrl) {
-      fetchExpensesData();
-  }
-}, [userId, backEndUrl]);
-
 
  // Function to add expense
- const addExpense = async () => {
+const addExpense = async () => {
   console.log('user data Expense check:', expenseUser);
   const amount = parseFloat(expenseAmount);
 
   if (isNaN(amount) || amount <= 0 || expenseDescription.trim() === "") {
-      alert("Please provide a valid expense description and amount.");
-      return;
+    alert("Please provide a valid expense description and amount.");
+    return;
   }
 
   const dateIncurred = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
 
   console.log("Attempting to add expense with details:", {
-      userId,
-      amount,
-      category: expenseDescription,
-      dateIncurred,
+    userId,
+    amount,
+    category: expenseDescription,
+    dateIncurred,
   });
 
   try {
-      // Send POST request to backend to create a new expense record
-      const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
-          user_id: userId,
-          amount: amount.toFixed(2), 
-          category: expenseDescription,
-          date_incurred: dateIncurred,
-          created_at: new Date().toISOString(), 
-      });
+    // Send POST request to backend to create a new expense record
+    const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
+      user_id: userId,
+      amount: amount.toFixed(2),
+      category: expenseDescription,
+      date_incurred: dateIncurred,
+      created_at: new Date().toISOString(),
+    });
 
-      console.log("Response add expense:", response.data);
+    console.log("Response add expense:", response.data);
 
-      // Update user data directly
-      setExpenseUser((prevData) => {
-          console.log("prevData before adding expense:", prevData);
-          console.log("Type of prevData:", Array.isArray(prevData) ? "Array" : typeof prevData);
+    // Update user data directly
+    setExpenseUser((prevData) => {
+      console.log("prevData before adding expense:", prevData);
 
-          // Add the new expense object
-          const newExpense = {
-              id: response.data.id, 
-              user_id: userId,
-              amount: amount.toFixed(2),
-              category: expenseDescription,
-              date_incurred: dateIncurred,
-              created_at: new Date().toISOString(),
-              User: prevData?.User || null,
-          };
-          return {
-              ...prevData,
-              expenses: [...(prevData.expenses || []), newExpense], 
-              stats: {
-                  ...prevData.stats,
-                  expenses: (parseFloat(prevData.amount) + parseFloat(amount)).toFixed(2),
-                  balance: (parseFloat(prevData.amount) - parseFloat(amount)).toFixed(2),
-              },
-              recentActivities: [
-                  { type: "Expense", description: expenseDescription, amount: amount.toFixed(2), date: dateIncurred },
-                  ...(prevData.recentActivities || []),
-              ],
-          };
-      });
+      // Add the new expense object
+      const newExpense = {
+        id: response.data.id,
+        user_id: userId,
+        amount: amount.toFixed(2),
+        category: expenseDescription,
+        date_incurred: dateIncurred,
+        created_at: new Date().toISOString(),
+        User: prevData?.User || null,
+      };
 
-      // Reset form fields
-      setExpenseDescription("");
-      setExpenseAmount("");
-      setIsAddingExpense(false);
+      return {
+        ...prevData,
+        expenses: [...(prevData.expenses || []), newExpense],
+        stats: {
+          ...prevData.stats,
+          expenses: (parseFloat(prevData.stats?.expenses || 0) + parseFloat(amount)).toFixed(2),
+          balance: (parseFloat(prevData.stats?.balance || 0) - parseFloat(amount)).toFixed(2),
+        },
+      };
+    });
+
+    // Reset form fields
+    setExpenseDescription("");
+    setExpenseAmount("");
+    setIsAddingExpense(false);
   } catch (error) {
-      console.error("Error adding expense:", error);
-      alert("There was an error adding your expense. Please try again.");
+    console.error("Error adding expense:", error);
+    alert("There was an error adding your expense. Please try again.");
+  }
+};
+
+//Function to update Expense
+const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
+  console.log(`[${new Date().toISOString()}] Triggered updateExpense with expenseId: ${expenseId}`);
+  if (!expenseId || isNaN(parseFloat(updatedAmount)) || updatedAmount <= 0 || updatedCategory.trim() === "") {
+    alert("Please provide valid expense details.");
+    return;
+  }
+
+  // console.log(`Expense ID: ${expenseId}`);
+  // console.log('Sending data to update expense:', {
+  //   amount: updatedAmount,
+  //   category: updatedCategory,
+  // });
+
+  try {
+    // Send PUT request to update expense
+    const response = await axios.put(`${backEndUrl}/users/${userId}/expenses/${expenseId}`, {
+      amount: updatedAmount,
+      category: updatedCategory,
+    });
+
+    const updatedExpense = response.data;
+    // console.log("Updated expense:", updatedExpense);
+
+    // Update the local state with the updated expense details
+    setExpenseUser(prevData => {
+      if (!prevData || !Array.isArray(prevData.expenses)) {
+        console.error("Invalid expense data:", prevData);
+        return prevData;
+      }
+
+      const updatedExpenses = prevData.expenses.map(expense =>
+        expense.id === expenseId
+          ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category }
+          : expense
+      );
+
+      // console.log("Updated expenses array:", updatedExpenses);
+      console.log(`[${new Date().toISOString()}] Updated local expense state:`, updatedExpenses);
+      return {
+        ...prevData,
+        expenses: updatedExpenses,
+      };
+    });
+
+    setUpdateEditedExpense(previous => !previous);
+    // console.log('updatedEditedExpense state:', updateEditedExpense);
+    console.log(`[${new Date().toISOString()}] State update: updateEditedExpense toggled`);
+
+    alert("Expense updated successfully!");
+    setIsEditingExpense(false);
+  } catch (error) {
+    console.error("Error updating expense:", error);
+    alert("There was an error updating your expense. Please try again.");
   }
 };
 
 
-// Function to create a budget
+//Function to create a budget
 const createBudget = async (budgetData) => {
   const {
     monthlyIncomeGoal,
@@ -367,7 +440,6 @@ const createBudget = async (budgetData) => {
     alert("There was an error creating your budget. Please try again.");
   }
 };
-
 
  
 // Function to update budget
@@ -416,6 +488,11 @@ const createBudget = async (budgetData) => {
   if (!userData) {
     return <div>Loading...</div>;
   }
+
+  if (!expenseUser.expenses.length) {
+    return <div>Add Some Expenses.</div>;
+  }
+
 
   return (
     <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg mt-24">
@@ -509,18 +586,7 @@ const createBudget = async (budgetData) => {
               Add Expense
             </button>
           )}
-          <ul className="mt-4 space-y-3">
-            {userData?.recentActivities
-              ?.filter((activity) => activity.type === "Expense")
-              .map((expense) => (
-                <li
-                  key={expense.id}
-                  className="flex justify-between items-center border-b border-gray-200 pb-2"
-                >
-                  <span>{expense.description} - {formatCurrency(expense.amount)}</span>
-                </li>
-              ))}
-          </ul>
+
         </div>
   
         {/* Budget Section */}
@@ -632,6 +698,19 @@ const createBudget = async (budgetData) => {
   </button>
       </div>
 
+      {/* Edit Expense Modal */}
+      <div>
+          {isEditingExpense && (
+            <ExpenseEditModal 
+              expense={expenseToEdit}
+              onClose={() => setIsEditingExpense(false)} 
+              onSave={updateExpense}
+              onSubmit={(id, amount, category) => updateExpense(id, amount, category)}
+
+            />
+          )}
+      </div>
+
       {/* Added Expense Section */}
       <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
          <h2 className="text-xl font-semibold text-gray-700 mb-4">Added Expenses</h2>
@@ -653,7 +732,10 @@ const createBudget = async (budgetData) => {
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     <button
                       className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
-                      onClick={() => updateIncome(expense.id, newAmount, newSource)}
+                      onClick={() => {
+                        setExpenseToEdit(expense)
+                        setIsEditingExpense(true); 
+                      }}
                     >
                       Edit
                     </button>
@@ -682,8 +764,7 @@ const createBudget = async (budgetData) => {
 
     </div>
   );
-  
-  
+   
   
 };
 

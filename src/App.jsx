@@ -27,6 +27,7 @@ import FourOFour from './Pages/FourOFour';
 import LearnMore from './Pages/LearnMore';
 import Dashboard from './Pages/Dashboard';
 import RegisterPasskey from './Pages/RegisterPasskey';
+import TestComponent from './Components/TestComponent';
 
 
 const AppContent = () => {
@@ -240,6 +241,7 @@ const loginUser = async (userData) => {
           element={<RegisterPasskey formik={formik.values} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}
           path='/register-passkey'
         />
+        <Route element={<TestComponent />} path='/test/:userId'/>
         <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/:userId' />
         <Route element={<FourOFour />} path='*' />
       </Routes>

@@ -25,47 +25,48 @@ const AddExpenseSectionComponent = ({
           </tr>
         </thead>
         <tbody>
-          {expenses.length > 0 ? (
-            expenses
-              .slice()
-              .reverse()
-              .slice(0, showAllExpense ? expenses.length : 4)
-              .map((expense) => (
-                <tr key={expense.id} className="hover:bg-gray-50">
-                  <td className="border border-gray-300 px-4 py-2 text-gray-800">{expense.category}</td>
-                  <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
-                    {formatCurrency(expense.amount)}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
-                    {expense.date_incurred}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    <button
-                      className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
-                      onClick={() => {
-                        setExpenseToEdit(expense);
-                        setIsEditingExpense(true);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
-                      onClick={() => deleteExpense(expense.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
+            {expenses.length > 0 ? (
+                expenses
+                .slice()
+                .reverse()
+                .slice(0, showAllExpense ? expenses.length : 4)
+                .map((expense) => (
+                    <tr key={expense.id} className="hover:bg-gray-50">
+                    <td className="border border-gray-300 px-4 py-2 text-gray-800">{expense.category}</td>
+                    <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
+                        {formatCurrency(expense.amount)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
+                        {expense.date_incurred}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                        <button
+                        className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
+                        onClick={() => {
+                            setExpenseToEdit(expense);
+                            setIsEditingExpense(true);
+                        }}
+                        >
+                        Edit
+                        </button>
+                        <button
+                        className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
+                        onClick={() => deleteExpense(expense.id)}
+                        >
+                        Delete
+                        </button>
+                    </td>
+                    </tr>
+                ))
+            ) : (
+                <tr>
+                <td colSpan="4" className="text-center text-gray-500">
+                    No expenses to display. Add Your Expenses!
+                </td>
                 </tr>
-              ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="text-center text-gray-500">
-                No expenses to display.
-              </td>
-            </tr>
-          )}
+            )}
         </tbody>
+
       </table>
 
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">

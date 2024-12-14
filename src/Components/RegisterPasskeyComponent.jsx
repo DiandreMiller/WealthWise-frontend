@@ -38,15 +38,18 @@ const RegisterPasskeyComponent = ({ registerPasskey }) => {
     try {
       const response = await axios.post(`${backEndUrl}/register-passkey` , { identifier: email });
       const options = response.data;
+      console.log('options:', options);
 
       options.challenge = Uint8Array.from(atob(options.challenge), c => c.charCodeAt(0));
+      console.log('challenge:', options.challenge);
       options.user.id = Uint8Array.from(atob(options.user.id), c => c.charCodeAt(0));
+      console.log('options user id:', options.user.id);
 
       // Create the credential using the WebAuthn API
       const credential = await navigator.credentials.create({ publicKey: options });
       // console.log('Credential:', credential);
 
-      // RegisterPasskey prop here
+      // RegisterPasskey prop 
       await registerPasskey({userId, email, credential }); 
 
       // Verify the credential with the backend

@@ -76,6 +76,7 @@ const DashboardComponent = () => {
             }));
         } catch (error) {
             console.error("Error fetching user expenses:", error);
+            setExpenseUser({ expenses: []});
         } finally {
             setLoading(false);
         }
@@ -505,13 +506,11 @@ const createBudget = async (budgetData) => {
   };
 
 
-  if (!userData) {
+
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!expenseUser.expenses.length) {
-    return <div>Add Some Expenses.</div>;
-  }
 
 
   return (

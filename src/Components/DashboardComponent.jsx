@@ -8,10 +8,12 @@ import ExpenseSectionComponent from "./ExpenseSectionComponent";
 import BudgetSectionComponent from "./BudgetSectionComponent";
 import AddIncomeSectionComponent from "./AddIncomeSectionComponent";
 import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
+import AddBudgetSectionComponent from "./AddBudgetComponent";
+import BudgetEditModal from './BudgetEditModal';
 
 const DashboardComponent = () => {
   const { userId } = useParams();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
   const [isAddingIncome, setIsAddingIncome] = useState(false);
   const [isAddingExpense, setIsAddingExpense] = useState(false);
   const [incomeDescription, setIncomeDescription] = useState("");
@@ -36,6 +38,11 @@ const DashboardComponent = () => {
   const [isEditingExpense, setIsEditingExpense] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
   const [updateEditedExpense, setUpdateEditedExpense] = useState(false);
+  const [budgetUserData, setBudgetUserData] = useState({});
+  const [isAddingBudget, setIsAddingBudget] = useState(false);
+  const [isEditingBudget, setIsEditingBudget] = useState(false);
+  const [budgetToEdit, setBudgetToEdit] = useState(null);
+
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
@@ -44,8 +51,12 @@ const DashboardComponent = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(`${backEndUrl}/users/${userId}/income`);
-        setUserData(response.data);
-        console.log("User data fetched:", response.data);
+        const formattedData = response.data.map((income) => ({
+          ...income,
+          amount: parseFloat(income.amount), 
+        }));
+        setUserData(formattedData);
+        console.log("User data fetched:", formattedData);
         setUpdatedIncome(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -67,7 +78,10 @@ const DashboardComponent = () => {
             console.log("Fetching expenses...");
             const response = await axios.get(`${backEndUrl}/users/${userId}/expenses`);
             console.log("Fetched data:", response.data);
-            const expenses = response.data || [];
+            const expenses = response.data.map((expense) => ({
+              ...expense,
+              amount: parseFloat(expense.amount),
+            }));
             console.log('Fetched expenses:', expenses);
 
             setExpenseUser((prevData) => ({
@@ -418,85 +432,180 @@ const deleteExpense = async (expenseId) => {
     }
 };
 
+  //Get Budget 
+  useEffect(() => {
+    const fetchBudgetData = async () => {
+      try {
+        const response = await axios.get(`${backEndUrl}/users/${userId}/budget`);
+
+        const formattedBudget = {
+          ...response.data,
+          monthly_income_goal: parseFloat(response.data.monthly_income_goal || 0),
+          monthly_expense_goal: parseFloat(response.data.monthly_expense_goal || 0),
+          actual_income: parseFloat(response.data.actual_income || 0),
+          actual_expenses: parseFloat(response.data.actual_expenses || 0),
+        };
+
+        setBudgetUserData(formattedBudget);
+        console.log('Budget User Data:', formattedBudget);
+
+      } catch (error) {
+        console.error('budget error:', error)
+      }
+    }
+
+    if(backEndUrl && userId) {
+      fetchBudgetData();
+    }
+  }, [userId, backEndUrl]);
+
+
+const handleToggleBudget = () => {
+  setIsAddingBudget(previous => !previous);
+}
 
 //Function to create a budget
 const createBudget = async (budgetData) => {
   const {
-    monthlyIncomeGoal,
-    monthlyExpenseGoal,
-    actualIncome,
-    actualExpenses,
+    monthly_income_goal,
+    monthly_expense_goal,
+    actual_income,
+    actual_expenses,
   } = budgetData;
+  console.log("Received Budget Data:", budgetData);
+  console.log("Parsed Values:", {
+    monthly_income_goal,
+    monthly_expense_goal,
+    actual_income,
+    actual_expenses,
+  });
+
 
   if (
-    isNaN(monthlyIncomeGoal) ||
-    isNaN(monthlyExpenseGoal) ||
-    isNaN(actualIncome) ||
-    isNaN(actualExpenses)
+    !monthly_income_goal ||
+    !monthly_expense_goal ||
+    !actual_income ||
+    !actual_expenses ||
+    isNaN(monthly_income_goal) ||
+    isNaN(monthly_expense_goal) ||
+    isNaN(actual_income) ||
+    isNaN(actual_expenses) ||
+    monthly_income_goal < 0 ||
+    monthly_expense_goal < 0 ||
+    actual_income < 0 ||
+    actual_expenses < 0
   ) {
-    alert("Please provide valid numbers for all fields.");
+    alert("Please provide valid positive numbers for all fields.");
     return;
   }
 
+  setLoading(true); 
   try {
-    // Send POST request to backend to create the budget
     const response = await axios.post(`${backEndUrl}/users/${userId}/budget`, {
-      monthly_income_goal: parseFloat(monthlyIncomeGoal),
-      monthly_expense_goal: parseFloat(monthlyExpenseGoal),
-      actual_income: parseFloat(actualIncome),
-      actual_expenses: parseFloat(actualExpenses),
+      monthly_income_goal: parseFloat(monthly_income_goal),
+      monthly_expense_goal: parseFloat(monthly_expense_goal),
+      actual_income: parseFloat(actual_income),
+      actual_expenses: parseFloat(actual_expenses),
     });
 
-    const newBudget = response.data;
+    const newBudget = {
+      budgetId: response.data.budget_id,
+      userId: response.data.user_id,
+      monthlyIncomeGoal: parseFloat(response.data.monthly_income_goal),
+      monthlyExpenseGoal: parseFloat(response.data.monthly_expense_goal),
+      actualIncome: parseFloat(response.data.actual_income),
+      actualExpenses: parseFloat(response.data.actual_expenses),
+      disposableIncome: parseFloat(response.data.disposable_income),
+      createdAt: response.data.created_at,
+    };
 
-    // Update the state with the new budget
-    setUserData(prevData => ({
-      ...prevData,
+    setUserData((prevData) => ({
+      ...(prevData || {}),
       budget: newBudget,
     }));
 
     alert("Budget created successfully!");
+    handleToggleBudget();
   } catch (error) {
     console.error("Error creating budget:", error);
-    alert("There was an error creating your budget. Please try again.");
+    const errorMessage = error.response?.data?.message || "There was an error creating your budget. Please try again.";
+    alert(errorMessage);
+  } finally {
+    setLoading(false); 
   }
 };
+
+//Edit Budget Modal
+const handleEditBudget = (budget) => {
+  console.log("Budget received in handleEditBudget:", budget);
+  const newBudgetToEdit = {
+    ...budget,
+    monthly_income_goal: parseFloat(budget.monthly_income_goal),
+    monthly_expense_goal: parseFloat(budget.monthly_expense_goal),
+    actual_income: parseFloat(budget.actual_income),
+    actual_expenses: parseFloat(budget.actual_expenses),
+  };
+
+  console.log("Setting budgetToEdit in handleEditBudget:", newBudgetToEdit);
+
+  setBudgetToEdit(newBudgetToEdit);
+  setIsEditingBudget(true);
+};
+
+
 
  
 // Function to update budget
   const updateBudget = async (budgetId, updatedBudgetData) => {
+    console.log("updatedBudgetData received in updateBudget:", updatedBudgetData);
+    console.log('budgetId:', budgetId);
     const {
-      monthlyIncomeGoal,
-      monthlyExpenseGoal,
-      actualIncome,
-      actualExpenses,
+      monthly_income_goal,
+      monthly_expense_goal,
+      actual_income,
+      actual_expenses,
     } = updatedBudgetData;
+
+
+    const disposableIncome = monthly_income_goal - monthly_expense_goal;
   
     if (
-      isNaN(monthlyIncomeGoal) ||
-      isNaN(monthlyExpenseGoal) ||
-      isNaN(actualIncome) ||
-      isNaN(actualExpenses)
+      isNaN(monthly_income_goal) ||
+      isNaN(monthly_expense_goal) ||
+      isNaN(actual_income) ||
+      isNaN(actual_expenses)
     ) {
       alert("Please provide valid numbers for all fields.");
       return;
     }
   
     try {
-      const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, {
-        monthly_income_goal: parseFloat(monthlyIncomeGoal),
-        monthly_expense_goal: parseFloat(monthlyExpenseGoal),
-        actual_income: parseFloat(actualIncome),
-        actual_expenses: parseFloat(actualExpenses),
-      });
-  
-      const updatedBudget = response.data;
+
+      const requestData = {
+        monthly_income_goal: parseFloat(monthly_income_goal),
+        monthly_expense_goal: parseFloat(monthly_expense_goal),
+        actual_income: parseFloat(actual_income),
+        actual_expenses: parseFloat(actual_expenses),
+        disposable_income: parseFloat(disposableIncome),
+      };
+
+      console.log("Request Data budget:", requestData);
+
+      const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData );
+      console.log("Response Data:", response.data);
   
       // Update the state with the updated budget
-      setUserData(prevData => ({
-        ...prevData,
-        budget: updatedBudget,
-      }));
+      setUserData((prevData) => {
+        const updatedState = {
+          ...prevData,
+          budget: {
+            ...response.data, 
+            disposable_income: parseFloat(response.data.disposable_income), 
+          },
+        };
+        console.log("Updated State:", updatedState);
+        return updatedState;
+      });
   
       alert("Budget updated successfully!");
     } catch (error) {
@@ -505,11 +614,36 @@ const createBudget = async (budgetData) => {
     }
   };
 
+  // Handle Save Budget (create or update)
+  const handleSaveBudget = async (budgetData) => {
+    try {
+      if (budgetUserData.budget_id) {
+        // Update existing budget
+        await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetUserData.budget_id}`, budgetData);
+      } else {
+        // Create new budget
+        await axios.post(`${backEndUrl}/users/${userId}/budget`, budgetData);
+      }
+      // Update local state with the latest budget
+      const updatedBudget = { ...budgetUserData, ...budgetData };
+      setBudgetUserData(updatedBudget);
+    } catch (error) {
+      console.error("Error saving budget:", error);
+    }
+  };
+
 
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="text-xl font-semibold text-gray-700 animate-pulse">
+          Loading...
+        </div>
+      </div>
+    );
   }
+  
 
 
 
@@ -544,21 +678,17 @@ const createBudget = async (budgetData) => {
 
         {/* Budget Section */}
         <BudgetSectionComponent
-          // isAddingBudget={isAddingBudget}
-          // budgetName={budgetName}
-          // setBudgetName={setBudgetName}
-          // budgetAmount={budgetAmount}
-          // setBudgetAmount={setBudgetAmount}
-          // addBudget={addBudget}
-          // setIsAddingBudget={setIsAddingBudget}
-          userData={userData}
+          budgetUserData={budgetUserData}
           formatCurrency={formatCurrency}
-          updateBudget={updateBudget}
           createBudget={createBudget}
-          newMonthlyIncomeGoal={newMonthlyIncomeGoal}
-          newMonthlyExpenseGoal={newMonthlyExpenseGoal}
-          newActualIncome={newActualIncome}
-          newActualExpenses={newActualExpenses}
+          newMonthlyIncomeGoal={parseFloat(newMonthlyIncomeGoal) || 0} 
+          newMonthlyExpenseGoal={parseFloat(newMonthlyExpenseGoal) || 0}
+          newActualIncome={parseFloat(newActualIncome) || 0}
+          newActualExpenses={parseFloat(newActualExpenses) || 0}
+          handleEditBudget={handleEditBudget}
+          handleSaveBudget={handleSaveBudget}
+          setBudgetToEdit={setBudgetToEdit}
+          setIsEditingBudget={setIsEditingBudget}
         />
 
       </main>
@@ -577,7 +707,7 @@ const createBudget = async (budgetData) => {
   
       {/* Added Income Section */}
       <AddIncomeSectionComponent
-        userData={userData}
+        userData={userData || []}
         formatCurrency={formatCurrency}
         totalIncome={totalIncome}
         setIncomeToEdit={setIncomeToEdit}
@@ -607,15 +737,43 @@ const createBudget = async (budgetData) => {
           expenseUser={expenseUser}
           userData={userData}
           formatCurrency={formatCurrency}
-          totalExpenses={(expenses) =>
-            expenses.reduce((sum, expense) => sum + parseFloat(expense.amount), 0)
-          }
+          totalExpenses={(expenses) => {
+            if (!Array.isArray(expenses) || expenses.length === 0) return "$0.00";
+          
+            const sum = expenses.reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
+            return formatCurrency(sum);
+          }}
+          
           setExpenseToEdit={setExpenseToEdit}
           setIsEditingExpense={setIsEditingExpense}
           deleteExpense={deleteExpense}
           showAllExpense={showAllExpense}
           setShowAllExpense={setShowAllExpense}
       />
+ 
+       {/* Budget Edit Modal */}
+    {isEditingBudget && budgetToEdit && (
+        <BudgetEditModal
+          budget={budgetToEdit} 
+          onClose={() => setIsEditingBudget(false)} 
+          // onSubmit={(updatedBudgetData) =>
+          //   updateBudget(budgetToEdit.budget_id, updatedBudgetData)
+          // }
+          onSubmit={(updatedBudgetData) => {
+            console.log("budgetToEdit:", budgetToEdit);
+            console.log("budgetId being sent:", budgetToEdit?.budget_id);
+            console.log("updatedBudgetData being sent:", updatedBudgetData);
+          
+            if (budgetToEdit?.budget_id) {
+              updateBudget(budgetToEdit.budget_id, updatedBudgetData);
+            } else {
+              createBudget(updatedBudgetData);
+            }
+          }}
+          
+          
+        />
+    )}
 
 
     </div>

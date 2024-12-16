@@ -9,6 +9,7 @@ import BudgetSectionComponent from "./BudgetSectionComponent";
 import AddIncomeSectionComponent from "./AddIncomeSectionComponent";
 import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
 import BudgetEditModal from './BudgetEditModal';
+import DOMPurify from 'dompurify';
 
 const DashboardComponent = () => {
   const { userId } = useParams();
@@ -165,8 +166,8 @@ const DashboardComponent = () => {
     try {
       // Send PUT request to update income
       const response = await axios.put(`${backEndUrl}/users/${userId}/income/${incomeId}`, {
-        amount: updatedAmount,
-        source: updatedSource,
+        amount: DOMPurify.sanitize(updatedAmount),
+        source: DOMPurify.sanitize(updatedSource),
       });
   
       const updatedIncome = response.data;
@@ -224,8 +225,8 @@ const DashboardComponent = () => {
     try {
         const response = await axios.post(`${backEndUrl}/users/${userId}/income`, {
             user_id: userId,
-            amount: amount.toFixed(2), 
-            source: incomeDescription,
+            amount: DOMPurify.sanitize(amount.toFixed(2)), 
+            source: DOMPurify.sanitize(incomeDescription),
             date_received: dateReceived,
             created_at: new Date().toISOString(), 
         });
@@ -327,9 +328,9 @@ const addExpense = async () => {
 
   try {
     const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
-      user_id: userId,
-      amount: amount.toFixed(2),
-      category: expenseDescription,
+      user_id: DOMPurify.sanitize(userId),
+      amount: DOMPurify.sanitize(amount.toFixed(2)),
+      category: DOMPurify.sanitize(expenseDescription),
       date_incurred: dateIncurred,
       created_at: new Date().toISOString(),
     });
@@ -381,8 +382,8 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
   try {
     // Send PUT request to update expense
     const response = await axios.put(`${backEndUrl}/users/${userId}/expenses/${expenseId}`, {
-      amount: updatedAmount,
-      category: updatedCategory,
+      amount: DOMPurify.sanitize(updatedAmount),
+      category: DOMPurify.sanitize(updatedCategory),
     });
 
     const updatedExpense = response.data;
@@ -529,10 +530,10 @@ const createBudget = async (budgetData) => {
   setLoading(true); 
   try {
     const response = await axios.post(`${backEndUrl}/users/${userId}/budget`, {
-      monthly_income_goal: parseFloat(monthly_income_goal),
-      monthly_expense_goal: parseFloat(monthly_expense_goal),
-      actual_income: parseFloat(actual_income),
-      actual_expenses: parseFloat(actual_expenses),
+      monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
+      monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
+      actual_income: DOMPurify.sanitize(parseFloat(actual_income)),
+      actual_expenses: DOMPurify.sanitize(parseFloat(actual_expenses)),
     });
 
     setBudgetUserData((prevData) => ({
@@ -557,10 +558,10 @@ const handleEditBudget = (budget) => {
   console.log("Budget received in handleEditBudget:", budget);
   const newBudgetToEdit = {
     ...budget,
-    monthly_income_goal: parseFloat(budget.monthly_income_goal),
-    monthly_expense_goal: parseFloat(budget.monthly_expense_goal),
-    actual_income: parseFloat(budget.actual_income),
-    actual_expenses: parseFloat(budget.actual_expenses),
+    monthly_income_goal: DOMPurify.sanitize(parseFloat(budget.monthly_income_goal)),
+    monthly_expense_goal: DOMPurify.sanitize(parseFloat(budget.monthly_expense_goal)),
+    actual_income: DOMPurify.sanitize(parseFloat(budget.actual_income)),
+    actual_expenses: DOMPurify.sanitize(parseFloat(budget.actual_expenses)),
   };
 
   console.log("Setting budgetToEdit in handleEditBudget:", newBudgetToEdit);
@@ -600,10 +601,10 @@ const handleEditBudget = (budget) => {
     try {
 
       const requestData = {
-        monthly_income_goal: parseFloat(monthly_income_goal),
-        monthly_expense_goal: parseFloat(monthly_expense_goal),
-        actual_income: parseFloat(actual_income),
-        actual_expenses: parseFloat(actual_expenses),
+        monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
+        monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
+        actual_income: DOMPurify.sanitize(parseFloat(actual_income)),
+        actual_expenses: DOMPurify.sanitize(parseFloat(actual_expenses)),
         disposable_income: parseFloat(disposableIncome),
       };
 

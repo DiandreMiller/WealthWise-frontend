@@ -90,6 +90,6 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 
 4. Create a .env in the root directory of your project, and use this environmental variable name:
     ```bash
-    VITE_REACT_APP_BACKEND_API
+    VITE_REACT_APP_BACKEND_API=http://localhost:4444
 
 5. Happy Hacking!!!!

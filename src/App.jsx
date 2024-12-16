@@ -28,6 +28,7 @@ import LearnMore from './Pages/LearnMore';
 import Dashboard from './Pages/Dashboard';
 import RegisterPasskey from './Pages/RegisterPasskey';
 import TestComponent from './Components/TestComponent';
+import PlaceHolderSubmittedContactUs from './Pages/PlaceHolderSubmittedContactUs';
 
 
 const AppContent = () => {
@@ -241,6 +242,7 @@ const loginUser = async (userData) => {
           element={<RegisterPasskey formik={formik.values} loginUser={loginUser} registerPasskey={registerPasskey} signUpUser={signUpUser} />}
           path='/register-passkey'
         />
+        <Route element={<PlaceHolderSubmittedContactUs />} path='/thank-you-for-contacting-us' />
         <Route element={<TestComponent />} path='/test/:userId'/>
         <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/:userId' />
         <Route element={<FourOFour />} path='*' />

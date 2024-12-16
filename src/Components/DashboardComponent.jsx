@@ -75,8 +75,6 @@ const DashboardComponent = () => {
 
   
 
-
-
   //Get Expense
   useEffect(() => {
     const fetchExpensesData = async () => {
@@ -121,28 +119,10 @@ const DashboardComponent = () => {
   }
 
   // Function for total income
-  // const totalIncome = (incomes) => {
-  //   const sumOfIncomes = incomes.reduce((a, b) => a + parseFloat(b.amount), 0);
-  //   return formatCurrency(sumOfIncomes); 
-  // };
-
   const totalIncome = (incomes) => {
-    if (!Array.isArray(incomes)) {
-      console.error("Expected incomes to be an array, received:", incomes);
-      return "$0.00";
-    }
-  
-    const incomesCopy = [...incomes];
-    
-    const sumOfIncomes = incomesCopy.reduce((total, income) => {
-      const amount = parseFloat(income.amount) || 0;
-      return total + amount;
-    }, 0);
-  
-    return formatCurrency(sumOfIncomes);
+    const sumOfIncomes = incomes.reduce((a, b) => a + parseFloat(b.amount), 0);
+    return formatCurrency(sumOfIncomes); 
   };
-  
-
 
   
 
@@ -490,7 +470,7 @@ const deleteExpense = async (expenseId) => {
     if(backEndUrl && userId) {
       fetchBudgetData();
     }
-  }, [userId, backEndUrl]);
+  }, [userId, backEndUrl, budgetUserData]);
 
 
 const handleToggleBudget = () => {

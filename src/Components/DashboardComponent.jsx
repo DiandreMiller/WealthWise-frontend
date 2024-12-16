@@ -41,31 +41,31 @@ const DashboardComponent = () => {
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
-//Get User
-useEffect(() => {
-  const fetchUser = async () => {
-    try{
-      const response = await axios.get(`${backEndUrl}/users/${userId}`);
-      const userObject = response.data;
-      console.log('userObject:', userObject);
-      if(userObject) {
-          const name = userObject.username
-          const length = name.length;
-          const firstLetter = name[0].toUpperCase();
-          const restOfUserName = name.slice(1,length);
-          const fullUserName = `${firstLetter}${restOfUserName}`
-          setUserName(fullUserName);
-      }
-      
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  //Get User
+  useEffect(() => {
+    const fetchUser = async () => {
+      try{
+        const response = await axios.get(`${backEndUrl}/users/${userId}`);
+        const userObject = response.data;
+        console.log('userObject:', userObject);
+        if(userObject) {
+            const name = userObject.username
+            const length = name.length;
+            const firstLetter = name[0].toUpperCase();
+            const restOfUserName = name.slice(1,length);
+            const fullUserName = `${firstLetter}${restOfUserName}`
+            setUserName(fullUserName);
+        }
 
-  if (userId && backEndUrl) {
-    fetchUser();
-  }
-},[backEndUrl, userId])
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    if (userId && backEndUrl) {
+      fetchUser();
+    }
+  },[backEndUrl, userId])
 
 //Get income
   useEffect(() => {
@@ -83,15 +83,6 @@ useEffect(() => {
         setUserData(formattedData);
         console.log("User data fetched:", formattedData);
         setUpdatedIncome(response.data);
-
-        // if(formattedData) {
-        //   const name = formattedData[0].User.username
-        //   const length = name.length;
-        //   const firstLetter = name[0].toUpperCase();
-        //   const restOfUserName = name.slice(1,length);
-        //   const fullUserName = `${firstLetter}${restOfUserName}`
-        //   setUserName(fullUserName);
-        // }
 
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -764,9 +755,6 @@ const handleEditBudget = (budget) => {
         <BudgetEditModal
           budget={budgetToEdit} 
           onClose={() => setIsEditingBudget(false)} 
-          // onSubmit={(updatedBudgetData) =>
-          //   updateBudget(budgetToEdit.budget_id, updatedBudgetData)
-          // }
           onSubmit={(updatedBudgetData) => {
             console.log("budgetToEdit:", budgetToEdit);
             console.log("budgetId being sent:", budgetToEdit?.budget_id);

@@ -8,7 +8,6 @@ import ExpenseSectionComponent from "./ExpenseSectionComponent";
 import BudgetSectionComponent from "./BudgetSectionComponent";
 import AddIncomeSectionComponent from "./AddIncomeSectionComponent";
 import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
-import AddBudgetSectionComponent from "./AddBudgetComponent";
 import BudgetEditModal from './BudgetEditModal';
 
 const DashboardComponent = () => {
@@ -21,12 +20,6 @@ const DashboardComponent = () => {
   const [expenseDescription, setExpenseDescription] = useState("");
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseUser, setExpenseUser] = useState({ expenses: [] });
-  const [newAmount, setNewAmount] = useState('');
-  const [newSource, setNewSource] = useState('');
-  const [newMonthlyIncomeGoal, setNewMonthlyIncomeGoal] = useState('');
-  const [newMonthlyExpenseGoal, setNewMonthlyExpenseGoal] = useState('');
-  const [newActualIncome, setNewActualIncome] = useState('');
-  const [newActualExpenses, setNewActualExpenses] = useState('');
   const [updatedIncome, setUpdatedIncome] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showAllIncome, setShowAllIncome] = useState(false);
@@ -243,10 +236,9 @@ const DashboardComponent = () => {
         return;
       }
       try {
-        // Send DELETE request to backend to remove the income record
         await axios.delete(`${backEndUrl}/users/${userId}/income/${incomeId}`);
 
-        // Update the state to remove the deleted income
+        // Remove the deleted income
         setUserData(prevData => {
 
           const income = Array.isArray(prevData.income) ? prevData.income : [];
@@ -261,7 +253,6 @@ const DashboardComponent = () => {
           }
 
           const newIncome = income.filter(activity => activity.id !== incomeId);
-          // const newBalance = newIncome.reduce((total, item) => total + parseFloat(item.amount),0);
           const newBalance = newIncome.reduce((total, item) => {
             const amount = parseFloat(item.amount);
             return !isNaN(amount) ? total + amount : total;
@@ -306,7 +297,6 @@ const addExpense = async () => {
   });
 
   try {
-    // Send POST request to backend to create a new expense record
     const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
       user_id: userId,
       amount: amount.toFixed(2),
@@ -317,11 +307,9 @@ const addExpense = async () => {
 
     console.log("Response add expense:", response.data);
 
-    // Update user data directly
     setExpenseUser((prevData) => {
       console.log("prevData before adding expense:", prevData);
 
-      // Add the new expense object
       const newExpense = {
         id: response.data.id,
         user_id: userId,
@@ -369,9 +357,7 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
     });
 
     const updatedExpense = response.data;
-    // console.log("Updated expense:", updatedExpense);
 
-    // Update the local state with the updated expense details
     setExpenseUser(prevData => {
       if (!prevData || !Array.isArray(prevData.expenses)) {
         console.error("Invalid expense data:", prevData);
@@ -384,7 +370,6 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
           : expense
       );
 
-      // console.log("Updated expenses array:", updatedExpenses);
       console.log(`[${new Date().toISOString()}] Updated local expense state:`, updatedExpenses);
       return {
         ...prevData,
@@ -393,7 +378,6 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
     });
 
     setUpdateEditedExpense(previous => !previous);
-    // console.log('updatedEditedExpense state:', updateEditedExpense);
     console.log(`[${new Date().toISOString()}] State update: updateEditedExpense toggled`);
 
     alert("Expense updated successfully!");
@@ -411,10 +395,9 @@ const deleteExpense = async (expenseId) => {
       return;
     }
     try {
-      // Send DELETE request to backend to remove the expense record
+      //Delete expense 
       await axios.delete(`${backEndUrl}/users/${userId}/expenses/${expenseId}`);
 
-      // Update the state to remove the deleted expense
       setExpenseUser(prevData => {
         const expenses = Array.isArray(prevData.expenses) ? prevData.expenses : [];
 
@@ -521,21 +504,8 @@ const createBudget = async (budgetData) => {
       actual_expenses: parseFloat(actual_expenses),
     });
 
-    const newBudget = {
-      budgetId: response.data.budget_id,
-      userId: response.data.user_id,
-      monthlyIncomeGoal: parseFloat(response.data.monthly_income_goal),
-      monthlyExpenseGoal: parseFloat(response.data.monthly_expense_goal),
-      actualIncome: parseFloat(response.data.actual_income),
-      actualExpenses: parseFloat(response.data.actual_expenses),
-      disposableIncome: parseFloat(response.data.disposable_income),
-      createdAt: response.data.created_at,
-    };
-
     setBudgetUserData((prevData) => ({
       ...(prevData || {}),
-      // budget: newBudget,
-      // budget: response.data,
       budget: { ...response.data },
       income: prevData.income,
     }));
@@ -634,13 +604,10 @@ const handleEditBudget = (budget) => {
   const handleSaveBudget = async (budgetData) => {
     try {
       if (budgetUserData.budget_id) {
-        // Update existing budget
         await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetUserData.budget_id}`, budgetData);
       } else {
-        // Create new budget
         await axios.post(`${backEndUrl}/users/${userId}/budget`, budgetData);
       }
-      // Update local state with the latest budget
       const updatedBudget = { ...budgetUserData, ...budgetData };
       setBudgetUserData(updatedBudget);
     } catch (error) {
@@ -696,13 +663,7 @@ const handleEditBudget = (budget) => {
         <BudgetSectionComponent
           budgetUserData={budgetUserData}
           formatCurrency={formatCurrency}
-          createBudget={createBudget}
-          newMonthlyIncomeGoal={parseFloat(newMonthlyIncomeGoal) || 0} 
-          newMonthlyExpenseGoal={parseFloat(newMonthlyExpenseGoal) || 0}
-          newActualIncome={parseFloat(newActualIncome) || 0}
-          newActualExpenses={parseFloat(newActualExpenses) || 0}
           handleEditBudget={handleEditBudget}
-          handleSaveBudget={handleSaveBudget}
           setBudgetToEdit={setBudgetToEdit}
           setIsEditingBudget={setIsEditingBudget}
         />

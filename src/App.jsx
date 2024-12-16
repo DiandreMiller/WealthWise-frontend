@@ -44,7 +44,7 @@ const AppContent = () => {
   const signUpUser = async (userData) => {
     try {
       const response = await axios.post(`${backEndUrl}/sign-up`, userData);
-      // console.log('Sign-up response:', response.data);
+      console.log('Sign-up response:', response.data);
       
       if (response.data && response.data.message === "User created") {
         return response.data.user; 

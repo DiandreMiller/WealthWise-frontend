@@ -35,6 +35,7 @@ const DashboardComponent = () => {
   const [isAddingBudget, setIsAddingBudget] = useState(false);
   const [isEditingBudget, setIsEditingBudget] = useState(false);
   const [budgetToEdit, setBudgetToEdit] = useState(null);
+  const [refreshBudget, setRefreshBudget] = useState(false);
 
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
@@ -453,11 +454,13 @@ const deleteExpense = async (expenseId) => {
     if(backEndUrl && userId) {
       fetchBudgetData();
     }
-  }, [userId, backEndUrl, budgetUserData]);
+    
+  }, [userId, backEndUrl, refreshBudget]);
 
 
 const handleToggleBudget = () => {
   setIsAddingBudget(previous => !previous);
+  setRefreshBudget((prev) => !prev)
 }
 
 //Function to create a budget
@@ -534,6 +537,7 @@ const handleEditBudget = (budget) => {
 
   console.log("Setting budgetToEdit in handleEditBudget:", newBudgetToEdit);
 
+  handleToggleBudget();
   setBudgetToEdit(newBudgetToEdit);
   setIsEditingBudget(true);
 };
@@ -593,28 +597,13 @@ const handleEditBudget = (budget) => {
         return updatedState;
       });
   
+      handleToggleBudget();
       alert("Budget updated successfully!");
     } catch (error) {
       console.error("Error updating budget:", error);
       alert("There was an error updating your budget. Please try again.");
     }
   };
-
-  // Handle Save Budget (create or update)
-  const handleSaveBudget = async (budgetData) => {
-    try {
-      if (budgetUserData.budget_id) {
-        await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetUserData.budget_id}`, budgetData);
-      } else {
-        await axios.post(`${backEndUrl}/users/${userId}/budget`, budgetData);
-      }
-      const updatedBudget = { ...budgetUserData, ...budgetData };
-      setBudgetUserData(updatedBudget);
-    } catch (error) {
-      console.error("Error saving budget:", error);
-    }
-  };
-
 
 
   if (loading) {

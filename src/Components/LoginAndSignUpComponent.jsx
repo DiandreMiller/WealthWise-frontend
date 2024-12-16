@@ -56,7 +56,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
                 onChange={formik.handleChange}
                 value={formik.values.phoneNumber}
                 className="border border-gray-600 rounded p-3 w-full bg-gray-700 text-white"
-                placeholder="Enter your phone number"
+                placeholder="Enter your phone number (digits only)"
               />
               {formik.errors.phoneNumber && <p className="text-red-500">{formik.errors.phoneNumber}</p>}
             </div>

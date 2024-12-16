@@ -55,11 +55,16 @@ const DashboardComponent = () => {
           ...income,
           amount: parseFloat(income.amount), 
         }));
+
+        console.log("Formatted User Data:", formattedData);
+        console.log("Type of User Data:", typeof formattedData);
+
         setUserData(formattedData);
         console.log("User data fetched:", formattedData);
         setUpdatedIncome(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setUserData([]);
       }
     };
   
@@ -67,8 +72,10 @@ const DashboardComponent = () => {
       fetchUserData();
     }
   }, [userId, backEndUrl, deletedIncome, updateEditedIncome]);
+
   
-  
+
+
 
   //Get Expense
   useEffect(() => {
@@ -114,10 +121,30 @@ const DashboardComponent = () => {
   }
 
   // Function for total income
+  // const totalIncome = (incomes) => {
+  //   const sumOfIncomes = incomes.reduce((a, b) => a + parseFloat(b.amount), 0);
+  //   return formatCurrency(sumOfIncomes); 
+  // };
+
   const totalIncome = (incomes) => {
-    const sumOfIncomes = incomes.reduce((a, b) => a + parseFloat(b.amount), 0);
-    return formatCurrency(sumOfIncomes); 
+    if (!Array.isArray(incomes)) {
+      console.error("Expected incomes to be an array, received:", incomes);
+      return "$0.00";
+    }
+  
+    const incomesCopy = [...incomes];
+    
+    const sumOfIncomes = incomesCopy.reduce((total, income) => {
+      const amount = parseFloat(income.amount) || 0;
+      return total + amount;
+    }, 0);
+  
+    return formatCurrency(sumOfIncomes);
   };
+  
+
+
+  
 
   // Function to update income
   const updateIncome = async (incomeId, updatedAmount, updatedSource) => {
@@ -247,13 +274,19 @@ const DashboardComponent = () => {
           const deletedIncome = income.find(
             activity => activity.id === incomeId
           );
+          
 
           if (!deletedIncome) {
             return prevData;
           }
 
           const newIncome = income.filter(activity => activity.id !== incomeId);
-          const newBalance = newIncome.reduce((total, item) => total + parseFloat(item.amount),0);
+          // const newBalance = newIncome.reduce((total, item) => total + parseFloat(item.amount),0);
+          const newBalance = newIncome.reduce((total, item) => {
+            const amount = parseFloat(item.amount);
+            return !isNaN(amount) ? total + amount : total;
+          }, 0);
+    
 
           return {
             ...prevData,
@@ -519,9 +552,12 @@ const createBudget = async (budgetData) => {
       createdAt: response.data.created_at,
     };
 
-    setUserData((prevData) => ({
+    setBudgetUserData((prevData) => ({
       ...(prevData || {}),
-      budget: newBudget,
+      // budget: newBudget,
+      // budget: response.data,
+      budget: { ...response.data },
+      income: prevData.income,
     }));
 
     alert("Budget created successfully!");
@@ -595,7 +631,7 @@ const handleEditBudget = (budget) => {
       console.log("Response Data:", response.data);
   
       // Update the state with the updated budget
-      setUserData((prevData) => {
+      setBudgetUserData((prevData) => {
         const updatedState = {
           ...prevData,
           budget: {
@@ -709,7 +745,7 @@ const handleEditBudget = (budget) => {
       <AddIncomeSectionComponent
         userData={userData || []}
         formatCurrency={formatCurrency}
-        totalIncome={totalIncome}
+        totalIncome={totalIncome || []}
         setIncomeToEdit={setIncomeToEdit}
         setIsEditingIncome={setIsEditingIncome}
         deleteIncome={deleteIncome}

@@ -20,7 +20,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
         <form onSubmit={formik.handleSubmit}>
           {!isLogin && (
             <div className="mb-4">
-              <label className="block text-gray-300 mb-2">Username:</label>
+              <label className="block text-gray-300 text-left mb-2">Username:</label>
               <input
                 required
                 type="text"
@@ -34,7 +34,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
             </div>
           )}
           <div className="mb-4">
-            <label className="block text-gray-300 mb-2">Email:</label>
+            <label className="block text-gray-300 text-left mb-2">Email:</label>
             <input
               required
               type="email"
@@ -48,7 +48,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
           </div>
           {!isLogin && (
             <div className="mb-4">
-              <label className="block text-gray-300 mb-2">Phone Number:</label>
+              <label className="block text-gray-300 text-left mb-2">Phone Number:</label>
               <input
                 required
                 type="text"
@@ -62,7 +62,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
             </div>
           )}
           <div className="mb-4 relative">
-            <label className="block text-gray-300 mb-2">Password:</label>
+            <label className="block text-gray-300 text-left mb-2">Password:</label>
             <input
               required
               type={showPassword ? 'text' : 'password'}
@@ -85,7 +85,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
   
           {!isLogin && (
             <div className="mb-4">
-              <label className="block text-gray-300 mb-2">Date of Birth:</label>
+              <label className="block text-gray-300 text-left mb-2">Date of Birth:</label>
               <input
                 required
                 type="date"

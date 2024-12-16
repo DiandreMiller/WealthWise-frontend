@@ -46,7 +46,7 @@ const BudgetSectionComponent = ({
           <p className="text-gray-600">
             Actual Expenses: <strong className="text-red-600">{formatCurrency(budgetUserData.actual_expenses)}</strong>
           </p>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mb-4">
             Disposable Income: <strong className="text-blue-600">{formatCurrency(budgetUserData.disposable_income)}</strong>
           </p>
           {/* Create or Update Budget Button */}

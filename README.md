@@ -77,13 +77,19 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 1. Clone the repository:
    ```bash
    git clone https://github.com/DiandreMiller/icapital-financial-planner-front-end.git
-   cd budgeting-app
+   cd icapital-financial-planner-front-end
 
 2. Install dependencies:
     ```bash
     npm install
 
 
-3. Navigate to the frontend directory and start the client:
+3. Navigate to the frontend directory and start the client. You should be running on local host 5173:
     ```bash
     npm run dev
+
+4. Create a .env in the root directory of your project, and use this environmental variable name:
+    ```bash
+    VITE_REACT_APP_BACKEND_API
+
+5. Happy Hacking!!!!

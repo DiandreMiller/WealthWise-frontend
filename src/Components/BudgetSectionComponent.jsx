@@ -46,6 +46,9 @@ const BudgetSectionComponent = ({
           <p className="text-gray-600">
             Actual Expenses: <strong className="text-red-600">{formatCurrency(budgetUserData.actual_expenses)}</strong>
           </p>
+          <p className="text-gray-600">
+            Disposable Income: <strong className="text-blue-600">{formatCurrency(budgetUserData.disposable_income)}</strong>
+          </p>
           {/* Create or Update Budget Button */}
           {isBudgetEmpty ? (
             <button 
@@ -77,6 +80,7 @@ BudgetSectionComponent.propTypes = {
     monthly_expense_goal: PropTypes.number.isRequired,
     actual_income: PropTypes.number.isRequired,
     actual_expenses: PropTypes.number.isRequired,
+    disposable_income: PropTypes.number.isRequired,
   }),
   formatCurrency: PropTypes.func.isRequired,
   createBudget: PropTypes.func.isRequired,

@@ -36,6 +36,7 @@ const DashboardComponent = () => {
   const [isEditingBudget, setIsEditingBudget] = useState(false);
   const [budgetToEdit, setBudgetToEdit] = useState(null);
   const [refreshBudget, setRefreshBudget] = useState(false);
+  const [userName, setUserName] = useState('');
 
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
@@ -56,6 +57,16 @@ const DashboardComponent = () => {
         setUserData(formattedData);
         console.log("User data fetched:", formattedData);
         setUpdatedIncome(response.data);
+
+        if(formattedData) {
+          const name = formattedData[0].User.username
+          const length = name.length;
+          const firstLetter = name[0].toUpperCase();
+          const restOfUserName = name.slice(1,length);
+          const fullUserName = `${firstLetter}${restOfUserName}`
+          setUserName(fullUserName);
+        }
+
       } catch (error) {
         console.error("Error fetching user data:", error);
         setUserData([]);
@@ -621,9 +632,14 @@ const handleEditBudget = (budget) => {
 
   return (
     <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg mt-24">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Financial Dashboard</h1>
-      </header>
+      <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+        <header className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Financial Dashboard</h1>
+          <h1 className="text-xl text-blue-600">Welcome {userName}</h1>
+        </header>
+
+      </div>
+
       <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* Income Section */}

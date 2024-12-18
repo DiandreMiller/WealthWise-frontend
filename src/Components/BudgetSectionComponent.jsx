@@ -5,7 +5,9 @@ const BudgetSectionComponent = ({
   formatCurrency,
   handleEditBudget,
   setBudgetToEdit,
-  setIsEditingBudget
+  setIsEditingBudget,
+  expenseUser,
+  userData,
 }) => {
   const isBudgetEmpty = 
     !budgetUserData.monthly_income_goal &&
@@ -14,6 +16,8 @@ const BudgetSectionComponent = ({
     !budgetUserData.actual_expenses;
 
     console.log('budgetUserData:', budgetUserData);
+    console.log('user data amount budget section:', userData.map((person) => person.amount));
+    console.log('user expense amount budget section:', expenseUser.expenses.map((person) => person.amount))
 
     const handleCreateBudget = () => {
       const initialBudget = {
@@ -26,7 +30,15 @@ const BudgetSectionComponent = ({
       setBudgetToEdit(initialBudget); 
       setIsEditingBudget(true); 
     };
+
     
+    const disposableIncome = (income, expense1) => {
+      const finalIncome = income.map((person) => person.amount).reduce((a,b) => a + b, 0);
+      const finalExpense = expense1.expenses.map((person) => person.amount).reduce((a,b) => a + b, 0);
+      const moneyToSpend = finalIncome - finalExpense;
+
+      return moneyToSpend; 
+    }
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
@@ -41,13 +53,20 @@ const BudgetSectionComponent = ({
             Expense Goal: <strong className="text-red-600">{formatCurrency(budgetUserData.monthly_expense_goal)}</strong>
           </p>
           <p className="text-gray-600">
-            Actual Income: <strong className="text-green-600">{formatCurrency(budgetUserData.actual_income)}</strong>
+            Actual Income: <strong className="text-green-600">
+              {formatCurrency(
+                userData.reduce((a, b) => a + b.amount, 0)
+              )}
+            </strong>
           </p>
+
           <p className="text-gray-600">
-            Actual Expenses: <strong className="text-red-600">{formatCurrency(budgetUserData.actual_expenses)}</strong>
+            Actual Expenses: <strong className="text-red-600">{formatCurrency(
+                expenseUser.expenses.reduce((a,b) => a + b.amount, 0)
+            )}</strong>
           </p>
           <p className="text-gray-600 mb-4">
-            Disposable Income: <strong className="text-blue-600">{formatCurrency(budgetUserData.disposable_income)}</strong>
+            Disposable Income: <strong className="text-blue-600">{formatCurrency(disposableIncome(userData, expenseUser))}</strong>
           </p>
           {/* Create or Update Budget Button */}
           {isBudgetEmpty ? (
@@ -83,14 +102,23 @@ BudgetSectionComponent.propTypes = {
     disposable_income: PropTypes.number.isRequired,
   }),
   formatCurrency: PropTypes.func.isRequired,
-  createBudget: PropTypes.func.isRequired,
-  newMonthlyIncomeGoal: PropTypes.number,
-  newMonthlyExpenseGoal: PropTypes.number,
-  newActualIncome: PropTypes.number,
-  newActualExpenses: PropTypes.number,
   handleEditBudget: PropTypes.func.isRequired,
   setBudgetToEdit: PropTypes.func.isRequired,
   setIsEditingBudget: PropTypes.func.isRequired,
+  expenseUser: PropTypes.shape({
+    expenses: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        amount: PropTypes.number.isRequired,
+      })
+    ).isRequired,
+  }).isRequired,
+  userData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+    })
+  ).isRequired,
 };
 
 export default BudgetSectionComponent;

@@ -78,7 +78,7 @@ const DashboardComponent = () => {
           amount: parseFloat(income.amount), 
         }));
 
-        console.log("Formatted User Data:", formattedData);
+        console.log("Formatted User Data:", formattedData.map((person) => person.amount));
         console.log("Type of User Data:", typeof formattedData);
 
         setUserData(formattedData);
@@ -684,6 +684,8 @@ const handleEditBudget = (budget) => {
 
         {/* Budget Section */}
         <BudgetSectionComponent
+          userData={userData || []}
+          expenseUser={expenseUser}
           budgetUserData={budgetUserData}
           formatCurrency={formatCurrency}
           handleEditBudget={handleEditBudget}

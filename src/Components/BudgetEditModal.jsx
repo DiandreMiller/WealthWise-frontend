@@ -12,8 +12,8 @@ const BudgetEditModal = ({ budget, onClose, onSubmit }) => {
   console.log("Budget passed to BudgetEditModal:", budget);
 
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
+  const handleChange = (event) => {
+    const { id, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
       [id]: value === "" ? 0 : parseFloat(value),

@@ -49,6 +49,7 @@ IncomeOrExpenseGoalAchievedModal.propTypes = {
     budgetUserData: PropTypes.object.isRequired,
     userData: PropTypes.array.isRequired,
     expenseUser: PropTypes.object.isRequired,
+    handleEditBudget: PropTypes.func.isRequired,
   };
 
 export default IncomeOrExpenseGoalAchievedModal;

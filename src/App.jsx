@@ -29,7 +29,6 @@ import Dashboard from './Pages/Dashboard';
 import RegisterPasskey from './Pages/RegisterPasskey';
 import TestComponent from './Components/TestComponent';
 import PlaceHolderSubmittedContactUs from './Pages/PlaceHolderSubmittedContactUs';
-import IncomeOrExpenseGoalAchieved from './Pages/IncomeOrExpenseGoalAchieved';
 
 
 const AppContent = () => {
@@ -245,7 +244,6 @@ const loginUser = async (userData) => {
           path='/register-passkey'
         />
         <Route element={<PlaceHolderSubmittedContactUs />} path='/thank-you-for-contacting-us' />
-        {/* <Route element={<IncomeOrExpenseGoalAchieved />} path='/goal-achieved' /> */}
         <Route element={<TestComponent />} path='/test/:userId'/>
         <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/:userId' />
         <Route element={<FourOFour />} path='*' />

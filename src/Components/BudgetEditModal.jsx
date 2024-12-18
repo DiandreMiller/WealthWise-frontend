@@ -54,28 +54,6 @@ const BudgetEditModal = ({ budget, onClose, onSubmit }) => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="actual_income" className="block">Actual Income</label>
-            <input
-              type="number"
-              id="actual_income"
-              value={formData.actual_income || ""}
-              onChange={handleChange}
-              className="w-full border border-white bg-black text-white rounded-lg p-2 mt-2"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="actual_expenses" className="block">Actual Expenses</label>
-            <input
-              type="number"
-              id="actual_expenses"
-              value={formData.actual_expenses || ""}
-              onChange={handleChange}
-              className="w-full border border-white bg-black text-white rounded-lg p-2 mt-2"
-              required
-            />
-          </div>
           <div className="flex justify-between">
             <button
               type="submit"

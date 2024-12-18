@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+import DOMPurify from 'dompurify';
 import IncomeEditModal from './IncomeEditModal';
 import ExpenseEditModal from './ExpenseEditModal';
 import IncomeSectionComponent from "./IncomeSectionComponent";
@@ -9,7 +10,9 @@ import BudgetSectionComponent from "./BudgetSectionComponent";
 import AddIncomeSectionComponent from "./AddIncomeSectionComponent";
 import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
 import BudgetEditModal from './BudgetEditModal';
-import DOMPurify from 'dompurify';
+import IncomeOrExpenseGoalAchievedModal from "./IncomeOrExpenseGoalAchievedModal";
+
+
 
 const DashboardComponent = () => {
   const { userId } = useParams();
@@ -38,6 +41,7 @@ const DashboardComponent = () => {
   const [budgetToEdit, setBudgetToEdit] = useState(null);
   const [refreshBudget, setRefreshBudget] = useState(false);
   const [userName, setUserName] = useState('');
+  const [showGoalModal, setShowModal] = useState(false);
 
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
@@ -484,7 +488,7 @@ const deleteExpense = async (expenseId) => {
       fetchBudgetData();
     }
     
-  }, [userId, backEndUrl, refreshBudget]);
+  }, [userId, backEndUrl, refreshBudget, expenseUser, userData]);
 
 
 const handleToggleBudget = () => {
@@ -634,6 +638,26 @@ const handleEditBudget = (budget) => {
     }
   };
 
+  //Function to Check if Goals were accomplished or exceeded
+  const checkIfIncomeOrExpenseAchieved = (incomeGoal, expenseGoal, incomeActual, expenseActual) => {
+
+    const totalIncome = incomeActual.map((person) => person.amount).reduce((a, b) => a + b, 0);
+    const totalExpense = expenseActual.expenses.map((person) => person.amount).reduce((a, b) => a + b, 0);
+  
+    const monthlyIncomeGoal = incomeGoal.monthly_income_goal;
+    const monthlyExpenseGoal = expenseGoal.monthly_expense_goal;
+  
+    if (totalIncome >= monthlyIncomeGoal && totalExpense <= monthlyExpenseGoal) {
+      return "Income & Expense";
+    } else if (totalIncome >= monthlyIncomeGoal) {
+      return "Income";
+    } else if (totalExpense <= monthlyExpenseGoal) {
+      return "Expense";
+    } else {
+      return null; 
+    }
+  };
+  
 
   if (loading) {
     return (
@@ -645,6 +669,7 @@ const handleEditBudget = (budget) => {
     );
   }
   
+
 
 
 
@@ -774,11 +799,16 @@ const handleEditBudget = (budget) => {
         />
     )}
 
-
+      {/* <IncomeOrExpenseGoalAchievedModal 
+        checkIfIncomeOrExpenseAchieved={checkIfIncomeOrExpenseAchieved} 
+        budgetUserData={budgetUserData}
+        userData={userData || []}
+        expenseUser={expenseUser}
+      /> */}
     </div>
   );
   
-  
+ 
 };
 
 

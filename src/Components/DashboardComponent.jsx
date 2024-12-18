@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import DOMPurify from 'dompurify';
@@ -41,7 +41,9 @@ const DashboardComponent = () => {
   const [budgetToEdit, setBudgetToEdit] = useState(null);
   const [refreshBudget, setRefreshBudget] = useState(false);
   const [userName, setUserName] = useState('');
-  const [showGoalModal, setShowModal] = useState(false);
+  const [showGoalModal, setShowGoalModal] = useState(false);
+  const [showBudgetEditModal, setShowBudgetEditModal] = useState(false);
+  const goalProcessedRef = useRef(false);
 
 
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
@@ -573,6 +575,7 @@ const handleEditBudget = (budget) => {
   handleToggleBudget();
   setBudgetToEdit(newBudgetToEdit);
   setIsEditingBudget(true);
+  setShowBudgetEditModal(true);
 };
 
 
@@ -656,6 +659,22 @@ const handleEditBudget = (budget) => {
     } else {
       return null; 
     }
+  };
+
+  useEffect(() => {
+
+    const goalAchieved = checkIfIncomeOrExpenseAchieved(budgetUserData, budgetUserData, userData || [], expenseUser)
+
+    if(goalAchieved && !goalProcessedRef.current) {
+      setShowGoalModal(true);
+      goalProcessedRef.current = true;
+    }
+
+  },[budgetUserData, userData, expenseUser])
+
+  const handleCloseModal = () => {
+    setShowGoalModal(false);
+    goalProcessedRef.current = true; 
   };
   
 
@@ -782,7 +801,10 @@ const handleEditBudget = (budget) => {
     {isEditingBudget && budgetToEdit && (
         <BudgetEditModal
           budget={budgetToEdit} 
-          onClose={() => setIsEditingBudget(false)} 
+          onClose={() => {
+            setIsEditingBudget(false);
+            setShowBudgetEditModal(false);
+          }} 
           onSubmit={(updatedBudgetData) => {
             console.log("budgetToEdit:", budgetToEdit);
             console.log("budgetId being sent:", budgetToEdit?.budget_id);
@@ -793,18 +815,33 @@ const handleEditBudget = (budget) => {
             } else {
               createBudget(updatedBudgetData);
             }
+              setIsEditingBudget(false);
+              setShowBudgetEditModal(false);
           }}
           
           
         />
     )}
 
-      {/* <IncomeOrExpenseGoalAchievedModal 
-        checkIfIncomeOrExpenseAchieved={checkIfIncomeOrExpenseAchieved} 
-        budgetUserData={budgetUserData}
-        userData={userData || []}
-        expenseUser={expenseUser}
-      /> */}
+          <div>
+            {showGoalModal && (
+              <IncomeOrExpenseGoalAchievedModal
+                // onClose={() => setShowGoalModal(false)}
+                onClose={handleCloseModal}
+                onUpdateGoals={() => {
+                  setShowGoalModal(false);
+                  setShowBudgetEditModal(true);
+                  setBudgetToEdit(budgetUserData);
+                  setShowBudgetEditModal(true);
+                }}
+                checkIfIncomeOrExpenseAchieved={checkIfIncomeOrExpenseAchieved}
+                budgetUserData={budgetUserData}
+                userData={userData || []}
+                expenseUser={expenseUser}
+                handleEditBudget={handleEditBudget}
+              />
+            )}
+          </div>
     </div>
   );
   

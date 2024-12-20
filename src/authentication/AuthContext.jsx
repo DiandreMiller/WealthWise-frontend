@@ -1,5 +1,6 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
+import Cookies from 'js-cookie'
 
 // Create the AuthContext
 const AuthContext = createContext();
@@ -9,13 +10,33 @@ const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [token, setToken] = useState(null);
     const [canRegisterPasskey, setCanRegisterPasskey] = useState(false);
-    const [isLogin, setIsLogin] = useState(true); // Added for login/signup state
+    const [isLogin, setIsLogin] = useState(true); 
+    const [loading, setLoading] = useState(true);
+
+    //Check for tokens in cookies on initial load
+
+    useEffect(() => {
+
+        const storedToken = Cookies.get('token');
+
+        if(storedToken) {
+            setToken(storedToken);
+            setIsAuthenticated(true);
+        }
+
+        setLoading(false);
+
+    },[])
 
     // Login function
-    const login = (token) => {
+    const login = (token, expiresIn) => {
         setIsAuthenticated(true);
         setToken(token);
         setCanRegisterPasskey(true);
+
+        // Store token in cookies with expiration
+        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        Cookies.set("token", token, { expires: expirationDate, secure: true, sameSite: "strict" });
     };
 
     // Logout function
@@ -24,6 +45,7 @@ const AuthProvider = ({ children }) => {
         setToken(null);
         setCanRegisterPasskey(false);
         setIsLogin(true); 
+        Cookies.remove("token");
     };
 
     const reset = () => {
@@ -31,6 +53,7 @@ const AuthProvider = ({ children }) => {
         setToken(null);
         setCanRegisterPasskey(false);
         setIsLogin(true); 
+        Cookies.remove("token");
     };
 
     // Toggle between login and signup
@@ -49,6 +72,7 @@ const AuthProvider = ({ children }) => {
                 canRegisterPasskey,
                 isLogin,  
                 toggleAuthState,  
+                loading,
             }}
         >
             {children}

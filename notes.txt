@@ -1,1 +1,71 @@
 Figure out why when I refresh the page it logs out.
+
+
+//
+
+import React, { useState } from 'react';
+
+function MyComponent() {
+  const [state, setState] = useState({
+    name: '',
+    age: 0,
+    email: ''
+  });
+
+  const handleNameChange = (event) => {
+    setState({ ...state, name: event.target.value });
+  };
+
+  const handleAgeChange = (event) => {
+    setState({ ...state, age: parseInt(event.target.value, 10) });
+  };
+
+  const handleEmailChange = (event) => {
+    setState({ ...state, email: event.target.value });
+  };
+
+  return (
+    <div>
+      <input type="text" value={state.name} onChange={handleNameChange} />
+      <input type="number" value={state.age} onChange={handleAgeChange} />
+      <input type="email" value={state.email} onChange={handleEmailChange} />
+    </div>
+  );
+}
+
+
+
+
+
+import React, { useReducer } from 'react';
+
+const initialState = {
+  name: '',
+  age: 0,
+  email: ''
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'UPDATE_NAME':
+      return { ...state, name: action.payload };
+    case 'UPDATE_AGE':
+      return { ...state, age: action.payload };
+    case 'UPDATE_EMAIL':
+      return { ...state, email: action.payload };
+    default:
+      return state;
+  }
+};
+
+function MyComponent() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <input type="text" value={state.name} onChange={(e) => dispatch({ type: 'UPDATE_NAME', payload: e.target.value })} />
+      <input type="number" value={state.age} onChange={(e) => dispatch({ type: 'UPDATE_AGE', payload: parseInt(e.target.value, 10) })} />
+      <input type="email" value={state.email} onChange={(e) => dispatch({ type: 'UPDATE_EMAIL', payload: e.target.value })} />
+    </div>
+  );
+}

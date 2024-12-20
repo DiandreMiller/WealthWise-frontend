@@ -43,6 +43,7 @@ const DashboardComponent = () => {
   const [userName, setUserName] = useState('');
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showBudgetEditModal, setShowBudgetEditModal] = useState(false);
+  const [start, setStart] = useState({state: 1})
   const goalProcessedRef = useRef(false);
 
 

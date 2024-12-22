@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import DOMPurify from 'dompurify';
@@ -44,7 +44,9 @@ const DashboardComponent = () => {
   const [userName, setUserName] = useState('');
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showBudgetEditModal, setShowBudgetEditModal] = useState(false);
-  const [start, setStart] = useState({state: 1})
+  const [currentMonth, setCurrentMonth] = useState('');
+  const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
+  const [currentMonthExpenses, setCurrentMonthExpenses] = useState(0);
   const goalProcessedRef = useRef(false);
 
 
@@ -679,6 +681,8 @@ const handleEditBudget = (budget) => {
     goalProcessedRef.current = true; 
   };
 
+
+  // Get current month
   const getMonth = () => {
 
     const monthMap = new Map([
@@ -709,14 +713,57 @@ const handleEditBudget = (budget) => {
     }
 
    
-    return month;
+    setCurrentMonth(month);
     
   }
 
-  const getSpecificMonthIncome = () => {
+  // Call get month function
+  useEffect(() => {
+    getMonth();
+}, []); 
 
-  }
-  
+  //Function to get income for a specific month
+  const getSpecificMonthIncome = useCallback(() => {
+    if (!currentMonth) {
+      return;
+    };
+
+    const filteredIncomes = userData.filter((income) => {
+        const incomeMonth = new Date(income.date_received).toLocaleString("en-US", { month: "long" });
+        return incomeMonth === currentMonth;
+    });
+
+    const totalIncome = filteredIncomes.reduce((total, income) => total + income.amount, 0);
+    setCurrentMonthIncome(totalIncome);
+}, [currentMonth, userData]);
+
+
+  // Get Monthly income
+  useEffect(() => {
+    getSpecificMonthIncome();
+  }, [getSpecificMonthIncome]);
+
+
+  const getSpecificMonthExpense = useCallback(() => {
+    if (!currentMonth) {
+      return;
+    };
+
+    const filteredExpenses = expenseUser.expenses.filter((expenses) => {
+        const expensesMonth = new Date(expenses.date_incurred).toLocaleString("en-US", { month: "long" });
+        return expensesMonth === currentMonth;
+    });
+
+    const totalExpenses = filteredExpenses.reduce((total, expenses) => total + expenses.amount, 0);
+    setCurrentMonthExpenses(totalExpenses);
+}, [currentMonth, expenseUser]);
+
+ // Get Monthly expense
+ useEffect(() => {
+  getSpecificMonthExpense();
+}, [getSpecificMonthExpense]);
+
+
 
   if (loading) {
     return (
@@ -792,7 +839,11 @@ const handleEditBudget = (budget) => {
     </div>
 
     <div>
-      <MonthlyActivityComponent />
+      <MonthlyActivityComponent
+        currentMonth={currentMonth}
+        currentMonthIncome={currentMonthIncome}
+        currentMonthExpenses={currentMonthExpenses}
+       />
     </div>
   
       {/* Added Income Section */}

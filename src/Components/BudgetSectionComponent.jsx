@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+
 
 const BudgetSectionComponent = ({
   budgetUserData,
@@ -9,6 +11,26 @@ const BudgetSectionComponent = ({
   expenseUser,
   userData,
 }) => {
+
+  const [disposableIncome, setDisposableIncome] = useState(0);
+
+  useEffect(() => {
+
+    if (userData.length > 0 && expenseUser.expenses.length > 0) {
+        const finalIncome = userData.map((person) => Number(person.amount)).reduce((a,b) => a + b, 0);
+        console.log('finalIncome:', finalIncome);
+        const finalExpense = expenseUser.expenses.map((person) => Number(person.amount)).reduce((a,b) => a + b, 0);
+        console.log('finalExpense:', finalExpense);
+        const moneyToSpend = Number((finalIncome - finalExpense).toFixed(2));
+        console.log('moneyToSpend:', moneyToSpend);
+        setDisposableIncome(moneyToSpend);
+    } else {
+      setDisposableIncome(0);
+    }
+
+  },[expenseUser, userData])
+
+
   const isBudgetEmpty = 
     !budgetUserData.monthly_income_goal &&
     !budgetUserData.monthly_expense_goal &&
@@ -32,13 +54,11 @@ const BudgetSectionComponent = ({
     };
 
     
-    const disposableIncome = (income, expense1) => {
-      const finalIncome = income.map((person) => person.amount).reduce((a,b) => a + b, 0);
-      const finalExpense = expense1.expenses.map((person) => person.amount).reduce((a,b) => a + b, 0);
-      const moneyToSpend = finalIncome - finalExpense;
+    
+     
 
-      return moneyToSpend; 
-    }
+    
+    
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
@@ -66,7 +86,7 @@ const BudgetSectionComponent = ({
             )}</strong>
           </p>
           <p className="text-gray-600 mb-4">
-            Disposable Income: <strong className="text-blue-600">{formatCurrency(disposableIncome(userData, expenseUser))}</strong>
+            Disposable Income: <strong className="text-blue-600">{formatCurrency(disposableIncome)}</strong>
           </p>
           {/* Create or Update Budget Button */}
           {isBudgetEmpty ? (
@@ -109,7 +129,7 @@ BudgetSectionComponent.propTypes = {
     expenses: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.string.isRequired,
-        amount: PropTypes.number.isRequired,
+        amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       })
     ).isRequired,
   }).isRequired,

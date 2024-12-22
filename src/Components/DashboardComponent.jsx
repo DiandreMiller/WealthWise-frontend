@@ -246,7 +246,7 @@ const DashboardComponent = () => {
             const newIncome = {
                 id: response.data.id, 
                 user_id: userId,
-                amount: amount.toFixed(2),
+                amount: parseFloat(amount.toFixed(2)),
                 source: incomeDescription,
                 date_received: dateReceived,
                 created_at: new Date().toISOString(),
@@ -350,7 +350,7 @@ const addExpense = async () => {
       const newExpense = {
         id: response.data.id,
         user_id: userId,
-        amount: amount.toFixed(2),
+        amount: parseFloat(amount.toFixed(2)),
         category: expenseDescription,
         date_incurred: dateIncurred,
         created_at: new Date().toISOString(),
@@ -677,6 +677,44 @@ const handleEditBudget = (budget) => {
     setShowGoalModal(false);
     goalProcessedRef.current = true; 
   };
+
+  const getMonth = () => {
+
+    const monthMap = new Map([
+        ['01', 'January'],
+        ['02', 'February'],
+        ['03', 'March'],
+        ['04', 'April'],
+        ['05', 'May'],
+        ['06', 'June'],
+        ['07', 'July'],
+        ['08', 'August'],
+        ['09', 'September'],
+        ['10', 'October'],
+        ['11', 'November'],
+        ['12', 'December']
+      ]);
+      
+    
+    const formattedDate = new Date().toLocaleDateString("en-CA");
+    const getMonthNumber = formattedDate.slice(5,7);
+
+    let month = '';
+
+    for(let [keys, values] of monthMap) {
+        if(keys === getMonthNumber) {
+            month += values
+        }
+    }
+
+   
+    return month;
+    
+  }
+
+  const getSpecificMonthIncome = () => {
+
+  }
   
 
   if (loading) {

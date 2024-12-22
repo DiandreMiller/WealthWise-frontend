@@ -69,6 +69,10 @@ const AddExpenseSectionComponent = ({
 
       </table>
 
+      {/* <div className="mt-4 text-right font-semibold text-xl text-gray-700">
+        Monthly Expenses: {totalExpenses(expenses)}
+      </div> */}
+
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">
         Total Expenses: {totalExpenses(expenses)}
       </div>

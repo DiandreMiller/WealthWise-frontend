@@ -66,9 +66,13 @@ const AddIncomeSectionComponent = ({
                 )}
             </tbody>
           </table>
+     {/* <div className="mt-4 text-right font-semibold text-xl text-gray-700">
+       Monthly Income: {totalIncome(userData)}
+     </div> */}
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">
        Total Income: {totalIncome(userData)}
      </div>
+
   <button
     className="mt-4 text-blue-500 hover:underline"
     onClick={() => setShowAllIncome((prevState) => !prevState)}

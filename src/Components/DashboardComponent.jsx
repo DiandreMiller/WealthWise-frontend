@@ -11,6 +11,7 @@ import AddIncomeSectionComponent from "./AddIncomeSectionComponent";
 import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
 import BudgetEditModal from './BudgetEditModal';
 import IncomeOrExpenseGoalAchievedModal from "./IncomeOrExpenseGoalAchievedModal";
+import MonthlyActivityComponent from "./MonthlyActivityComponent";
 
 
 
@@ -788,6 +789,10 @@ const handleEditBudget = (budget) => {
             onSubmit={(id, amount, source) => updateIncome(id, amount, source)}
           />
         )}
+    </div>
+
+    <div>
+      <MonthlyActivityComponent />
     </div>
   
       {/* Added Income Section */}

@@ -37,9 +37,20 @@ const AppContent = () => {
   const [isLogin, setIsLogin] = useState(true);
   // eslint-disable-next-line no-use-before-define
   const [userError, setUserError] = useState('');
+  const [userId, setUserId] = useState(null);
   const { login, logout, reset } = useAuth();
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
   // console.log('backEndUrl:', backEndUrl);
+
+
+  useEffect(() => {
+    const currentUserId = Cookies.get('userID');
+    if(currentUserId) {
+      setUserId(currentUserId);
+    }
+  },[])
+
+  
 
   const signUpUser = async (userData) => {
     try {
@@ -189,8 +200,10 @@ const loginUser = async (userData) => {
           // console.log('Expiration date:', expirationDate);
           Cookies.set('token', token, { expires: expirationDate, secure: true, sameSite: 'strict' });
           // console.log('Token:', token);
+          Cookies.set('userID', response.userId, { expires: expirationDate, secure: true, sameSite: 'strict' });
+          console.log('userId in app.js:', userId);
           login(token);
-  
+          setUserId(response.userId);
           if (!hasRegisteredPasskey) {
             navigate('/register-passkey', { state: { userId: response.userId, email: sanitizedValues.email } });
           } else {
@@ -210,6 +223,7 @@ const loginUser = async (userData) => {
     const handleLogout = () => {
       logout(); 
       reset(); 
+      setUserId(null);
       formik.resetForm(); 
       navigate('/'); 
   };
@@ -228,7 +242,7 @@ const loginUser = async (userData) => {
 
   return (
     <>
-      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} />
+      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} />
       <Routes>
         <Route element={<Home />} path='/' />
         <Route element={<About />} path='/about' />

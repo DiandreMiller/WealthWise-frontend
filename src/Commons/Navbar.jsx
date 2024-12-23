@@ -1,12 +1,8 @@
 import PropTypes from 'prop-types';
 import wealthWise from '../assets/wealthWise.png';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Navbar = ({ onLogOut, isLogin, toggleState }) => {
-  const location = useLocation();
-  const userId = location.state?.userId;
-  // const { userId } = useParams();
+const Navbar = ({ onLogOut, isLogin, toggleState, userId }) => {
 
   const navigate = useNavigate();
 
@@ -16,9 +12,9 @@ const Navbar = ({ onLogOut, isLogin, toggleState }) => {
     console.log('isLogin navbar state:', isLogin);
     console.log('userId: nav', userId)
 
-    if(userId) {
+    if(isLogin && userId) {
       console.log('userId navigate:', userId);
-      navigate(`/dashboard/${userId}`)
+      navigate(`/dashboard/${userId}`);
     } else {
       navigate('/')
     }
@@ -68,7 +64,8 @@ const Navbar = ({ onLogOut, isLogin, toggleState }) => {
 Navbar.propTypes = {
   onLogOut: PropTypes.func.isRequired,
   isLogin: PropTypes.bool.isRequired,
-  toggleState: PropTypes.func.isRequired
+  toggleState: PropTypes.func.isRequired,
+  userId: PropTypes.string,
 };
 
 export default Navbar;

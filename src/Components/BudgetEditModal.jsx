@@ -9,7 +9,18 @@ const BudgetEditModal = ({ budget, onClose, onSubmit }) => {
     actual_expenses: budget?.actual_expenses || 0,
   });
 
-  console.log("Budget passed to BudgetEditModal:", budget);
+  console.log("Form data before submitting:", formData);
+
+
+  // console.log("Budget passed to BudgetEditModal:", budget);
+  console.log("Parsed Budget Data:", {
+    ...budget,
+    monthly_income_goal: parseFloat(budget.monthly_income_goal),
+    monthly_expense_goal: parseFloat(budget.monthly_expense_goal),
+    actual_income: parseFloat(budget.actual_income),
+    actual_expenses: parseFloat(budget.actual_expenses),
+  });
+  
 
 
   const handleChange = (event) => {
@@ -22,8 +33,18 @@ const BudgetEditModal = ({ budget, onClose, onSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Form data before submitting:", formData);
-    onSubmit(formData);
+    
+    const parsedFormData ={
+      ...formData,
+      monthly_income_goal: parseFloat(formData.monthly_income_goal),
+      monthly_expense_goal: parseFloat(formData.monthly_expense_goal),
+      actual_income: parseFloat(formData.actual_income),
+      actual_expenses: parseFloat(formData.actual_expenses),
+      disposable_income:
+        parseFloat(formData.monthly_income_goal) - parseFloat(formData.monthly_expense_goal),
+    }
+    console.log("Parsed Form Data Before Submit:", parsedFormData);
+    onSubmit(parsedFormData);
     onClose();
   };
 

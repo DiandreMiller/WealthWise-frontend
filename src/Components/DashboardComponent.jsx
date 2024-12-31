@@ -58,7 +58,7 @@ const DashboardComponent = () => {
       try{
         const response = await axios.get(`${backEndUrl}/users/${userId}`);
         const userObject = response.data;
-        console.log('userObject:', userObject);
+        // console.log('userObject:', userObject);
         if(userObject) {
             const name = userObject.username
             const length = name.length;
@@ -88,11 +88,11 @@ const DashboardComponent = () => {
           amount: parseFloat(income.amount), 
         }));
 
-        console.log("Formatted User Data:", formattedData.map((person) => person.amount));
-        console.log("Type of User Data:", typeof formattedData);
+        // console.log("Formatted User Data:", formattedData.map((person) => person.amount));
+        // console.log("Type of User Data:", typeof formattedData);
 
         setUserData(formattedData);
-        console.log("User data fetched:", formattedData);
+        // console.log("User data fetched:", formattedData);
         setUpdatedIncome(response.data);
 
       } catch (error) {
@@ -113,14 +113,14 @@ const DashboardComponent = () => {
     const fetchExpensesData = async () => {
         setLoading(true);
         try {
-            console.log("Fetching expenses...");
+            // console.log("Fetching expenses...");
             const response = await axios.get(`${backEndUrl}/users/${userId}/expenses`);
-            console.log("Fetched data:", response.data);
+            // console.log("Fetched data:", response.data);
             const expenses = response.data.map((expense) => ({
               ...expense,
               amount: parseFloat(expense.amount),
             }));
-            console.log('Fetched expenses:', expenses);
+            // console.log('Fetched expenses:', expenses);
 
             setExpenseUser((prevData) => ({
                 ...prevData,
@@ -135,7 +135,7 @@ const DashboardComponent = () => {
     };
 
     if (userId && backEndUrl) {
-      console.log("Re-fetching expenses...");
+      // console.log("Re-fetching expenses...");
       fetchExpensesData();
     }
   }, [userId, backEndUrl, updateEditedExpense]);
@@ -166,12 +166,12 @@ const DashboardComponent = () => {
       return;
     }
 
-    console.log(`User ID: ${userId}`);
-    console.log(`Income ID: ${incomeId}`);
-    console.log('Sending data to update income:', {
-      amount: updatedAmount,
-      source: updatedSource,
-    });
+    // console.log(`User ID: ${userId}`);
+    // console.log(`Income ID: ${incomeId}`);
+    // console.log('Sending data to update income:', {
+    //   amount: updatedAmount,
+    //   source: updatedSource,
+    // });
   
     try {
       // Send PUT request to update income
@@ -181,7 +181,7 @@ const DashboardComponent = () => {
       });
   
       const updatedIncome = response.data;
-      console.log("Updated income:", updatedIncome);
+      // console.log("Updated income:", updatedIncome);
   
       setUserData(prevData => {
 
@@ -203,7 +203,7 @@ const DashboardComponent = () => {
       });
 
       setUpdateEditedIncome(previous => !previous);
-      console.log('UpdateEditedIncome:', updateEditedIncome);
+      // console.log('UpdateEditedIncome:', updateEditedIncome);
   
       alert("Income updated successfully!");
       setIsEditingIncome(false);
@@ -225,12 +225,12 @@ const DashboardComponent = () => {
 
     const dateReceived = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
 
-    console.log("Attempting to add income with details:", {
-        userId,
-        amount,
-        description: incomeDescription,
-        dateReceived,
-    });
+    // console.log("Attempting to add income with details:", {
+    //     userId,
+    //     amount,
+    //     description: incomeDescription,
+    //     dateReceived,
+    // });
 
     try {
         const response = await axios.post(`${backEndUrl}/users/${userId}/income`, {
@@ -241,11 +241,11 @@ const DashboardComponent = () => {
             created_at: new Date().toISOString(), 
         });
 
-        console.log("Response add income:", response);
+        // console.log("Response add income:", response);
 
         // Update user data 
         setUserData((prevData) => {
-            console.log("prevData:", prevData);
+            // console.log("prevData:", prevData);
             const newIncome = {
                 id: response.data.id, 
                 user_id: userId,
@@ -319,7 +319,7 @@ const DashboardComponent = () => {
 
  // Function to add expense
 const addExpense = async () => {
-  console.log('user data Expense check:', expenseUser);
+  // console.log('user data Expense check:', expenseUser);
   const amount = parseFloat(expenseAmount);
 
   if (isNaN(amount) || amount <= 0 || expenseDescription.trim() === "") {
@@ -329,12 +329,12 @@ const addExpense = async () => {
 
   const dateIncurred = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
 
-  console.log("Attempting to add expense with details:", {
-    userId,
-    amount,
-    category: expenseDescription,
-    dateIncurred,
-  });
+  // console.log("Attempting to add expense with details:", {
+  //   userId,
+  //   amount,
+  //   category: expenseDescription,
+  //   dateIncurred,
+  // });
 
   try {
     const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
@@ -345,10 +345,10 @@ const addExpense = async () => {
       created_at: new Date().toISOString(),
     });
 
-    console.log("Response add expense:", response.data);
+    // console.log("Response add expense:", response.data);
 
     setExpenseUser((prevData) => {
-      console.log("prevData before adding expense:", prevData);
+      // console.log("prevData before adding expense:", prevData);
 
       const newExpense = {
         id: response.data.id,
@@ -383,7 +383,7 @@ const addExpense = async () => {
 
 //Function to update Expense
 const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
-  console.log(`[${new Date().toISOString()}] Triggered updateExpense with expenseId: ${expenseId}`);
+  // console.log(`[${new Date().toISOString()}] Triggered updateExpense with expenseId: ${expenseId}`);
   if (!expenseId || isNaN(parseFloat(updatedAmount)) || updatedAmount <= 0 || updatedCategory.trim() === "") {
     alert("Please provide valid expense details.");
     return;
@@ -410,7 +410,7 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
           : expense
       );
 
-      console.log(`[${new Date().toISOString()}] Updated local expense state:`, updatedExpenses);
+      // console.log(`[${new Date().toISOString()}] Updated local expense state:`, updatedExpenses);
       return {
         ...prevData,
         expenses: updatedExpenses,
@@ -418,7 +418,7 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
     });
 
     setUpdateEditedExpense(previous => !previous);
-    console.log(`[${new Date().toISOString()}] State update: updateEditedExpense toggled`);
+    // console.log(`[${new Date().toISOString()}] State update: updateEditedExpense toggled`);
 
     alert("Expense updated successfully!");
     setIsEditingExpense(false);
@@ -510,13 +510,13 @@ const createBudget = async (budgetData) => {
     actual_income,
     actual_expenses,
   } = budgetData;
-  console.log("Received Budget Data:", budgetData);
-  console.log("Parsed Values:", {
-    monthly_income_goal,
-    monthly_expense_goal,
-    actual_income,
-    actual_expenses,
-  });
+  // console.log("Received Budget Data:", budgetData);
+  // console.log("Parsed Values:", {
+  //   monthly_income_goal,
+  //   monthly_expense_goal,
+  //   actual_income,
+  //   actual_expenses,
+  // });
 
 
   if (
@@ -586,64 +586,45 @@ const handleEditBudget = (budget) => {
 
  
 // Function to update budget
-  const updateBudget = async (budgetId, updatedBudgetData) => {
-    console.log("updatedBudgetData received in updateBudget:", updatedBudgetData);
-    console.log('budgetId:', budgetId);
-    const {
-      monthly_income_goal,
-      monthly_expense_goal,
-      actual_income,
-      actual_expenses,
-    } = updatedBudgetData;
+const updateBudget = async (budgetId, updatedBudgetData) => {
+  console.log("Budget data being sent to updateBudget:", updatedBudgetData);
+  console.log("budgetId:", budgetId);
+
+  try {
+    const requestData = {
+      monthly_income_goal: parseFloat(updatedBudgetData.monthly_income_goal),
+      monthly_expense_goal: parseFloat(updatedBudgetData.monthly_expense_goal),
+      actual_income: parseFloat(updatedBudgetData.actual_income),
+      actual_expenses: parseFloat(updatedBudgetData.actual_expenses),
+      disposable_income: parseFloat(updatedBudgetData.monthly_income_goal) - parseFloat(updatedBudgetData.monthly_expense_goal),
+    };
+
+    console.log("Request Data budget:", requestData);
+
+    const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData);
+    console.log("Response Data:", response.data);
 
 
-    const disposableIncome = monthly_income_goal - monthly_expense_goal;
-  
-    if (
-      isNaN(monthly_income_goal) ||
-      isNaN(monthly_expense_goal) ||
-      isNaN(actual_income) ||
-      isNaN(actual_expenses)
-    ) {
-      alert("Please provide valid numbers for all fields.");
-      return;
-    }
-  
-    try {
+    setBudgetUserData({
+      budget_id: response.data.budget_id,
+      user_id: response.data.user_id,
+      monthly_income_goal: parseFloat(response.data.monthly_income_goal),
+      monthly_expense_goal: parseFloat(response.data.monthly_expense_goal),
+      actual_income: parseFloat(response.data.actual_income),
+      actual_expenses: parseFloat(response.data.actual_expenses),
+      disposable_income: parseFloat(response.data.disposable_income),
+    });
+    
 
-      const requestData = {
-        monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
-        monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
-        actual_income: DOMPurify.sanitize(parseFloat(actual_income)),
-        actual_expenses: DOMPurify.sanitize(parseFloat(actual_expenses)),
-        disposable_income: parseFloat(disposableIncome),
-      };
 
-      console.log("Request Data budget:", requestData);
+    alert("Budget updated successfully!");
+    handleToggleBudget();
+  } catch (error) {
+    console.error("Error updating budget:", error);
+    alert("There was an error updating your budget. Please try again.");
+  }
+};
 
-      const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData );
-      console.log("Response Data:", response.data);
-  
-      // Update the state with the updated budget
-      setBudgetUserData((prevData) => {
-        const updatedState = {
-          ...prevData,
-          budget: {
-            ...response.data, 
-            disposable_income: parseFloat(response.data.disposable_income), 
-          },
-        };
-        console.log("Updated State:", updatedState);
-        return updatedState;
-      });
-  
-      handleToggleBudget();
-      alert("Budget updated successfully!");
-    } catch (error) {
-      console.error("Error updating budget:", error);
-      alert("There was an error updating your budget. Please try again.");
-    }
-  };
 
   //Function to Check if Goals were accomplished or exceeded
   const checkIfIncomeOrExpenseAchieved = (incomeGoal, expenseGoal, incomeActual, expenseActual) => {

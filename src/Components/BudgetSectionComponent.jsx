@@ -12,6 +12,8 @@ const BudgetSectionComponent = ({
   userData,
 }) => {
 
+  console.log('budgetUserData:', budgetUserData);
+
   const [disposableIncome, setDisposableIncome] = useState(0);
 
   useEffect(() => {
@@ -24,6 +26,8 @@ const BudgetSectionComponent = ({
         const moneyToSpend = Number((finalIncome - finalExpense).toFixed(2));
         console.log('moneyToSpend:', moneyToSpend);
         setDisposableIncome(moneyToSpend);
+        console.log("Calculated Disposable Income:", disposableIncome);
+
     } else {
       setDisposableIncome(0);
     }

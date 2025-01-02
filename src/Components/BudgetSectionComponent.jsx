@@ -12,7 +12,7 @@ const BudgetSectionComponent = ({
   userData,
 }) => {
 
-  console.log('budgetUserData:', budgetUserData);
+  // console.log('budgetUserData:', budgetUserData);
 
   const [disposableIncome, setDisposableIncome] = useState(0);
 
@@ -20,13 +20,13 @@ const BudgetSectionComponent = ({
 
     if (userData.length > 0 && expenseUser.expenses.length > 0) {
         const finalIncome = userData.map((person) => Number(person.amount)).reduce((a,b) => a + b, 0);
-        console.log('finalIncome:', finalIncome);
+        // console.log('finalIncome:', finalIncome);
         const finalExpense = expenseUser.expenses.map((person) => Number(person.amount)).reduce((a,b) => a + b, 0);
-        console.log('finalExpense:', finalExpense);
+        // console.log('finalExpense:', finalExpense);
         const moneyToSpend = Number((finalIncome - finalExpense).toFixed(2));
-        console.log('moneyToSpend:', moneyToSpend);
+        // console.log('moneyToSpend:', moneyToSpend);
         setDisposableIncome(moneyToSpend);
-        console.log("Calculated Disposable Income:", disposableIncome);
+        // console.log("Calculated Disposable Income:", disposableIncome);
 
     } else {
       setDisposableIncome(0);
@@ -41,9 +41,9 @@ const BudgetSectionComponent = ({
     !budgetUserData.actual_income &&
     !budgetUserData.actual_expenses;
 
-    console.log('budgetUserData:', budgetUserData);
-    console.log('user data amount budget section:', userData.map((person) => person.amount));
-    console.log('user expense amount budget section:', expenseUser.expenses.map((person) => person.amount))
+    // console.log('budgetUserData:', budgetUserData);
+    // console.log('user data amount budget section:', userData.map((person) => person.amount));
+    // console.log('user expense amount budget section:', expenseUser.expenses.map((person) => person.amount))
 
     const handleCreateBudget = () => {
       const initialBudget = {

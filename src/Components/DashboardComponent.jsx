@@ -483,7 +483,7 @@ const deleteExpense = async (expenseId) => {
         };
 
         setBudgetUserData(formattedBudget);
-        console.log('Budget User Data:', formattedBudget);
+        // console.log('Budget User Data:', formattedBudget);
 
       } catch (error) {
         console.error('budget error:', error)
@@ -565,7 +565,7 @@ const createBudget = async (budgetData) => {
 
 //Edit Budget Modal
 const handleEditBudget = (budget) => {
-  console.log("Budget received in handleEditBudget:", budget);
+  // console.log("Budget received in handleEditBudget:", budget);
   const newBudgetToEdit = {
     ...budget,
     monthly_income_goal: DOMPurify.sanitize(parseFloat(budget.monthly_income_goal)),
@@ -574,7 +574,7 @@ const handleEditBudget = (budget) => {
     actual_expenses: DOMPurify.sanitize(parseFloat(budget.actual_expenses)),
   };
 
-  console.log("Setting budgetToEdit in handleEditBudget:", newBudgetToEdit);
+  // console.log("Setting budgetToEdit in handleEditBudget:", newBudgetToEdit);
 
   handleToggleBudget();
   setBudgetToEdit(newBudgetToEdit);
@@ -587,8 +587,8 @@ const handleEditBudget = (budget) => {
  
 // Function to update budget
 const updateBudget = async (budgetId, updatedBudgetData) => {
-  console.log("Budget data being sent to updateBudget:", updatedBudgetData);
-  console.log("budgetId:", budgetId);
+  // console.log("Budget data being sent to updateBudget:", updatedBudgetData);
+  // console.log("budgetId:", budgetId);
 
   try {
     const requestData = {
@@ -599,10 +599,10 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       disposable_income: parseFloat(updatedBudgetData.monthly_income_goal) - parseFloat(updatedBudgetData.monthly_expense_goal),
     };
 
-    console.log("Request Data budget:", requestData);
+    // console.log("Request Data budget:", requestData);
 
     const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData);
-    console.log("Response Data:", response.data);
+    // console.log("Response Data:", response.data);
 
 
     setBudgetUserData({
@@ -693,7 +693,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         }
     }
 
-   
+   console.log('month:', month);
     setCurrentMonth(month);
     
   }
@@ -710,9 +710,14 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     };
 
     const filteredIncomes = userData.filter((income) => {
-        const incomeMonth = new Date(income.date_received).toLocaleString("en-US", { month: "long" });
-        return incomeMonth === currentMonth;
+      const incomeMonth = new Date(`${income.date_received}T00:00:00Z`).toLocaleString("en-US", { month: "long", timeZone: "UTC" }).toLowerCase();
+      console.log('Raw Date:', income.date_received);
+      console.log('Parsed Date:', new Date(`${income.date_received}T00:00:00Z`).toISOString());
+      console.log('Parsed Month (UTC):', incomeMonth);
+      return currentMonth.toLowerCase() === incomeMonth;
     });
+    
+    
 
     const totalIncome = filteredIncomes.reduce((total, income) => total + income.amount, 0);
     setCurrentMonthIncome(totalIncome);
@@ -731,8 +736,9 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     };
 
     const filteredExpenses = expenseUser.expenses.filter((expenses) => {
-        const expensesMonth = new Date(expenses.date_incurred).toLocaleString("en-US", { month: "long" });
-        return expensesMonth === currentMonth;
+      const expensesMonth = new Date(`${expenses.date_incurred}T00:00:00Z`).toLocaleString("en-US", { month: "long", timeZone: "UTC" }).toLowerCase();
+      console.log('expensesMonth:', expensesMonth);
+        return expensesMonth === currentMonth.toLowerCase();
     });
 
     const totalExpenses = filteredExpenses.reduce((total, expenses) => total + expenses.amount, 0);
@@ -882,9 +888,9 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
             setShowBudgetEditModal(false);
           }} 
           onSubmit={(updatedBudgetData) => {
-            console.log("budgetToEdit:", budgetToEdit);
-            console.log("budgetId being sent:", budgetToEdit?.budget_id);
-            console.log("updatedBudgetData being sent:", updatedBudgetData);
+            // console.log("budgetToEdit:", budgetToEdit);
+            // console.log("budgetId being sent:", budgetToEdit?.budget_id);
+            // console.log("updatedBudgetData being sent:", updatedBudgetData);
           
             if (budgetToEdit?.budget_id) {
               updateBudget(budgetToEdit.budget_id, updatedBudgetData);

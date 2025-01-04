@@ -169,19 +169,14 @@ const DashboardComponent = () => {
       alert("Please provide valid income details.");
       return;
     }
-
-    // console.log(`User ID: ${userId}`);
-    // console.log(`Income ID: ${incomeId}`);
-    // console.log('Sending data to update income:', {
-    //   amount: updatedAmount,
-    //   source: updatedSource,
-    // });
   
     try {
       // Send PUT request to update income
       const response = await axios.put(`${backEndUrl}/users/${userId}/income/${incomeId}`, {
         amount: DOMPurify.sanitize(updatedAmount),
         source: DOMPurify.sanitize(updatedSource),
+        category: incomeCategory,
+        is_recurring: isRecurringIncome
       });
   
       const updatedIncome = response.data;
@@ -196,7 +191,7 @@ const DashboardComponent = () => {
 
         const updatedIncomes = prevData.income.map(income =>
           income.id === incomeId
-            ? { ...income, amount: updatedIncome.amount, source: updatedIncome.source }
+            ? { ...income, amount: updatedIncome.amount, source: updatedIncome.source, category: updatedIncome.category, is_recurring: updateIncome.is_recurring }
             : income
         );
   
@@ -412,6 +407,7 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
       amount: DOMPurify.sanitize(updatedAmount),
       category: DOMPurify.sanitize(updatedCategory),
       category_type: expenseCategories,
+      is_recurring: isRecurringExpense ? true : false,
     });
 
     const updatedExpense = response.data;
@@ -424,7 +420,7 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
 
       const updatedExpenses = prevData.expenses.map(expense =>
         expense.id === expenseId
-          ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type }
+          ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type, is_recurring: updateEditedExpense.is_recurring }
           : expense
       );
 
@@ -599,7 +595,6 @@ const handleEditBudget = (budget) => {
   setIsEditingBudget(true);
   setShowBudgetEditModal(true);
 };
-
 
 
  
@@ -846,7 +841,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
             income={incomeToEdit}
             onClose={() => setIsEditingIncome(false)} 
             onSave={updateIncome}
-            onSubmit={(id, amount, source) => updateIncome(id, amount, source)}
+            onSubmit={(id, amount, source, category, is_recurring) => updateIncome(id, amount, source, category, is_recurring)}
           />
         )}
     </div>
@@ -880,7 +875,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
               expense={expenseToEdit}
               onClose={() => setIsEditingExpense(false)} 
               onSave={updateExpense}
-              onSubmit={(id, amount, category) => updateExpense(id, amount, category)}
+              onSubmit={(id, amount, category, category_type, is_recurring) => updateExpense(id, amount, category, category_type, is_recurring)}
 
             />
           )}

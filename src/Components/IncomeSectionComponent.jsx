@@ -81,7 +81,7 @@ const IncomeSectionComponent = ({
                 </option>
               ))}
             </select>
-          </div>
+          </div> 
 
 
           <div>

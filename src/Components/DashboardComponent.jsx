@@ -25,7 +25,10 @@ const DashboardComponent = () => {
   const [expenseDescription, setExpenseDescription] = useState("");
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseUser, setExpenseUser] = useState({ expenses: [] });
+  const [expenseCategories, setExpenseCategories] = useState('');
+  const [isRecurringExpense, setIsRecurringExpense] = useState(null);
   const [updatedIncome, setUpdatedIncome] = useState(null);
+  const [incomeCategory, setIncomeCategory] = useState("");
   const [loading, setLoading] = useState(true);
   const [showAllIncome, setShowAllIncome] = useState(false);
   const [showAllExpense, setShowAllExpense] = useState(false);
@@ -46,6 +49,7 @@ const DashboardComponent = () => {
   const [showBudgetEditModal, setShowBudgetEditModal] = useState(false);
   const [currentMonth, setCurrentMonth] = useState('');
   const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
+  const [isRecurringIncome, setIsRecurringIncome] = useState(null);
   const [currentMonthExpenses, setCurrentMonthExpenses] = useState(0);
   const goalProcessedRef = useRef(false);
 
@@ -92,7 +96,7 @@ const DashboardComponent = () => {
         // console.log("Type of User Data:", typeof formattedData);
 
         setUserData(formattedData);
-        // console.log("User data fetched:", formattedData);
+        console.log("User data fetched:", formattedData);
         setUpdatedIncome(response.data);
 
       } catch (error) {
@@ -120,7 +124,7 @@ const DashboardComponent = () => {
               ...expense,
               amount: parseFloat(expense.amount),
             }));
-            // console.log('Fetched expenses:', expenses);
+            console.log('Fetched expenses:', expenses);
 
             setExpenseUser((prevData) => ({
                 ...prevData,
@@ -218,19 +222,21 @@ const DashboardComponent = () => {
   const addIncome = async () => {
     const amount = parseFloat(incomeAmount);
 
-    if (isNaN(amount) || amount <= 0 || incomeDescription.trim() === "") {
-        alert("Please provide valid income description and amount.");
+    if (isNaN(amount) || amount <= 0 || incomeDescription.trim() === "" || !incomeCategory) {
+        alert("Please provide valid income description, amount and category.");
         return;
     }
 
+    console.log("Selected category Dashboard:", incomeCategory);
+    console.log("Preparing to add income with the following details:");
+    console.log("Description:", incomeDescription);
+    console.log("Amount:", amount);
+    console.log("Category:", incomeCategory);
+    console.log("Selected Category before POST:", incomeCategory);
+
+
     const dateReceived = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
 
-    // console.log("Attempting to add income with details:", {
-    //     userId,
-    //     amount,
-    //     description: incomeDescription,
-    //     dateReceived,
-    // });
 
     try {
         const response = await axios.post(`${backEndUrl}/users/${userId}/income`, {
@@ -239,6 +245,8 @@ const DashboardComponent = () => {
             source: DOMPurify.sanitize(incomeDescription),
             date_received: dateReceived,
             created_at: new Date().toISOString(), 
+            category: DOMPurify.sanitize(incomeCategory),
+            is_recurring: DOMPurify.sanitize(isRecurringIncome)
         });
 
         // console.log("Response add income:", response);
@@ -253,6 +261,8 @@ const DashboardComponent = () => {
                 source: incomeDescription,
                 date_received: dateReceived,
                 created_at: new Date().toISOString(),
+                category: incomeCategory,
+                is_recurring: isRecurringIncome,
                 User: prevData?.User || null, 
             };
 
@@ -262,7 +272,9 @@ const DashboardComponent = () => {
         // Reset form fields
         setIncomeDescription("");
         setIncomeAmount("");
+        setIncomeCategory("");
         setIsAddingIncome(false);
+        setIsRecurringIncome(false);
     } catch (error) {
         console.error("Error adding income:", error);
         alert("There was an error adding your income. Please try again.");
@@ -341,7 +353,10 @@ const addExpense = async () => {
       user_id: DOMPurify.sanitize(userId),
       amount: DOMPurify.sanitize(amount.toFixed(2)),
       category: DOMPurify.sanitize(expenseDescription),
+      category_type: expenseCategories,
+      is_recurring: isRecurringExpense,
       date_incurred: dateIncurred,
+
       created_at: new Date().toISOString(),
     });
 
@@ -355,6 +370,8 @@ const addExpense = async () => {
         user_id: userId,
         amount: parseFloat(amount.toFixed(2)),
         category: expenseDescription,
+        category_type: expenseCategories,
+        is_recurring: isRecurringExpense,
         date_incurred: dateIncurred,
         created_at: new Date().toISOString(),
         User: prevData?.User || null,
@@ -394,6 +411,7 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
     const response = await axios.put(`${backEndUrl}/users/${userId}/expenses/${expenseId}`, {
       amount: DOMPurify.sanitize(updatedAmount),
       category: DOMPurify.sanitize(updatedCategory),
+      category_type: expenseCategories,
     });
 
     const updatedExpense = response.data;
@@ -406,7 +424,7 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
 
       const updatedExpenses = prevData.expenses.map(expense =>
         expense.id === expenseId
-          ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category }
+          ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type }
           : expense
       );
 
@@ -693,7 +711,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         }
     }
 
-   console.log('month:', month);
+  //  console.log('month:', month);
     setCurrentMonth(month);
     
   }
@@ -711,9 +729,9 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 
     const filteredIncomes = userData.filter((income) => {
       const incomeMonth = new Date(`${income.date_received}T00:00:00Z`).toLocaleString("en-US", { month: "long", timeZone: "UTC" }).toLowerCase();
-      console.log('Raw Date:', income.date_received);
-      console.log('Parsed Date:', new Date(`${income.date_received}T00:00:00Z`).toISOString());
-      console.log('Parsed Month (UTC):', incomeMonth);
+      // console.log('Raw Date:', income.date_received);
+      // console.log('Parsed Date:', new Date(`${income.date_received}T00:00:00Z`).toISOString());
+      // console.log('Parsed Month (UTC):', incomeMonth);
       return currentMonth.toLowerCase() === incomeMonth;
     });
     
@@ -737,7 +755,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 
     const filteredExpenses = expenseUser.expenses.filter((expenses) => {
       const expensesMonth = new Date(`${expenses.date_incurred}T00:00:00Z`).toLocaleString("en-US", { month: "long", timeZone: "UTC" }).toLowerCase();
-      console.log('expensesMonth:', expensesMonth);
+      // console.log('expensesMonth:', expensesMonth);
         return expensesMonth === currentMonth.toLowerCase();
     });
 
@@ -787,6 +805,10 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
          incomeAmount={incomeAmount}
          setIncomeAmount={setIncomeAmount}
          addIncome={addIncome}
+         incomeCategory={incomeCategory} 
+         setIncomeCategory={setIncomeCategory}
+         isRecurringIncome={isRecurringIncome}
+         setIsRecurringIncome={setIsRecurringIncome}
         />
 
         {/* Expense Section */}
@@ -798,6 +820,10 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
             setExpenseAmount={setExpenseAmount}
             addExpense={addExpense}
             setIsAddingExpense={setIsAddingExpense}
+            expenseCategories={expenseCategories}
+            setExpenseCategories={setExpenseCategories}
+            isRecurringExpense={isRecurringExpense}
+            setIsRecurringExpense={setIsRecurringExpense}
         />
 
         {/* Budget Section */}

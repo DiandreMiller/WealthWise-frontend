@@ -1,4 +1,4 @@
-import DashboardComponent from "../Components/DashboardComponent"
+import DashboardComponent from "../Components/DashboardComponents/DashboardComponent"
 
 const Dashboard = () => {
 

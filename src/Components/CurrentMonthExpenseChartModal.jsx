@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { PieChart, Pie, Cell, Sector } from 'recharts';
 import { useState } from 'react';
+import expenses from '../assets/expenses.png'
 
 const COLORS = [
     '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF',
@@ -97,6 +98,15 @@ const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, fil
     };
 
     const chartData = categories();
+
+    if(currentMonthExpenses === 0) {
+        return (
+            <div>
+                <h3 className="text-2xl font-semibold text-gray-700">Uh oh, it seems you haven't added any expenses yet. Add some expenses to see your spending chart</h3>
+                <img className='h-3/6' src={expenses} alt='expenses' />
+            </div>
+        )
+    }
 
     return (
         <div>

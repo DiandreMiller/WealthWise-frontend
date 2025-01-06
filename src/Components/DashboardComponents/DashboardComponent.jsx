@@ -17,46 +17,63 @@ import MonthlyActivityComponent from "../MonthlyActivityComponent";
 
 
 const DashboardComponent = () => {
+  //User ID
   const { userId } = useParams();
+
+  //Income
   const [userData, setUserData] = useState([]);
+  const [updatedIncome, setUpdatedIncome] = useState(null);
   const [isAddingIncome, setIsAddingIncome] = useState(false);
-  const [isAddingExpense, setIsAddingExpense] = useState(false);
   const [incomeDescription, setIncomeDescription] = useState("");
+  const [incomeCategory, setIncomeCategory] = useState("");
   const [incomeAmount, setIncomeAmount] = useState("");
+  const [showAllIncome, setShowAllIncome] = useState(false);
+  const [isEditingIncome, setIsEditingIncome] = useState(false); 
+  const [incomeToEdit, setIncomeToEdit] = useState(null); 
+  const [updateEditedIncome, setUpdateEditedIncome] = useState(false);
+  const [deletedIncome, setDeleteIncome] = useState(false);
+  const [filteredIncome, setFilteredIncome] = useState([]);
+  const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
+  const [isRecurringIncome, setIsRecurringIncome] = useState(null);
+
+  //Expenses
+  const [showAllExpense, setShowAllExpense] = useState(false);
+  const [isAddingExpense, setIsAddingExpense] = useState(false);
   const [expenseDescription, setExpenseDescription] = useState("");
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseUser, setExpenseUser] = useState({ expenses: [] });
   const [expenseCategories, setExpenseCategories] = useState('');
   const [isRecurringExpense, setIsRecurringExpense] = useState(null);
   const [filteredExpense, setFilteredExpense] = useState([]);
-  const [updatedIncome, setUpdatedIncome] = useState(null);
-  const [incomeCategory, setIncomeCategory] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [showAllIncome, setShowAllIncome] = useState(false);
-  const [showAllExpense, setShowAllExpense] = useState(false);
-  const [isEditingIncome, setIsEditingIncome] = useState(false); 
-  const [incomeToEdit, setIncomeToEdit] = useState(null); 
-  const [deletedIncome, setDeleteIncome] = useState(false);
-  const [updateEditedIncome, setUpdateEditedIncome] = useState(false);
-  const [filteredIncome, setFilteredIncome] = useState([]);
   const [isEditingExpense, setIsEditingExpense] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
   const [updateEditedExpense, setUpdateEditedExpense] = useState(false);
+  const [currentMonthExpenses, setCurrentMonthExpenses] = useState(0);
+
+  //Budget
   const [budgetUserData, setBudgetUserData] = useState({});
   const [isAddingBudget, setIsAddingBudget] = useState(false);
   const [isEditingBudget, setIsEditingBudget] = useState(false);
   const [budgetToEdit, setBudgetToEdit] = useState(null);
   const [refreshBudget, setRefreshBudget] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [showGoalModal, setShowGoalModal] = useState(false);
   const [showBudgetEditModal, setShowBudgetEditModal] = useState(false);
+
+  //Month
+
   const [currentMonth, setCurrentMonth] = useState('');
-  const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
-  const [isRecurringIncome, setIsRecurringIncome] = useState(null);
-  const [currentMonthExpenses, setCurrentMonthExpenses] = useState(0);
+  const [getPreviousMonth, setGetPreviousMonth] = useState('');
+
+  //Goals
+  const [showGoalModal, setShowGoalModal] = useState(false);
   const goalProcessedRef = useRef(false);
 
+  //Loading
+  const [loading, setLoading] = useState(true);
 
+  //Username
+  const [userName, setUserName] = useState('');
+
+  //Backend URL
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
   //Get User
@@ -147,7 +164,7 @@ const DashboardComponent = () => {
     }
   }, [userId, backEndUrl, updateEditedExpense]);
 
-
+//Function to Format money
   const formatCurrency = (value) => {
     const numberValue = typeof value === 'number' ? value : parseFloat(value);
 
@@ -164,7 +181,6 @@ const DashboardComponent = () => {
     return formatCurrency(sumOfIncomes); 
   };
 
-  
 
   // Function to update income
   const updateIncome = async (incomeId, updatedAmount, updatedSource) => {
@@ -599,7 +615,6 @@ const handleEditBudget = (budget) => {
   setShowBudgetEditModal(true);
 };
 
-
  
 // Function to update budget
 const updateBudget = async (budgetId, updatedBudgetData) => {
@@ -662,6 +677,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     }
   };
 
+  //Get goal achieved
   useEffect(() => {
 
     const goalAchieved = checkIfIncomeOrExpenseAchieved(budgetUserData, budgetUserData, userData || [], expenseUser)
@@ -749,7 +765,36 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
   }, [getSpecificMonthIncome]);
 
 
-  const getSpecificMonthExpense = useCallback(() => {
+  // Get previous month
+  useEffect(() => {
+    
+    const previousMonth = () => {
+  
+      const allMonths = ['January', 'February', 'March', 'April', 'May', 'June',
+       'July', 'August', 'September', 'October', 'November', 'December'];
+  
+       
+       console.log('dashboard:', currentMonth);
+  
+       let monthBeforeCurrent = '';
+  
+       for(let i = 0; i < allMonths.length; i++) {
+        if(currentMonth === allMonths[i] && currentMonth !== 'January') {
+          monthBeforeCurrent = allMonths[i - 1];
+        } else {
+          monthBeforeCurrent = 'December';
+        }
+       }
+       setGetPreviousMonth(monthBeforeCurrent);
+       console.log('monthBeforeCurrent', monthBeforeCurrent);
+    }
+    previousMonth();
+  },)
+
+  
+
+// Function to get expenses for a specific month
+const getSpecificMonthExpense = useCallback(() => {
     if (!currentMonth) {
       return;
     };
@@ -765,13 +810,14 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     setCurrentMonthExpenses(totalExpenses);
 }, [currentMonth, expenseUser]);
 
+
  // Get Monthly expense
  useEffect(() => {
   getSpecificMonthExpense();
 }, [getSpecificMonthExpense]);
 
 
-
+//If data is loading
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -781,10 +827,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       </div>
     );
   }
-  
-
-
-
 
   return (
     <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg mt-24">
@@ -862,6 +904,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         userData={userData}
         filteredIncome={filteredIncome}
         filteredExpense={filteredExpense}
+        getPreviousMonth={getPreviousMonth}
         
        />
     </div>
@@ -921,10 +964,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
             setShowBudgetEditModal(false);
           }} 
           onSubmit={(updatedBudgetData) => {
-            // console.log("budgetToEdit:", budgetToEdit);
-            // console.log("budgetId being sent:", budgetToEdit?.budget_id);
-            // console.log("updatedBudgetData being sent:", updatedBudgetData);
-          
             if (budgetToEdit?.budget_id) {
               updateBudget(budgetToEdit.budget_id, updatedBudgetData);
             } else {
@@ -941,7 +980,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
           <div>
             {showGoalModal && (
               <IncomeOrExpenseGoalAchievedModal
-                // onClose={() => setShowGoalModal(false)}
                 onClose={handleCloseModal}
                 onUpdateGoals={() => {
                   setShowGoalModal(false);

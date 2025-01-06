@@ -59,10 +59,11 @@ renderActiveShape.propTypes = {
     value: PropTypes.number.isRequired
 };
 
-const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMonthIncome }) => {
+const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMonthIncome, getPreviousMonth }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
-    console.log('currentMonthIncome:', currentMonthIncome);
+    // console.log('currentMonthIncome:', currentMonthIncome);
+    console.log('getPreviousMonth:', getPreviousMonth);
 
     const categories = () => {
         const userCategories = filteredIncome.map(input => input.category);
@@ -100,8 +101,8 @@ const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMon
     if(currentMonthIncome === 0) {
         return (
             <div>
-                <h3 className="text-2xl font-semibold text-gray-700">Uh Oh, you haven't added any income yet. Add income to see your chart</h3>
-                <img className='h-3/6' src={cash} alt='money' />
+                <h3 className="text-2xl font-semibold text-gray-700">Uh Oh, you haven't added any income yet. Add income to see your income chart </h3>
+                <img className='h-3/6 mt-4' src={cash} alt='money' />
             </div>
         )
     }

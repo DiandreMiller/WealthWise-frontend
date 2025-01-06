@@ -112,7 +112,7 @@ const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, fil
         <div>
             <div>
                 <h3 className="text-2xl font-semibold text-gray-700">
-                    Here is a breakdown of your {currentMonth} income
+                    Here is a breakdown of your {currentMonth} expenses
                 </h3>
             </div>
             <div className="flex justify-center items-center h-full">

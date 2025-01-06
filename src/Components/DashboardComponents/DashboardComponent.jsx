@@ -49,6 +49,7 @@ const DashboardComponent = () => {
   const [expenseToEdit, setExpenseToEdit] = useState(null);
   const [updateEditedExpense, setUpdateEditedExpense] = useState(false);
   const [currentMonthExpenses, setCurrentMonthExpenses] = useState(0);
+  const [previousMonthExpenses, setPreviousMonthExpenses] = useState(0);
 
   //Budget
   const [budgetUserData, setBudgetUserData] = useState({});
@@ -530,6 +531,7 @@ const deleteExpense = async (expenseId) => {
   }, [userId, backEndUrl, refreshBudget, expenseUser, userData]);
 
 
+//Toggle budget modal
 const handleToggleBudget = () => {
   setIsAddingBudget(previous => !previous);
   setRefreshBudget((prev) => !prev)
@@ -689,6 +691,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 
   },[budgetUserData, userData, expenseUser])
 
+  //Close modal
   const handleCloseModal = () => {
     setShowGoalModal(false);
     goalProcessedRef.current = true; 
@@ -817,6 +820,24 @@ const getSpecificMonthExpense = useCallback(() => {
 }, [getSpecificMonthExpense]);
 
 
+// Get previous month's expenses
+useEffect(() => {
+
+  const previousMonthExpensesFunction = () => {
+    const filteredExpensesFromPreviousMonth = expenseUser.expenses.filter((expenses) => {
+      if(expenses) {
+        return getPreviousMonth;
+      }
+    });
+
+    const totalExpensesForPreviousMonth = filteredExpensesFromPreviousMonth.map((cost) => cost.amount).reduce((a,b) => a + b, 0);
+    setPreviousMonthExpenses(totalExpensesForPreviousMonth);
+  };
+
+  previousMonthExpensesFunction();
+}, [getPreviousMonth, currentMonth, expenseUser.expenses, previousMonthExpenses]);
+
+
 //If data is loading
   if (loading) {
     return (
@@ -905,6 +926,7 @@ const getSpecificMonthExpense = useCallback(() => {
         filteredIncome={filteredIncome}
         filteredExpense={filteredExpense}
         getPreviousMonth={getPreviousMonth}
+        previousMonthExpenses={previousMonthExpenses}
         
        />
     </div>

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import SpecificMonthExpenseComponent from "./DashboardComponents/SpecificMonthExpenseComponent";
 import SpecificMonthIncomeComponent from "./DashboardComponents/SpecificMonthIncomeComponent";
 
-const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMonthExpenses, showAllIncome, userData, filteredIncome, filteredExpense, getPreviousMonth }) => {
+const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMonthExpenses, showAllIncome, userData, filteredIncome, filteredExpense, getPreviousMonth, previousMonthExpenses}) => {
 
 
     // console.log('current month:', currentMonth);
@@ -23,6 +23,7 @@ const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMon
                     currentMonthExpenses={currentMonthExpenses}
                     filteredExpense={filteredExpense}
                     getPreviousMonth={getPreviousMonth}
+                    previousMonthExpenses={previousMonthExpenses}
 
                 />
             </div>

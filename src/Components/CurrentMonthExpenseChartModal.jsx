@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { PieChart, Pie, Cell, Sector } from 'recharts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import expenses from '../assets/expenses.png'
 
 const COLORS = [
@@ -60,12 +60,17 @@ renderActiveShape.propTypes = {
     value: PropTypes.number.isRequired
 };
 
-const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, filteredExpense, getPreviousMonth }) => {
+const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, filteredExpense, getPreviousMonth, previousMonthExpenses }) => {
 
     const [activeIndex, setActiveIndex] = useState(null);
+    const [spendingComparedToLastMonth, setSpendingComparedToLastMonth] = useState(0);
+    const [isSpendingMore, setIsSpendingMore] = useState(null);
+    const [spendingUnchanged, setSpendingUnchanged] = useState('');
 
+    //Categories for expense chart
     const categories = () => {
         console.log('getPreviousMonth:', getPreviousMonth);
+        console.log('previousMonthExpenses:', previousMonthExpenses);
 
         const userCategories = filteredExpense.map(input => input.category_type);
         const userExpenses = filteredExpense.map(input => parseFloat(input.amount));
@@ -98,8 +103,40 @@ const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, fil
             .filter(([, value]) => value > 0)
             .map(([name, value]) => ({ name, value }));
     };
-
     const chartData = categories();
+
+    //Percentage spent compared to the previous month
+    useEffect(() => {
+        const percentageSpentComparedToPreviousMonth = () => {
+            if (!currentMonthExpenses || !previousMonthExpenses) {
+                return;
+            }
+    
+            let differenceInPercentage = 0;
+    
+            if (currentMonthExpenses > previousMonthExpenses) {
+                const difference = (currentMonthExpenses / previousMonthExpenses - 1) * 100;
+                differenceInPercentage = Math.round(difference); // Round to whole number
+                setIsSpendingMore(true);
+            } else if (currentMonthExpenses < previousMonthExpenses) {
+                const difference = (1 - currentMonthExpenses / previousMonthExpenses) * 100;
+                differenceInPercentage = Math.round(difference); // Round to whole number
+                setIsSpendingMore(false);
+            } else {
+                setSpendingUnchanged("You're spending the same amount as last month");
+                setIsSpendingMore(null);
+            }
+    
+            setSpendingComparedToLastMonth(differenceInPercentage);
+            console.log('differenceInPercentage:', differenceInPercentage);
+        };
+    
+        percentageSpentComparedToPreviousMonth();
+    }, [currentMonthExpenses, previousMonthExpenses]);
+    
+    
+    
+
 
     if(currentMonthExpenses === 0) {
         return (
@@ -143,6 +180,20 @@ const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, fil
                 <h3 className="text-lg font-semibold text-gray-700">
                     You've Spent ${currentMonthExpenses} so far in {currentMonth}
                 </h3>
+                <p className="text-xs text-gray-700 mt-4 flex items-center  justify-center">
+                    You are spending 
+                    {isSpendingMore !== null && (
+                        <>
+                            <span
+                                className={`ml-2 text-${isSpendingMore ? 'red' : 'green'}-500`}>
+                                {isSpendingMore ? '▲' : '▼'}
+                            </span>
+                            <span className="ml-1">{spendingComparedToLastMonth}%&nbsp;</span>
+                        </>
+                    )} 
+                    {isSpendingMore ? ' more ' : ' less '} in {currentMonth} compared to {getPreviousMonth}.
+                </p>
+
             </div>
         </div>
     );
@@ -155,7 +206,9 @@ CurrentMonthExpenseChartModal.propTypes = {
         category_type: PropTypes.string.isRequired,
         amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
     })).isRequired,
-    currentMonthExpenses: PropTypes.number.isRequired
+    currentMonthExpenses: PropTypes.number.isRequired,
+    getPreviousMonth: PropTypes.string.isRequired,
+    previousMonthExpenses: PropTypes.number.isRequired,
 };
 
 export default CurrentMonthExpenseChartModal;

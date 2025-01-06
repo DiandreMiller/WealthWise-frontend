@@ -3,7 +3,7 @@ import { useState } from 'react';
 import CurrentMonthExpenseChartModal from '../CurrentMonthExpenseChartModal'
 
 
-const SpecificMonthExpenseComponent = ({ currentMonth, currentMonthExpenses, filteredExpense, getPreviousMonth}) => {
+const SpecificMonthExpenseComponent = ({ currentMonth, currentMonthExpenses, filteredExpense, getPreviousMonth, previousMonthExpenses }) => {
     const [showExpenseChart, setShowExpenseChart] = useState(false);
 
     const toggleChart = () => {
@@ -53,6 +53,7 @@ const SpecificMonthExpenseComponent = ({ currentMonth, currentMonthExpenses, fil
                              currentMonthExpenses={currentMonthExpenses}
                              filteredExpense={filteredExpense}
                              getPreviousMonth={getPreviousMonth}
+                             previousMonthExpenses={previousMonthExpenses}
                         />
                     </div>
                 </div>
@@ -66,7 +67,8 @@ SpecificMonthExpenseComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthExpenses: PropTypes.number.isRequired, 
     filteredExpense: PropTypes.array.isRequired,
-    getPreviousMonth: PropTypes.string.isRequired
+    getPreviousMonth: PropTypes.string.isRequired,
+    previousMonthExpenses: PropTypes.number.isRequired
 };
 
 export default SpecificMonthExpenseComponent;

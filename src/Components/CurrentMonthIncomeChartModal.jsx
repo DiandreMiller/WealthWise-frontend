@@ -58,7 +58,7 @@ renderActiveShape.propTypes = {
     value: PropTypes.number.isRequired
 };
 
-const CurrentMonthChartIncomeComponent = ({ currentMonth, filteredIncome, currentMonthIncome }) => {
+const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMonthIncome }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
     const categories = () => {
@@ -125,14 +125,14 @@ const CurrentMonthChartIncomeComponent = ({ currentMonth, filteredIncome, curren
 
             <div>
                 <h3 className="text-lg font-semibold text-gray-700">
-                    You've Spent ${currentMonthIncome} so far in {currentMonth}
+                    You've Made ${currentMonthIncome} so far in {currentMonth}
                 </h3>
             </div>
         </div>
     );
 };
 
-CurrentMonthChartIncomeComponent.propTypes = {
+CurrentMonthChartIncomeModal.propTypes = {
     currentMonth: PropTypes.string.isRequired,
     filteredIncome: PropTypes.arrayOf(PropTypes.shape({
         category: PropTypes.string.isRequired,
@@ -143,4 +143,4 @@ CurrentMonthChartIncomeComponent.propTypes = {
     userData: PropTypes.array.isRequired
 };
 
-export default CurrentMonthChartIncomeComponent;
+export default CurrentMonthChartIncomeModal;

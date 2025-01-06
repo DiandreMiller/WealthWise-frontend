@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'; 
 import { useState } from 'react';
-import CurrentMonthChartIncomeComponent from "../CurrentMonthIncomeChartComponent";
+import CurrentMonthChartIncomeModal from "../CurrentMonthIncomeChartModal";
 
 const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAllIncome, userData, filteredIncome }) => {
     const [showIncomeChart, setIncomeChart] = useState(false);
@@ -24,7 +24,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
             </div>
 
             <button
-                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    className="mt-4 bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                     onClick={toggleChart}>
                     {showIncomeChart ? "Hide Chart" : "View Chart"}
                 </button>
@@ -46,7 +46,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
                         <h2 className="text-lg font-semibold mb-4">
                             {currentMonth}'s Income Chart
                         </h2>
-                        <CurrentMonthChartIncomeComponent
+                        <CurrentMonthChartIncomeModal
                             currentMonth={currentMonth}
                             currentMonthIncome={currentMonthIncome}
                             showAllIncome={showAllIncome}
@@ -64,6 +64,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
 SpecificMonthIncomeComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthIncome: PropTypes.number.isRequired, 
+    // showAllIncome.
 };
 
 export default SpecificMonthIncomeComponent;

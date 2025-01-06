@@ -28,6 +28,7 @@ const DashboardComponent = () => {
   const [expenseUser, setExpenseUser] = useState({ expenses: [] });
   const [expenseCategories, setExpenseCategories] = useState('');
   const [isRecurringExpense, setIsRecurringExpense] = useState(null);
+  const [filteredExpense, setFilteredExpense] = useState([]);
   const [updatedIncome, setUpdatedIncome] = useState(null);
   const [incomeCategory, setIncomeCategory] = useState("");
   const [loading, setLoading] = useState(true);
@@ -759,6 +760,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         return expensesMonth === currentMonth.toLowerCase();
     });
 
+    setFilteredExpense(filteredExpenses);
     const totalExpenses = filteredExpenses.reduce((total, expenses) => total + expenses.amount, 0);
     setCurrentMonthExpenses(totalExpenses);
 }, [currentMonth, expenseUser]);
@@ -859,6 +861,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         showAllIncome={showAllIncome}
         userData={userData}
         filteredIncome={filteredIncome}
+        filteredExpense={filteredExpense}
         
        />
     </div>

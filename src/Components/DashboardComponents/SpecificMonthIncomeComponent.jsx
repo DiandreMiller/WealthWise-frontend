@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'; 
 import { useState } from 'react';
-import CurrentMonthChartIncomeComponent from "../CurrentMonthIncomeChartComponent";
+import CurrentMonthChartIncomeModal from "../CurrentMonthIncomeChartModal";
 
 const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAllIncome, userData, filteredIncome }) => {
     const [showIncomeChart, setIncomeChart] = useState(false);
@@ -22,13 +22,40 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
                     ${currentMonthIncome} 
                 </p>
             </div>
-            <CurrentMonthChartIncomeComponent 
-                currentMonth={currentMonth}
-                currentMonthIncome={currentMonthIncome}
-                showAllIncome={showAllIncome}
-                userData={userData}
-                filteredIncome={filteredIncome}
-            />
+
+            <button
+                    className="mt-4 bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                    onClick={toggleChart}>
+                    {showIncomeChart ? "Hide Chart" : "View Chart"}
+                </button>
+                {showIncomeChart && (
+                <div
+                    className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
+                    onClick={toggleChart} 
+                >
+                    <div
+                        className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg"
+                        onClick={(event) => event.stopPropagation()} 
+                    >
+                        <button
+                            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+                            onClick={toggleChart}
+                        >
+                            &times;
+                        </button>
+                        <h2 className="text-lg font-semibold mb-4">
+                            {currentMonth}'s Income Chart
+                        </h2>
+                        <CurrentMonthChartIncomeModal
+                            currentMonth={currentMonth}
+                            currentMonthIncome={currentMonthIncome}
+                            showAllIncome={showAllIncome}
+                            userData={userData}
+                            filteredIncome={filteredIncome}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 
@@ -37,6 +64,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
 SpecificMonthIncomeComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthIncome: PropTypes.number.isRequired, 
+    // showAllIncome.
 };
 
 export default SpecificMonthIncomeComponent;

@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
+import CurrentMonthExpenseChartModal from '../CurrentMonthExpenseChartModal'
 
-const SpecificMonthExpenseComponent = ({ currentMonth, currentMonthExpenses }) => {
 
+const SpecificMonthExpenseComponent = ({ currentMonth, currentMonthExpenses, filteredExpense }) => {
     return (
         <div className="bg-white border border-gray-300 p-4 rounded-lg shadow-md hover:bg-red-50 transition-colors">
             <h3 className="text-lg font-semibold text-gray-700">
@@ -15,6 +16,13 @@ const SpecificMonthExpenseComponent = ({ currentMonth, currentMonthExpenses }) =
                     ${currentMonthExpenses}
                 </p>
             </div>
+            <div>
+                <CurrentMonthExpenseChartModal 
+                    currentMonth={currentMonth}
+                    currentMonthExpenses={currentMonthExpenses}
+                    filteredExpense={filteredExpense}
+                />
+            </div>
         </div>
     );
 
@@ -23,6 +31,7 @@ const SpecificMonthExpenseComponent = ({ currentMonth, currentMonthExpenses }) =
 SpecificMonthExpenseComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthExpenses: PropTypes.number.isRequired, 
+    filteredExpense: PropTypes.array.isRequired,
 };
 
 export default SpecificMonthExpenseComponent;

@@ -2,15 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import DOMPurify from 'dompurify';
-import IncomeEditModal from './IncomeEditModal';
-import ExpenseEditModal from './ExpenseEditModal';
-import IncomeSectionComponent from "./IncomeSectionComponent";
-import ExpenseSectionComponent from "./ExpenseSectionComponent";
-import BudgetSectionComponent from "./BudgetSectionComponent";
-import AddIncomeSectionComponent from "./AddIncomeSectionComponent";
-import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
-import BudgetEditModal from './BudgetEditModal';
-import IncomeOrExpenseGoalAchievedModal from "./IncomeOrExpenseGoalAchievedModal";
+import IncomeEditModal from './DashboardComponents/IncomeEditModal';
+import ExpenseEditModal from './DashboardComponents/ExpenseEditModal';
+import IncomeSectionComponent from "./DashboardComponents/IncomeSectionComponent";
+import ExpenseSectionComponent from "./DashboardComponents/ExpenseSectionComponent";
+import BudgetSectionComponent from "./DashboardComponents/BudgetSectionComponent";
+import AddIncomeSectionComponent from "./DashboardComponents/AddIncomeSectionComponent";
+import AddExpenseSectionComponent from "./DashboardComponents/AddExpenseSectionComponent";
+import BudgetEditModal from './DashboardComponents/BudgetEditModal';
+import IncomeOrExpenseGoalAchievedModal from "./DashboardComponents/IncomeOrExpenseGoalAchievedModal";
 
 
 

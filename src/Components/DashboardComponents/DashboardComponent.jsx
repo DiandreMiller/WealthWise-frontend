@@ -11,7 +11,7 @@ import AddIncomeSectionComponent from "./AddIncomeSectionComponent";
 import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
 import BudgetEditModal from './BudgetEditModal';
 import IncomeOrExpenseGoalAchievedModal from "./IncomeOrExpenseGoalAchievedModal";
-import MonthlyActivityComponent from "./MonthlyActivityComponent";
+import MonthlyActivityComponent from "../MonthlyActivityComponent";
 
 
 

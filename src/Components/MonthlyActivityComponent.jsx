@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'; 
-import SpecificMonthExpenseComponent from "./SpecificMonthExpenseComponent";
-import SpecificMonthIncomeComponent from "./SpecificMonthIncomeComponent";
+import SpecificMonthExpenseComponent from "./DashboardComponents/SpecificMonthExpenseComponent";
+import SpecificMonthIncomeComponent from "./DashboardComponents/SpecificMonthIncomeComponent";
 
 const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMonthExpenses }) => {
 

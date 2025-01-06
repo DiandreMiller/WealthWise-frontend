@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { PieChart, Pie, Cell, Sector } from 'recharts';
 import { useState } from 'react';
+import cash from '../assets/cash.png'
 
 const COLORS = [
     '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF',
@@ -61,6 +62,8 @@ renderActiveShape.propTypes = {
 const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMonthIncome }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
+    console.log('currentMonthIncome:', currentMonthIncome);
+
     const categories = () => {
         const userCategories = filteredIncome.map(input => input.category);
         const userIncomes = filteredIncome.map(input => parseFloat(input.amount));
@@ -93,6 +96,15 @@ const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMon
     };
 
     const chartData = categories();
+
+    if(currentMonthIncome === 0) {
+        return (
+            <div>
+                <h3 className="text-2xl font-semibold text-gray-700">Uh Oh, you haven't added any income yet. Add income to see your chart</h3>
+                <img className='h-3/6' src={cash} alt='money' />
+            </div>
+        )
+    }
 
     return (
         <div>

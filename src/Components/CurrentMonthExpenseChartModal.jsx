@@ -139,11 +139,11 @@ const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, fil
 
 CurrentMonthExpenseChartModal.propTypes = {
     currentMonth: PropTypes.string.isRequired,
-    filteredExpenses: PropTypes.arrayOf(PropTypes.shape({
-        category: PropTypes.string.isRequired,
+    filteredExpense: PropTypes.arrayOf(PropTypes.shape({
+        category_type: PropTypes.string.isRequired,
         amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
     })).isRequired,
-    currentMonthExpenses: PropTypes.number.isRequired,
+    currentMonthExpenses: PropTypes.number.isRequired
 };
 
 export default CurrentMonthExpenseChartModal;

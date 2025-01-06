@@ -3,10 +3,10 @@ import { useState } from 'react';
 import CurrentMonthChartIncomeModal from "../CurrentMonthIncomeChartModal";
 
 const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAllIncome, userData, filteredIncome }) => {
-    const [showIncomeChart, setIncomeChart] = useState(false);
+    const [showIncomeChart, setShowIncomeChart] = useState(false);
 
     const toggleChart = () => {
-        setIncomeChart((previous) => !previous);
+        setShowIncomeChart((previous) => !previous);
     }
 
     return (
@@ -27,7 +27,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
                     className="mt-4 bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                     onClick={toggleChart}>
                     {showIncomeChart ? "Hide Chart" : "View Chart"}
-                </button>
+            </button>
                 {showIncomeChart && (
                 <div
                     className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"

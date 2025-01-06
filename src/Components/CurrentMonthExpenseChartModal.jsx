@@ -60,11 +60,13 @@ renderActiveShape.propTypes = {
     value: PropTypes.number.isRequired
 };
 
-const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, filteredExpense }) => {
+const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, filteredExpense, getPreviousMonth }) => {
 
     const [activeIndex, setActiveIndex] = useState(null);
 
     const categories = () => {
+        console.log('getPreviousMonth:', getPreviousMonth);
+
         const userCategories = filteredExpense.map(input => input.category_type);
         const userExpenses = filteredExpense.map(input => parseFloat(input.amount));
         const categoriesMap = new Map();
@@ -103,7 +105,7 @@ const CurrentMonthExpenseChartModal = ({ currentMonth, currentMonthExpenses, fil
         return (
             <div>
                 <h3 className="text-2xl font-semibold text-gray-700">Uh oh, it seems you haven't added any expenses yet. Add some expenses to see your spending chart</h3>
-                <img className='h-3/6' src={expenses} alt='expenses' />
+                <img className='h-3/6 mt-4' src={expenses} alt='expenses' />
             </div>
         )
     }

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import CurrentMonthChartIncomeModal from "../CurrentMonthIncomeChartModal";
 
-const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAllIncome, userData, filteredIncome }) => {
+const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAllIncome, userData, filteredIncome, getPreviousMonth }) => {
     const [showIncomeChart, setShowIncomeChart] = useState(false);
 
     const toggleChart = () => {
@@ -52,6 +52,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
                             showAllIncome={showAllIncome}
                             userData={userData}
                             filteredIncome={filteredIncome}
+                            getPreviousMonth={getPreviousMonth}
                         />
                     </div>
                 </div>

@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types'; 
+import { useState } from 'react';
+import CurrentMonthChartIncomeComponent from "../CurrentMonthIncomeChartComponent";
 
-const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome }) => {
+const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAllIncome, userData, filteredIncome }) => {
+    const [showIncomeChart, setIncomeChart] = useState(false);
+
+    const toggleChart = () => {
+        setIncomeChart((previous) => !previous);
+    }
 
     return (
         <div className="bg-white border border-gray-300 p-4 rounded-lg shadow-md hover:bg-green-50 transition-colors">
@@ -15,6 +22,13 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome }) => {
                     ${currentMonthIncome} 
                 </p>
             </div>
+            <CurrentMonthChartIncomeComponent 
+                currentMonth={currentMonth}
+                currentMonthIncome={currentMonthIncome}
+                showAllIncome={showAllIncome}
+                userData={userData}
+                filteredIncome={filteredIncome}
+            />
         </div>
     );
 

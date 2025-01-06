@@ -58,7 +58,7 @@ renderActiveShape.propTypes = {
     value: PropTypes.number.isRequired
 };
 
-const CurrentMonthChartIncomeComponent = ({ currentMonth, filteredIncome, currentMonthIncome, showAllIncome, userData }) => {
+const CurrentMonthChartIncomeComponent = ({ currentMonth, filteredIncome, currentMonthIncome }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
     const categories = () => {
@@ -97,29 +97,37 @@ const CurrentMonthChartIncomeComponent = ({ currentMonth, filteredIncome, curren
     return (
         <div>
             <div>
-                <h3 className="text-lg font-semibold text-gray-700">
+                <h3 className="text-2xl font-semibold text-gray-700">
                     Here is a breakdown of your {currentMonth} income
                 </h3>
             </div>
-            <PieChart width={400} height={400}>
-                <Pie
-                    data={chartData}
-                    cx={200}
-                    cy={200}
-                    innerRadius={100}
-                    outerRadius={150}
-                    fill="#8884d8"
-                    dataKey="value"
-                    activeIndex={activeIndex}
-                    activeShape={renderActiveShape} 
-                    onMouseEnter={(_, index) => setActiveIndex(index)}
-                    onMouseLeave={() => setActiveIndex(null)}
-                >
-                    {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                </Pie>
-            </PieChart>
+            <div className="flex justify-center items-center h-full">
+                <PieChart className='justify-items-center' width={400} height={400}>
+                    <Pie
+                        data={chartData}
+                        cx={200}
+                        cy={200}
+                        innerRadius={100}
+                        outerRadius={150}
+                        fill="#8884d8"
+                        dataKey="value"
+                        activeIndex={activeIndex}
+                        activeShape={renderActiveShape} 
+                        onMouseEnter={(_, index) => setActiveIndex(index)}
+                        onMouseLeave={() => setActiveIndex(null)}
+                    >
+                        {chartData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                    </Pie>
+                </PieChart>
+            </div>
+
+            <div>
+                <h3 className="text-lg font-semibold text-gray-700">
+                    You've Spent ${currentMonthIncome} so far in {currentMonth}
+                </h3>
+            </div>
         </div>
     );
 };

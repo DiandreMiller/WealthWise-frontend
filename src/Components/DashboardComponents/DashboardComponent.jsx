@@ -15,6 +15,7 @@ import MonthlyActivityComponent from "../MonthlyActivityComponent";
 
 
 
+
 const DashboardComponent = () => {
   const { userId } = useParams();
   const [userData, setUserData] = useState([]);
@@ -36,6 +37,7 @@ const DashboardComponent = () => {
   const [incomeToEdit, setIncomeToEdit] = useState(null); 
   const [deletedIncome, setDeleteIncome] = useState(false);
   const [updateEditedIncome, setUpdateEditedIncome] = useState(false);
+  const [filteredIncome, setFilteredIncome] = useState([]);
   const [isEditingExpense, setIsEditingExpense] = useState(false);
   const [expenseToEdit, setExpenseToEdit] = useState(null);
   const [updateEditedExpense, setUpdateEditedExpense] = useState(false);
@@ -729,9 +731,12 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       // console.log('Parsed Month (UTC):', incomeMonth);
       return currentMonth.toLowerCase() === incomeMonth;
     });
-    
-    
 
+    
+    
+    
+    setFilteredIncome(filteredIncomes);
+    console.log('filteredIncomes:', filteredIncomes);
     const totalIncome = filteredIncomes.reduce((total, income) => total + income.amount, 0);
     setCurrentMonthIncome(totalIncome);
 }, [currentMonth, userData]);
@@ -851,6 +856,10 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         currentMonth={currentMonth}
         currentMonthIncome={currentMonthIncome}
         currentMonthExpenses={currentMonthExpenses}
+        showAllIncome={showAllIncome}
+        userData={userData}
+        filteredIncome={filteredIncome}
+        
        />
     </div>
   

@@ -11,6 +11,7 @@ const AddIncomeSectionComponent = ({
   setShowAllIncome,
 }) => {
 
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
          <h2 className="text-xl font-semibold text-gray-700 mb-4">Added Incomes</h2>

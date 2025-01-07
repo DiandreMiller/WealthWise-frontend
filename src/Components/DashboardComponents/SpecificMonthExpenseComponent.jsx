@@ -49,23 +49,19 @@ const SpecificMonthExpenseComponent = ({
             </div>
             <button
                 className="mt-4 bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-                onClick={toggleChart}
-            >
+                onClick={toggleChart}>
                 {showExpenseChart ? 'Hide Chart' : 'View Chart'}
             </button>
             {showExpenseChart && (
                 <div
                     className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50"
-                    onClick={toggleChart} // Close chart when background is clicked
-                >
+                    onClick={toggleChart}>
                     <div
                         className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg"
-                        onClick={event => event.stopPropagation()} // Prevent closing when modal is clicked
-                    >
+                        onClick={event => event.stopPropagation()}>
                         <button
                             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-                            onClick={toggleChart}
-                        >
+                            onClick={toggleChart}>
                             &times;
                         </button>
                         <h2 className="text-lg font-semibold mb-4">

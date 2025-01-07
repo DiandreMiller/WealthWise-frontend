@@ -49,7 +49,6 @@ const CurrentMonthExpenseChartModal = ({
     currentMonthExpenses,
     filteredExpense,
     getPreviousMonth,
-    previousMonthExpenses,
     spendingComparedToLastMonth,
     isSpendingMore,
 }) => {
@@ -105,8 +104,7 @@ const CurrentMonthExpenseChartModal = ({
                         activeIndex={activeIndex}
                         activeShape={renderActiveShape}
                         onMouseEnter={(_, index) => setActiveIndex(index)}
-                        onMouseLeave={() => setActiveIndex(null)}
-                    >
+                        onMouseLeave={() => setActiveIndex(null)}>
                         {chartData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
@@ -122,11 +120,9 @@ const CurrentMonthExpenseChartModal = ({
                     You are spending{' '}
                     <span
                         className={`ml-2 font-bold ${
-                            isSpendingMore ? 'text-red-500' : 'text-green-500'
-                        }`}
-                    >
-                        {isSpendingMore ? '▲' : '▼'} {spendingComparedToLastMonth}%
-                    </span>{' '}
+                            isSpendingMore ? 'text-red-500' : 'text-green-500'}`}>
+                        {isSpendingMore ? '▲' : '▼'} {spendingComparedToLastMonth}%&nbsp;
+                    </span>
                     {isSpendingMore ? 'more' : 'less'} in {currentMonth} compared to {getPreviousMonth}.
                 </p>
             </div>

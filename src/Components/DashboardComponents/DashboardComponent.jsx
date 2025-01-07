@@ -867,8 +867,6 @@ useEffect(() => {
 // Get previous month's income
 useEffect(() => {
 
-  console.log('previousMonth:', getPreviousMonth);
-
   
 
   const previousMonthIncomeFunction = () => {
@@ -903,7 +901,6 @@ useEffect(() => {
     })
 
     const totalIncomeForPreviousMonth = filteredIncomeFromPreviousMonth.map((cost) => cost.amount).reduce((a,b) => a + b, 0);
-    console.log('totalIncomeForPreviousMonth:', totalIncomeForPreviousMonth)
     setPreviousMonthIncome(totalIncomeForPreviousMonth);
     console.log('previousMonthIncome:', previousMonthIncome);
   };
@@ -1001,6 +998,7 @@ useEffect(() => {
         filteredExpense={filteredExpense}
         getPreviousMonth={getPreviousMonth}
         previousMonthExpenses={previousMonthExpenses}
+        previousMonthIncome={previousMonthIncome}
         
        />
     </div>

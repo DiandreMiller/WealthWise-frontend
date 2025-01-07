@@ -1,13 +1,36 @@
 import PropTypes from 'prop-types'; 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CurrentMonthChartIncomeModal from "../CurrentMonthIncomeChartModal";
 
-const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAllIncome, userData, filteredIncome, getPreviousMonth }) => {
+const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, filteredIncome, getPreviousMonth, previousMonthIncome }) => {
     const [showIncomeChart, setShowIncomeChart] = useState(false);
+    const [incomeComparison, setIncomeComparison] = useState({ percentage: 0, isIncomeMore: null });
 
     const toggleChart = () => {
         setShowIncomeChart((previous) => !previous);
     }
+
+    // Calculate percentage income gained compared to previous month
+    useEffect(() => {
+
+        const calculateIncomeComparison = () => {
+
+                if(!currentMonthIncome || !previousMonthIncome || previousMonthIncome === 0) {
+                    setIncomeComparison({ percentage: 0, isIncomeMore: null });
+                    return;
+                }
+
+                const difference = currentMonthIncome - previousMonthIncome;
+                const percentage = Math.abs((difference / previousMonthIncome) * 100).toFixed(2);
+                const isIncomeMore = difference > 0;
+            
+                setIncomeComparison({ percentage, isIncomeMore });
+        }
+
+        calculateIncomeComparison()
+
+    }, [currentMonthIncome, previousMonthIncome])
+    
 
     return (
         <div className="bg-white border border-gray-300 p-4 rounded-lg shadow-md hover:bg-green-50 transition-colors">
@@ -49,10 +72,11 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
                         <CurrentMonthChartIncomeModal
                             currentMonth={currentMonth}
                             currentMonthIncome={currentMonthIncome}
-                            showAllIncome={showAllIncome}
-                            userData={userData}
                             filteredIncome={filteredIncome}
                             getPreviousMonth={getPreviousMonth}
+                            previousMonthIncome={previousMonthIncome}
+                            incomeComparedToLastMonth={incomeComparison.percentage}
+                            isIncomeMore={incomeComparison.isIncomeMore}
                         />
                     </div>
                 </div>
@@ -65,7 +89,6 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, showAl
 SpecificMonthIncomeComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthIncome: PropTypes.number.isRequired, 
-    // showAllIncome.
 };
 
 export default SpecificMonthIncomeComponent;

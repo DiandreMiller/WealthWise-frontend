@@ -59,7 +59,15 @@ renderActiveShape.propTypes = {
     value: PropTypes.number.isRequired
 };
 
-const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMonthIncome, getPreviousMonth }) => {
+const CurrentMonthChartIncomeModal = ({ 
+    currentMonth, 
+    filteredIncome, 
+    currentMonthIncome, 
+    getPreviousMonth, 
+    incomeComparedToLastMonth, 
+    isIncomeMore 
+}) => {
+
     const [activeIndex, setActiveIndex] = useState(null);
 
     // console.log('currentMonthIncome:', currentMonthIncome);
@@ -74,26 +82,12 @@ const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMon
             if (!categoriesMap.has(category)) categoriesMap.set(category, []);
             categoriesMap.get(category).push(index);
         });
+        
+        return Array.from(categoriesMap.entries()).map(([name, indices]) => ({
+            name,
+            value: indices.reduce((sum, index) => sum + userIncomes[index], 0),
+        }));
 
-        const categoriesOptions = [
-            'salary', 'rental', 'investments', 'business', 'pension',
-            'social security', 'royalties', 'government assistance',
-            'gifts', 'bonus', 'inheritance', 'lottery/gambling', 'gigs',
-            'asset sales', 'tax refunds', 'severance pay', 'grants/scholarships', 'other'
-        ];
-
-        const categoriesOptionsMap = new Map(categoriesOptions.map(category => [category, 0]));
-
-        for (let [category, indices] of categoriesMap) {
-            const total = indices.reduce((sum, index) => sum + userIncomes[index], 0);
-            if (categoriesOptionsMap.has(category)) {
-                categoriesOptionsMap.set(category, parseFloat(total.toFixed(2)));
-            }
-        }
-
-        return Array.from(categoriesOptionsMap.entries())
-            .filter(([, value]) => value > 0)
-            .map(([name, value]) => ({ name, value }));
     };
 
     const chartData = categories();
@@ -127,8 +121,7 @@ const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMon
                         activeIndex={activeIndex}
                         activeShape={renderActiveShape} 
                         onMouseEnter={(_, index) => setActiveIndex(index)}
-                        onMouseLeave={() => setActiveIndex(null)}
-                    >
+                        onMouseLeave={() => setActiveIndex(null)}>
                         {chartData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
@@ -140,6 +133,15 @@ const CurrentMonthChartIncomeModal = ({ currentMonth, filteredIncome, currentMon
                 <h3 className="text-lg font-semibold text-gray-700">
                     You've Made ${currentMonthIncome} so far in {currentMonth}
                 </h3>
+                <p className="text-xs text-gray-700 mt-4 flex items-center justify-center">
+                    Your income is {' '}
+                    <span
+                        className={`ml-2 font-bold ${
+                            isIncomeMore ? 'text-green-500' : 'text-red-500'}`}>
+                        {isIncomeMore ?  '▲' : '▼' } {incomeComparedToLastMonth}%&nbsp;
+                    </span>
+                    {isIncomeMore ? 'more' : 'less'} in {currentMonth} compared to {getPreviousMonth}.
+                </p>
             </div>
         </div>
     );

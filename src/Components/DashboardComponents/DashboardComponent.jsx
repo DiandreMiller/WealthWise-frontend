@@ -35,6 +35,7 @@ const DashboardComponent = () => {
   const [filteredIncome, setFilteredIncome] = useState([]);
   const [currentMonthIncome, setCurrentMonthIncome] = useState(0);
   const [isRecurringIncome, setIsRecurringIncome] = useState(null);
+  const [previousMonthIncome, setPreviousMonthIncome] = useState(0);
 
   //Expenses
   const [showAllExpense, setShowAllExpense] = useState(false);
@@ -823,12 +824,37 @@ const getSpecificMonthExpense = useCallback(() => {
 // Get previous month's expenses
 useEffect(() => {
 
+
   const previousMonthExpensesFunction = () => {
-    const filteredExpensesFromPreviousMonth = expenseUser.expenses.filter((expenses) => {
-      if(expenses) {
-        return getPreviousMonth;
+
+    const monthMap = new Map([
+      ['01', 'January'],
+      ['02', 'February'],
+      ['03', 'March'],
+      ['04', 'April'],
+      ['05', 'May'],
+      ['06', 'June'],
+      ['07', 'July'],
+      ['08', 'August'],
+      ['09', 'September'],
+      ['10', 'October'],
+      ['11', 'November'],
+      ['12', 'December']
+    ]);
+
+    const monthMapArray = Array.from(monthMap.values());
+
+    let monthNumber = '';
+  
+    if(monthMapArray) {
+      for(let [keys, values] of monthMap) {
+        monthNumber = keys;
       }
-    });
+    }
+
+    const filteredExpensesFromPreviousMonth = expenseUser.expenses.filter((expense) => {
+      return expense.date_incurred.slice(5,7) === monthNumber;
+    })
 
     const totalExpensesForPreviousMonth = filteredExpensesFromPreviousMonth.map((cost) => cost.amount).reduce((a,b) => a + b, 0);
     setPreviousMonthExpenses(totalExpensesForPreviousMonth);
@@ -836,6 +862,54 @@ useEffect(() => {
 
   previousMonthExpensesFunction();
 }, [getPreviousMonth, currentMonth, expenseUser.expenses, previousMonthExpenses]);
+
+
+// Get previous month's income
+useEffect(() => {
+
+  console.log('previousMonth:', getPreviousMonth);
+
+  
+
+  const previousMonthIncomeFunction = () => {
+
+    const monthMap = new Map([
+      ['01', 'January'],
+      ['02', 'February'],
+      ['03', 'March'],
+      ['04', 'April'],
+      ['05', 'May'],
+      ['06', 'June'],
+      ['07', 'July'],
+      ['08', 'August'],
+      ['09', 'September'],
+      ['10', 'October'],
+      ['11', 'November'],
+      ['12', 'December']
+    ]);
+  
+    const monthMapArray = Array.from(monthMap.values());
+
+    let monthNumber = '';
+
+    if(monthMapArray) {
+      for(let [keys, values] of monthMap) {
+        monthNumber = keys;
+      }
+    }
+
+    const filteredIncomeFromPreviousMonth = userData.filter((userData) => {
+      return userData.date_received.slice(5,7) === monthNumber;
+    })
+
+    const totalIncomeForPreviousMonth = filteredIncomeFromPreviousMonth.map((cost) => cost.amount).reduce((a,b) => a + b, 0);
+    console.log('totalIncomeForPreviousMonth:', totalIncomeForPreviousMonth)
+    setPreviousMonthIncome(totalIncomeForPreviousMonth);
+    console.log('previousMonthIncome:', previousMonthIncome);
+  };
+
+  previousMonthIncomeFunction();
+}, [getPreviousMonth, currentMonth, userData, previousMonthIncome]);
 
 
 //If data is loading

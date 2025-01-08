@@ -910,74 +910,88 @@ useEffect(() => {
 
 
 //Check if income is recurring
-// useEffect(() => {
-//   const recurringIncome = () => {
-//     console.log("userData before filtering:", userData);
-//     const incomeThatIsRecurring = userData.filter((income) => income.is_recurring);
-//     console.log('test11:', incomeThatIsRecurring);
+useEffect(() => {
+  const recurringIncome = () => {
+    console.log("userData before filtering:", userData);
+    const incomeThatIsRecurring = userData.filter((income) => income.is_recurring);
+    console.log('test11:', incomeThatIsRecurring);
 
-//     if (processedRecurringIncome) {
-//       return;
-//     } 
     
-//     const today = new Date();
-//     const currentYear = today.getFullYear();
-//     const endMonth = 11; 
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const endMonth = 11; 
 
-//     const generateMonthlyIncome = (income) => {
-//       const startDate = new Date(income.date_received);
-//       if (isNaN(startDate)) {
-//         console.error(`Invalid date_received for income:`, income);
-//         return [];
-//       }
+    const generateMonthlyIncome = (income) => {
+      console.log('generate Income function invoked:')
+      const startDate = new Date(income.date_received);
+      if (isNaN(startDate)) {
+        console.error(`Invalid date_received for income:`, income);
+        return [];
+      }
     
-//       const startYear = startDate.getFullYear();
-//       const startMonth = startDate.getMonth();
+      const startYear = startDate.getFullYear();
+      const startMonth = startDate.getMonth();
     
-//       const recurringIncomeEntries = [];
-//       console.log('entries before data:', recurringIncomeEntries);
+      const recurringIncomeEntries = [];
+      console.log('entries before data:', recurringIncomeEntries);
     
-//       for (let year = startYear; year <= currentYear; year++) {
-//         const start = year === startYear ? startMonth : 0;
-//         const end = year === currentYear ? endMonth : 11;
+      for (let year = startYear; year <= currentYear; year++) {
+        const start = year === startYear ? startMonth : 0;
+        const end = year === currentYear ? endMonth : 11;
     
-//         for (let month = start; month <= end; month++) {
-//           const newDate = new Date(year, month, 1).toISOString().split('T')[0]; 
+        for (let month = start; month <= end; month++) {
+          const newDate = new Date(year, month, 1).toISOString().split('T')[0]; 
     
-//           recurringIncomeEntries.push({
-//             ...income,
-//             date_received: newDate,
-//             key: `${income.id}-${newDate}`,
-//           });
-//         }
-//       }
-//       console.log('recurringIncomeEntries1:', recurringIncomeEntries);
-//       return recurringIncomeEntries;
-//     };
-    
+          recurringIncomeEntries.push({
+            ...income,
+            date_received: newDate,
+            key: `${income.id}-${newDate}`,
+          });
+        }
+      }
+      console.log('recurringIncomeEntries1:', recurringIncomeEntries);
+      return recurringIncomeEntries;
+    };
 
-//     const updatedRecurringIncome = incomeThatIsRecurring.flatMap(generateMonthlyIncome);
+    const updatedRecurringIncome = incomeThatIsRecurring.flatMap(generateMonthlyIncome);
+  
 
 
-//     // Filter for February
-//     const februaryEntries = updatedRecurringIncome.filter((entry) => {
-//       const month = new Date(entry.date_received).getMonth(); 
-//       return month === 1; 
-//     });
+    // Filter for February Test
+    const februaryEntries = updatedRecurringIncome.filter((entry) => {
+      const month = new Date(entry.date_received).getMonth(); 
+      return month === 1; 
+    });
 
-//     console.log("Entries for February:", februaryEntries);
-//     console.log("Updated Recurring Income:", updatedRecurringIncome);
+  
+    console.log("Entries for February:", februaryEntries);
+    console.log("Updated Recurring Income:", updatedRecurringIncome);
 
-//     setUserData((prevData) => {
-//       const nonRecurringIncome = prevData.filter((income) => !income.is_recurring);
-//       return [...nonRecurringIncome, ...updatedRecurringIncome];
-//     });
+      // Filter for March Test
+      const marchEntries = updatedRecurringIncome.filter((entry) => {
+        const month = new Date(entry.date_received).getMonth(); 
+        return month === 1; 
+      });
 
-//     setProcessedRecurringIncome(true); 
-//   };
+      console.log('marchEntries:', marchEntries);
 
-//   recurringIncome();
-// }, [userData, processedRecurringIncome, filteredIncome]); 
+    if (processedRecurringIncome) {
+      console.log('processedRecurringIncome:', processedRecurringIncome);
+      return;
+    } 
+
+    setUserData((prevData) => {
+      const nonRecurringIncome = prevData.filter((income) => !income.is_recurring);
+      return [...nonRecurringIncome, ...updatedRecurringIncome];
+    });
+
+   
+
+    setProcessedRecurringIncome(true); 
+  };
+
+  recurringIncome();
+}, [userData, processedRecurringIncome, filteredIncome]); 
 
 
 

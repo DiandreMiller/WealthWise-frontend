@@ -42,7 +42,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, filter
             </p>
             <div className="mt-4">
                 <p className="text-2xl font-bold text-green-600">
-                    ${currentMonthIncome} 
+                    ${currentMonthIncome.toFixed(2)}
                 </p>
             </div>
 

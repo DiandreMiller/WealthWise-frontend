@@ -264,7 +264,7 @@ const DashboardComponent = () => {
             date_received: dateReceived,
             created_at: new Date().toISOString(), 
             category: DOMPurify.sanitize(incomeCategory),
-            is_recurring: DOMPurify.sanitize(isRecurringIncome)
+            is_recurring: isRecurringIncome
         });
 
         // console.log("Response add income:", response);
@@ -545,23 +545,21 @@ const createBudget = async (budgetData) => {
   const {
     monthly_income_goal,
     monthly_expense_goal,
+    actual_income = userData?.amount || 0, 
+    actual_expenses = expenseUser?.expenses?.reduce((sum, expense) => sum + expense.amount, 0) || 0, 
+  } = budgetData;
+
+  console.log("=== createBudget Function Start ===");
+  console.log("Received Budget Data:", budgetData);
+  console.log("Parsed Values Before Validation:", {
+    monthly_income_goal,
+    monthly_expense_goal,
     actual_income,
     actual_expenses,
-  } = budgetData;
-  // console.log("Received Budget Data:", budgetData);
-  // console.log("Parsed Values:", {
-  //   monthly_income_goal,
-  //   monthly_expense_goal,
-  //   actual_income,
-  //   actual_expenses,
-  // });
+  });
 
-
+  // Validate inputs
   if (
-    !monthly_income_goal ||
-    !monthly_expense_goal ||
-    !actual_income ||
-    !actual_expenses ||
     isNaN(monthly_income_goal) ||
     isNaN(monthly_expense_goal) ||
     isNaN(actual_income) ||
@@ -571,18 +569,43 @@ const createBudget = async (budgetData) => {
     actual_income < 0 ||
     actual_expenses < 0
   ) {
+    console.error("Validation Error: Invalid input data.");
+    console.error("Validation Details:", {
+      isNaNMonthlyIncomeGoal: isNaN(monthly_income_goal),
+      isNaNMonthlyExpenseGoal: isNaN(monthly_expense_goal),
+      isNaNActualIncome: isNaN(actual_income),
+      isNaNActualExpenses: isNaN(actual_expenses),
+      negativeMonthlyIncomeGoal: monthly_income_goal < 0,
+      negativeMonthlyExpenseGoal: monthly_expense_goal < 0,
+      negativeActualIncome: actual_income < 0,
+      negativeActualExpenses: actual_expenses < 0,
+    });
     alert("Please provide valid positive numbers for all fields.");
     return;
   }
 
-  setLoading(true); 
+  setLoading(true);
   try {
+    console.log("Sending API Request to Create Budget...");
+    console.log("API Request Payload:", {
+      monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
+      monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
+      actual_income: actual_income,
+      actual_expenses: actual_expenses,
+    });
+
     const response = await axios.post(`${backEndUrl}/users/${userId}/budget`, {
       monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
       monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
-      actual_income: DOMPurify.sanitize(parseFloat(actual_income)),
-      actual_expenses: DOMPurify.sanitize(parseFloat(actual_expenses)),
+      actual_income: parseFloat(actual_income),
+      actual_expenses: parseFloat(actual_expenses),
     });
+
+    console.log("API Response:", response.data);
+    console.log("type: month goal", response.data.monthly_income_goal);
+    console.log("type: month expense", response.data.monthly_expense_goal);
+    console.log("type: actual income", response.data.actual_income);
+    console.log("type: actual expense", response.data.actual_expenses);
 
     setBudgetUserData((prevData) => ({
       ...(prevData || {}),
@@ -594,12 +617,20 @@ const createBudget = async (budgetData) => {
     handleToggleBudget();
   } catch (error) {
     console.error("Error creating budget:", error);
+    console.error("Error Details:", {
+      message: error.message,
+      responseData: error.response?.data,
+      status: error.response?.status,
+    });
     const errorMessage = error.response?.data?.message || "There was an error creating your budget. Please try again.";
     alert(errorMessage);
   } finally {
-    setLoading(false); 
+    setLoading(false);
+    console.log("=== createBudget Function End ===");
   }
 };
+
+
 
 //Edit Budget Modal
 const handleEditBudget = (budget) => {

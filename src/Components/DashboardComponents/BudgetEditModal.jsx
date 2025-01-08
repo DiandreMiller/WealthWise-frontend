@@ -41,7 +41,7 @@ const BudgetEditModal = ({ budget, onClose, onSubmit }) => {
       actual_income: parseFloat(formData.actual_income),
       actual_expenses: parseFloat(formData.actual_expenses),
       disposable_income:
-        parseFloat(formData.monthly_income_goal) - parseFloat(formData.monthly_expense_goal),
+        parseFloat(formData.actual_income) - parseFloat(formData.actual_expenses),
     }
     console.log("Parsed Form Data Before Submit:", parsedFormData);
     onSubmit(parsedFormData);

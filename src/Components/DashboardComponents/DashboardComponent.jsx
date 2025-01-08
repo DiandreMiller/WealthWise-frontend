@@ -167,7 +167,7 @@ const DashboardComponent = () => {
     }
   }, [userId, backEndUrl, updateEditedExpense]);
 
-//Function to Format money
+  //Function to Format money
   const formatCurrency = (value) => {
     const numberValue = typeof value === 'number' ? value : parseFloat(value);
 

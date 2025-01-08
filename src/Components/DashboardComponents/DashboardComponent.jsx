@@ -52,6 +52,7 @@ const DashboardComponent = () => {
   const [updateEditedExpense, setUpdateEditedExpense] = useState(false);
   const [currentMonthExpenses, setCurrentMonthExpenses] = useState(0);
   const [previousMonthExpenses, setPreviousMonthExpenses] = useState(0);
+  const [processedRecurringExpense, setProcessedRecurringExpense] = useState(false);
 
   //Budget
   const [budgetUserData, setBudgetUserData] = useState({});
@@ -916,6 +917,9 @@ useEffect(() => {
     const incomeThatIsRecurring = userData.filter((income) => income.is_recurring);
     console.log('test11:', incomeThatIsRecurring);
 
+    // console.log('id:', expenseUser.expenses.map((test) => test.id))
+
+
     
     const today = new Date();
     const currentYear = today.getFullYear();
@@ -993,6 +997,90 @@ useEffect(() => {
   recurringIncome();
 }, [userData, processedRecurringIncome, filteredIncome]); 
 
+//Check if expense is recurring
+useEffect(() => {
+  const recurringExpenses = () => {
+    console.log("expenses before filtering:", expenseUser.expenses);
+    const expenseThatIsRecurring = expenseUser.expenses.filter((expense) => expense.is_recurring);
+    console.log('expenseUser.expenses', expenseThatIsRecurring);
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const endMonth = 11; 
+
+    const generateMonthlyExpense = (expense) => {
+      console.log('generate expense function invoked:')
+      const startDate = new Date(expense.date_incurred
+      );
+      if (isNaN(startDate)) {
+        console.error(`Invalid date_received for expense:`, expense);
+        return [];
+      }
+    
+      const startYear = startDate.getFullYear();
+      const startMonth = startDate.getMonth();
+    
+      const recurringExpenseEntries = [];
+      console.log('entries before data:', recurringExpenseEntries);
+    
+      for (let year = startYear; year <= currentYear; year++) {
+        const start = year === startYear ? startMonth : 0;
+        const end = year === currentYear ? endMonth : 11;
+    
+        for (let month = start; month <= end; month++) {
+          const newDate = new Date(year, month, 1).toISOString().split('T')[0]; 
+    
+          recurringExpenseEntries.push({
+            ...expense,
+            date_incurred: newDate,
+            key: `${expense.id}-${newDate}`,
+          });
+        }
+      }
+      console.log('recurringExpenseEntries1:', recurringExpenseEntries);
+      return recurringExpenseEntries;
+    };
+
+    const updatedRecurringExpense = expenseThatIsRecurring.flatMap(generateMonthlyExpense);
+
+    // Filter for February Test
+    const februaryEntries = updatedRecurringExpense.filter((entry) => {
+      const month = new Date(entry.date_incurred).getMonth(); 
+      return month === 1; 
+    });
+
+  
+    console.log("Entries for February expense:", februaryEntries);
+    console.log("Updated Recurring Expense:", updatedRecurringExpense);
+
+      // Filter for March Test
+      const marchEntries = updatedRecurringExpense.filter((entry) => {
+        const month = new Date(entry.date_incurred).getMonth(); 
+        return month === 2; 
+      });
+
+      console.log('marchEntries expenses:', marchEntries);
+
+      if (processedRecurringExpense) {
+        console.log('processedRecurringExpense:', processedRecurringExpense);
+        return;
+      } 
+
+
+      setExpenseUser((prevData) => ({
+        ...prevData,
+        expenses: [
+          ...prevData.expenses.filter((expense) => !expense.is_recurring),
+          ...updatedRecurringExpense,
+        ],
+      }));
+      
+
+      setProcessedRecurringExpense(true); 
+
+  }
+  recurringExpenses();
+},[expenseUser.expenses, processedRecurringExpense])
 
 
 //If data is loading

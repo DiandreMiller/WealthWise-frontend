@@ -131,7 +131,7 @@ const CurrentMonthChartIncomeModal = ({
 
             <div>
                 <h3 className="text-lg font-semibold text-gray-700">
-                    You've Made ${currentMonthIncome} so far in {currentMonth}
+                    You've Made ${currentMonthIncome.toFixed(2)} so far in {currentMonth}
                 </h3>
                 <p className="text-xs text-gray-700 mt-4 flex items-center justify-center">
                     Your income is {' '}

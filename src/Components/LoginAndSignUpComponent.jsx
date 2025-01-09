@@ -42,12 +42,13 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
                 type="text"
                 name="username"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
                 value={formik.values.username}
                 className="border border-gray-600 rounded p-3 w-full bg-gray-700 text-white"
                 placeholder="Enter your username"
               />
               {formik.errors.username && <p className="text-red-500">{formik.errors.username}</p>}
-              {userNameErrorHandling(formik.values.username)}
+              {formik.touched.username && userNameErrorHandling(formik.values.username)}
             </div>
           )}
           <div className="mb-4">
@@ -71,12 +72,13 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
                 type="text"
                 name="phoneNumber"
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur} 
                 value={formik.values.phoneNumber}
                 className="border border-gray-600 rounded p-3 w-full bg-gray-700 text-white"
                 placeholder="Enter your phone number (digits only)"
               />
               {formik.errors.phoneNumber && <p className="text-red-500">{formik.errors.phoneNumber}</p>}
-              {phoneNumberErrorHandling(formik.values.phoneNumber)}
+              {formik.touched.phoneNumber && phoneNumberErrorHandling(formik.values.phoneNumber)}
             </div>
           )}
           <div className="mb-4 relative">
@@ -143,6 +145,7 @@ LoginAndSignUpComponent.propTypes = {
   formik: PropTypes.shape({
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
+    handleBlur: PropTypes.func.isRequired,
     values: PropTypes.shape({
       username: PropTypes.string,
       email: PropTypes.string,
@@ -151,6 +154,7 @@ LoginAndSignUpComponent.propTypes = {
       dateOfBirth: PropTypes.string,
     }).isRequired,
     errors: PropTypes.object,
+    touched: PropTypes.object
   }).isRequired,
   userError: PropTypes.string,
   toggleState: PropTypes.func.isRequired,

@@ -25,7 +25,7 @@ const Navbar = ({ onLogOut, isLogin, toggleState, userId }) => {
       <div className="container mx-auto px-4 md:px-8 lg:px-16 flex justify-between items-center py-4">
         {/* Logo */}
         <div className="flex flex-col items-center">
-          <Link to='/'>
+          <Link to={handleHomeDirect}>
             <img src={wealthWise} alt="WealthWise Logo" className="w-12 h-12" />
           </Link>
           <div className="text-xl font-bold text-white mt-2">

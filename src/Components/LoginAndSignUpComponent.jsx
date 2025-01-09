@@ -9,6 +9,22 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
     setShowPassword(!showPassword);
   };
 
+  const phoneNumberErrorHandling = (numberOfPhone) => {
+    if (numberOfPhone.length < 10) {
+      return <p className="text-red-500">Phone Number Must be at least 10 digits</p>;
+    } else if (numberOfPhone.length > 14) {
+      return <p className="text-red-500">Phone Number Must be less than 15 characters</p>;
+    }
+    return null;
+  };
+
+  const userNameErrorHandling = (nameOfUser) => {
+    if(nameOfUser.length < 8) {
+      return <p className="text-red-500">Username must be at least 8 characters</p>;
+    } else if (nameOfUser.length > 32) {
+      return <p className="text-red-500">Username must be less than 33 characters</p>;
+    }
+  }
 
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white ${!isLogin ? 'mt-12' : ''}`}>
@@ -31,6 +47,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
                 placeholder="Enter your username"
               />
               {formik.errors.username && <p className="text-red-500">{formik.errors.username}</p>}
+              {userNameErrorHandling(formik.values.username)}
             </div>
           )}
           <div className="mb-4">
@@ -59,6 +76,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
                 placeholder="Enter your phone number (digits only)"
               />
               {formik.errors.phoneNumber && <p className="text-red-500">{formik.errors.phoneNumber}</p>}
+              {phoneNumberErrorHandling(formik.values.phoneNumber)}
             </div>
           )}
           <div className="mb-4 relative">
@@ -82,7 +100,6 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
             </button>
             {formik.errors.password && <p className="text-red-500">{formik.errors.password}</p>}
           </div>
-  
           {!isLogin && (
             <div className="mb-4">
               <label className="block text-gray-300 text-left mb-2">Date of Birth:</label>
@@ -97,7 +114,6 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
               {formik.errors.dateOfBirth && <p className="text-red-500">{formik.errors.dateOfBirth}</p>}
             </div>
           )}
-  
           {isLogin && (
             <div className="mb-4">
               <Link to="/forgot-password" className="text-blue-400 hover:underline text-sm">
@@ -105,7 +121,6 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
               </Link>
             </div>
           )}
-  
           <button
             type="submit"
             className={`${isLogin ? 'bg-blue-500 hover:bg-blue-600' : 'bg-green-500 hover:bg-green-600'} text-white font-bold py-2 px-4 rounded w-full`}
@@ -134,19 +149,12 @@ LoginAndSignUpComponent.propTypes = {
       password: PropTypes.string,
       phoneNumber: PropTypes.string,
       dateOfBirth: PropTypes.string,
-      identifier: PropTypes.string
     }).isRequired,
-    errors: PropTypes.shape({
-      username: PropTypes.string,
-      email: PropTypes.string,
-      password: PropTypes.string,
-      phoneNumber: PropTypes.string,
-      dateOfBirth: PropTypes.string
-    })
+    errors: PropTypes.object,
   }).isRequired,
   userError: PropTypes.string,
   toggleState: PropTypes.func.isRequired,
-  isLogin: PropTypes.bool.isRequired
+  isLogin: PropTypes.bool.isRequired,
 };
 
 export default LoginAndSignUpComponent;

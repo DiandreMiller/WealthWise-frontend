@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import wealthWise from '../assets/wealthWise.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ onLogOut, isLogin, toggleState, userId }) => {
 

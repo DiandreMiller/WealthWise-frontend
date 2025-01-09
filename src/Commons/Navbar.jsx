@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = ({ onLogOut, isLogin, toggleState, userId }) => {
 
   const navigate = useNavigate();
+  console.log('redeploy');
 
   const handleHomeDirect = (event) => {
     event.preventDefault()

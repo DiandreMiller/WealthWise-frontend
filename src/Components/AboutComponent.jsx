@@ -4,11 +4,11 @@ const AboutComponent = () => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen text-white px-6 py-12"
-      style={{ backgroundColor: 'rgb(17, 24, 39)' }} // Sets the background for the entire page
+      style={{ backgroundColor: 'rgb(17, 24, 39)' }}
     >
       <div
         className="p-10 rounded-3xl shadow-xl max-w-5xl w-full"
-        style={{ backgroundColor: 'rgb(17, 24, 39)' }} // Sets background color for content section
+        style={{ backgroundColor: 'rgb(17, 24, 39)' }}
       >
         {/* Header Section */}
         <header className="text-center mb-12">

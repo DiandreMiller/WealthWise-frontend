@@ -3,7 +3,7 @@ import SpecificMonthExpenseComponent from "./DashboardComponents/SpecificMonthEx
 import SpecificMonthIncomeComponent from "./DashboardComponents/SpecificMonthIncomeComponent";
 
 const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMonthExpenses, 
-    showAllIncome, userData, filteredIncome, filteredExpense, getPreviousMonth, 
+    filteredIncome, filteredExpense, getPreviousMonth, 
     previousMonthExpenses, previousMonthIncome}) => {
 
 
@@ -16,8 +16,6 @@ const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMon
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <SpecificMonthIncomeComponent currentMonth={currentMonth} 
                     currentMonthIncome={currentMonthIncome} 
-                    // showAllIncome={showAllIncome}
-                    // userData={userData}
                     filteredIncome={filteredIncome}
                     getPreviousMonth={getPreviousMonth}
                     previousMonthIncome={previousMonthIncome}
@@ -39,7 +37,17 @@ MonthlyActivityComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthIncome: PropTypes.number.isRequired, 
     currentMonthExpenses: PropTypes.number.isRequired, 
-    getPreviousMonth: PropTypes.string.isRequired
+    getPreviousMonth: PropTypes.string.isRequired,
+    filteredIncome: PropTypes.arrayOf(PropTypes.shape({
+        category: PropTypes.string.isRequired,
+        amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    })).isRequired,
+    filteredExpense: PropTypes.arrayOf(PropTypes.shape({
+        category_type: PropTypes.string.isRequired,
+        amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    })).isRequired,
+    previousMonthExpenses: PropTypes.number.isRequired,
+    previousMonthIncome: PropTypes.number.isRequired
 };
 
 export default MonthlyActivityComponent;

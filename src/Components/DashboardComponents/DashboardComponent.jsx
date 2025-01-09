@@ -682,6 +682,15 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       disposable_income: parseFloat(response.data.disposable_income),
     });
     
+    console.log("Updated budgetUserData:", {
+      budget_id: response.data.budget_id,
+      user_id: response.data.user_id,
+      monthly_income_goal: parseFloat(response.data.monthly_income_goal),
+      monthly_expense_goal: parseFloat(response.data.monthly_expense_goal),
+      actual_income: parseFloat(response.data.actual_income),
+      actual_expenses: parseFloat(response.data.actual_expenses),
+      disposable_income: parseFloat(response.data.disposable_income),
+   });
 
 
     alert("Budget updated successfully!");

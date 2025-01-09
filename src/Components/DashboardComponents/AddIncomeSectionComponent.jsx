@@ -61,7 +61,7 @@ const AddIncomeSectionComponent = ({
                 ) : (
                     <tr>
                     <td colSpan="4" className="text-center text-gray-500">
-                        No incomes to display. Add Your Incomes!
+                        No income to display. Add Your Income!
                     </td>
                     </tr>
                 )}

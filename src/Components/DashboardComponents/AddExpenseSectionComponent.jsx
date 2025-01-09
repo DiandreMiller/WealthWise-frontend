@@ -12,6 +12,14 @@ const AddExpenseSectionComponent = ({
 }) => {
   const expenses = expenseUser?.expenses || []; 
 
+  // const dateFormatted = (date) => {
+  //   const year = date.slice(0,4);
+  //   const month = date.slice(5,7);
+  //   const day = date.slice(9,10)
+
+  //   return `${month}-${day}-${year}`
+  // }
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
       <h2 className="text-xl font-semibold text-gray-700 mb-4">Added Expenses</h2>
@@ -20,7 +28,7 @@ const AddExpenseSectionComponent = ({
           <tr>
             <th className="border border-gray-300 px-4 py-2 text-left text-gray-600">Source</th>
             <th className="border border-gray-300 px-4 py-2 text-right text-gray-600">Expense</th>
-            <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">Date Received</th>
+            <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">Date Incurred</th>
             <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">Actions</th>
           </tr>
         </thead>
@@ -37,6 +45,7 @@ const AddExpenseSectionComponent = ({
                         {formatCurrency(expense.amount)}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
+                        {/* {dateFormatted(expense.date_incurred)} */}
                         {expense.date_incurred}
                     </td>
                     <td className="border border-gray-300 px-4 py-2 text-center">

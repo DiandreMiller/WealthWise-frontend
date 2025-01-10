@@ -46,7 +46,7 @@ const IncomeSectionComponent = ({
             placeholder="Income Source"
             value={incomeDescription}
             onChange={(e) => {
-              console.log("Income description updated:", e.target.value);
+              // console.log("Income description updated:", e.target.value);
               setIncomeDescription(e.target.value);
             }}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -56,7 +56,7 @@ const IncomeSectionComponent = ({
             placeholder="Amount"
             value={incomeAmount}
             onChange={(e) => {
-              console.log("Income amount updated:", e.target.value);
+              // console.log("Income amount updated:", e.target.value);
               setIncomeAmount(e.target.value);
             }}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -67,7 +67,7 @@ const IncomeSectionComponent = ({
               value={incomeCategory === null ? "" : incomeCategory}
               onChange={(e) => {
                 const selectedCategory = e.target.value === "" ? null : e.target.value;
-                console.log("Selected category in dropdown:", selectedCategory);
+                // console.log("Selected category in dropdown:", selectedCategory);
                 setIncomeCategory(selectedCategory);
               }}
               className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -89,7 +89,7 @@ const IncomeSectionComponent = ({
                 value={isRecurringIncome === null ? "" : isRecurringIncome ? "Yes" : "No"}
                 onChange={(e) => {
                   const selectedValue = e.target.value === "Yes" ? true : e.target.value === "No" ? false : null;
-                  console.log("Is recurring income:", selectedValue);
+                  // console.log("Is recurring income:", selectedValue);
                   setIsRecurringIncome(selectedValue);
                 }}
                 className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -108,10 +108,10 @@ const IncomeSectionComponent = ({
             <button
               className="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition-colors"
               onClick={() => {
-                console.log("Adding income with the following details:");
-                console.log("Description:", incomeDescription);
-                console.log("Amount:", incomeAmount);
-                console.log("Category:", incomeCategory);
+                // console.log("Adding income with the following details:");
+                // console.log("Description:", incomeDescription);
+                // console.log("Amount:", incomeAmount);
+                // console.log("Category:", incomeCategory);
                 addIncome();
               }}
             >
@@ -120,7 +120,7 @@ const IncomeSectionComponent = ({
             <button
               className="bg-gray-400 text-white px-5 py-2 rounded-lg hover:bg-gray-500 transition-colors"
               onClick={() => {
-                console.log("Cancelled adding income.");
+                // console.log("Cancelled adding income.");
                 setIsAddingIncome(false);
               }}
             >
@@ -132,7 +132,7 @@ const IncomeSectionComponent = ({
         <button
           className="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors"
           onClick={() => {
-            console.log("Clicked 'Add Income' button.");
+            // console.log("Clicked 'Add Income' button.");
             setIsAddingIncome(true);
           }}
         >

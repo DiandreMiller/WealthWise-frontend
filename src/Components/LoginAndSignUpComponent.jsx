@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  console.log('userError:', userError); 
+  // console.log('userError:', userError); 
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

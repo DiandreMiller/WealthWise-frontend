@@ -380,10 +380,10 @@ const addExpense = async () => {
       created_at: new Date().toISOString(),
     });
 
-    console.log("Response add expense:", response.data);
+    // console.log("Response add expense:", response.data);
 
     setExpenseUser((prevData) => {
-      console.log("prevData before adding expense:", prevData);
+      // console.log("prevData before adding expense:", prevData);
 
       const newExpense = {
         id: response.data.id,
@@ -397,7 +397,7 @@ const addExpense = async () => {
         User: prevData?.User || null,
       };
 
-      console.log('newExpense:', newExpense);
+      // console.log('newExpense:', newExpense);
 
       return {
         ...prevData,
@@ -437,16 +437,16 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory, updateEx
       is_recurring: isRecurringExpense ? true : false,
     });
 
-    console.log('response:', response.data)
-    console.log('expenseId:', expenseId);
-    console.log('updatedAmount:', updatedAmount);
-    console.log('updatedCategory type:', updateExpenseCategories);
-    console.log('updatedCategory:', updatedCategory);
-    console.log('updateExpenseCategories:', updateExpenseCategories);
+    // console.log('response:', response.data)
+    // console.log('expenseId:', expenseId);
+    // console.log('updatedAmount:', updatedAmount);
+    // console.log('updatedCategory type:', updateExpenseCategories);
+    // console.log('updatedCategory:', updatedCategory);
+    // console.log('updateExpenseCategories:', updateExpenseCategories);
 
     const updatedExpense = response.data;
 
-    console.log('updatedExpense10:', updatedExpense);
+    // console.log('updatedExpense10:', updatedExpense);
     // setExpenseUser(prevData => {
     //   if (!prevData || !Array.isArray(prevData.expenses)) {
     //     console.error("Invalid expense data:", prevData);
@@ -695,7 +695,7 @@ const handleEditBudget = (budget) => {
  
 // Function to update budget
 const updateBudget = async (budgetId, updatedBudgetData) => {
-  console.log('update budget involked')
+  // console.log('update budget involked')
 
   try {
     const requestData = {
@@ -706,20 +706,20 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       // disposable_income: parseFloat(updatedBudgetData.monthly_income_goal) - parseFloat(updatedBudgetData.monthly_expense_goal),
     };
 
-    console.log("Request Data budget:", requestData);
+    // console.log("Request Data budget:", requestData);
 
-    const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData);
-    console.log("Response Data:", response.data);
+     await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData);
+    // console.log("Response Data:", response.data);
 
 
     console.log("Entering setTimeout block for GET request");
   
     setTimeout(async () => {
       try {
-        console.log("GET request started for updated budget");
+        // console.log("GET request started for updated budget");
         const response1 = await axios.get(`${backEndUrl}/users/${userId}/budget/${budgetId}`);
         setBudgetUserData(response1.data);
-        console.log("Updated budgetUserData (from GET):", response1.data);
+        // console.log("Updated budgetUserData (from GET):", response1.data);
       } catch (error) {
         console.error("Error fetching updated budget (GET request failed):", error.response || error.message || error);
       }

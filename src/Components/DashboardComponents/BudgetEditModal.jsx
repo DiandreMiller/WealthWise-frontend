@@ -7,6 +7,7 @@ const BudgetEditModal = ({ budget, onClose, onSubmit }) => {
     monthly_expense_goal: budget?.monthly_expense_goal || 0,
     actual_income: budget?.actual_income || 0,
     actual_expenses: budget?.actual_expenses || 0,
+    
   });
 
   console.log("Form data before submitting:", formData);

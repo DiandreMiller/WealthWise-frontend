@@ -663,7 +663,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       monthly_expense_goal: parseFloat(updatedBudgetData.monthly_expense_goal),
       actual_income: parseFloat(updatedBudgetData.actual_income),
       actual_expenses: parseFloat(updatedBudgetData.actual_expenses),
-      disposable_income: parseFloat(updatedBudgetData.monthly_income_goal) - parseFloat(updatedBudgetData.monthly_expense_goal),
+      // disposable_income: parseFloat(updatedBudgetData.monthly_income_goal) - parseFloat(updatedBudgetData.monthly_expense_goal),
     };
 
     // console.log("Request Data budget:", requestData);

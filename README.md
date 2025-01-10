@@ -1,6 +1,6 @@
 # Budgeting and Investment Recommendation App
 
-Welcome to my **Budgeting and Investment Recommendation App**! This project aims to help users track their finances, calculate disposable income, and optionally provide low-risk investment recommendations based on their financial profile.
+Welcome to my **Budgeting and Investment Recommendation App**! This project aims to help users track their finances, calculate their disposable income, and see their changes in spending and income over time.
 
 ---
 
@@ -16,16 +16,11 @@ Welcome to my **Budgeting and Investment Recommendation App**! This project aims
 - **Income and Expense Input**: Users can log and categorize their financial data.
 - **Disposable Income Calculation**: Automatically calculates disposable income.
 
-### **3. Notifications**
-- **Account Alerts**: Users are notified of changes such as password updates or unusual login activity.
-- **Investment Alerts (Optional)**: Notifications about market conditions or portfolio changes.
 
-### **4. User Dashboard**
+### **3. User Dashboard**
 - A centralized place to view:
   - Budget summary.
   - Disposable income.
-  - Projected earnings.
-- **(Optional)** AI-generated investment suggestions based on disposable income and risk preferences.
 
 ---
 

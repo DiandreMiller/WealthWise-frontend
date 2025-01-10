@@ -65,7 +65,7 @@ const ExpenseSectionComponent = ({
               onChange={(e) => {
                 const selectedValue =
                   e.target.value === "Yes" ? true : e.target.value === "No" ? false : null;
-                console.log("Is this expense recurring:", selectedValue);
+                // console.log("Is this expense recurring:", selectedValue);
                 setIsRecurringExpense(selectedValue);
               }}
               className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -84,7 +84,7 @@ const ExpenseSectionComponent = ({
               value={expenseCategories || ""}
               onChange={(e) => {
                 const selectedCategory = e.target.value || null;
-                console.log("Selected expense category:", selectedCategory);
+                // console.log("Selected expense category:", selectedCategory);
                 setExpenseCategories(selectedCategory);
               }}
               className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"

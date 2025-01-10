@@ -5,16 +5,16 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = ({ onLogOut, isLogin, toggleState, userId }) => {
 
   const navigate = useNavigate();
-  console.log('redeploy');
+  // console.log('redeploy');
 
   const handleHomeDirect = (event) => {
     event.preventDefault()
     toggleState()
-    console.log('isLogin navbar state:', isLogin);
-    console.log('userId: nav', userId)
+    // console.log('isLogin navbar state:', isLogin);
+    // console.log('userId: nav', userId)
 
     if(isLogin && userId) {
-      console.log('userId navigate:', userId);
+      // console.log('userId navigate:', userId);
       navigate(`/dashboard/${userId}`);
     } else {
       navigate('/')

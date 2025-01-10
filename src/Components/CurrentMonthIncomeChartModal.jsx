@@ -71,7 +71,7 @@ const CurrentMonthChartIncomeModal = ({
     const [activeIndex, setActiveIndex] = useState(null);
 
     // console.log('currentMonthIncome:', currentMonthIncome);
-    console.log('getPreviousMonth:', getPreviousMonth);
+    // console.log('getPreviousMonth:', getPreviousMonth);
 
     const categories = () => {
         const userCategories = filteredIncome.map(input => input.category);

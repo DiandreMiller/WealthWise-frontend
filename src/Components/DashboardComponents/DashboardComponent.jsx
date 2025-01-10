@@ -120,7 +120,7 @@ const DashboardComponent = () => {
         // console.log("Type of User Data:", typeof formattedData);
 
         setUserData(formattedData);
-        console.log("User data fetched:", formattedData);
+        // console.log("User data fetched:", formattedData);
         setUpdatedIncome(response.data);
 
       } catch (error) {
@@ -148,7 +148,7 @@ const DashboardComponent = () => {
               ...expense,
               amount: parseFloat(expense.amount),
             }));
-            console.log('Fetched expenses:', expenses);
+            // console.log('Fetched expenses:', expenses);
 
             setExpenseUser((prevData) => ({
                 ...prevData,
@@ -245,12 +245,12 @@ const DashboardComponent = () => {
         return;
     }
 
-    console.log("Selected category Dashboard:", incomeCategory);
-    console.log("Preparing to add income with the following details:");
-    console.log("Description:", incomeDescription);
-    console.log("Amount:", amount);
-    console.log("Category:", incomeCategory);
-    console.log("Selected Category before POST:", incomeCategory);
+    // console.log("Selected category Dashboard:", incomeCategory);
+    // console.log("Preparing to add income with the following details:");
+    // console.log("Description:", incomeDescription);
+    // console.log("Amount:", amount);
+    // console.log("Category:", incomeCategory);
+    // console.log("Selected Category before POST:", incomeCategory);
 
 
     const dateReceived = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
@@ -549,14 +549,14 @@ const createBudget = async (budgetData) => {
     actual_expenses = expenseUser?.expenses?.reduce((sum, expense) => sum + expense.amount, 0) || 0, 
   } = budgetData;
 
-  console.log("=== createBudget Function Start ===");
-  console.log("Received Budget Data:", budgetData);
-  console.log("Parsed Values Before Validation:", {
-    monthly_income_goal,
-    monthly_expense_goal,
-    actual_income,
-    actual_expenses,
-  });
+  // console.log("=== createBudget Function Start ===");
+  // console.log("Received Budget Data:", budgetData);
+  // console.log("Parsed Values Before Validation:", {
+  //   monthly_income_goal,
+  //   monthly_expense_goal,
+  //   actual_income,
+  //   actual_expenses,
+  // });
 
   // Validate inputs
   if (
@@ -586,13 +586,13 @@ const createBudget = async (budgetData) => {
 
   setLoading(true);
   try {
-    console.log("Sending API Request to Create Budget...");
-    console.log("API Request Payload:", {
-      monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
-      monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
-      actual_income: actual_income,
-      actual_expenses: actual_expenses,
-    });
+    // console.log("Sending API Request to Create Budget...");
+    // console.log("API Request Payload:", {
+    //   monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
+    //   monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
+    //   actual_income: actual_income,
+    //   actual_expenses: actual_expenses,
+    // });
 
     const response = await axios.post(`${backEndUrl}/users/${userId}/budget`, {
       monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
@@ -601,11 +601,11 @@ const createBudget = async (budgetData) => {
       actual_expenses: parseFloat(actual_expenses),
     });
 
-    console.log("API Response:", response.data);
-    console.log("type: month goal", response.data.monthly_income_goal);
-    console.log("type: month expense", response.data.monthly_expense_goal);
-    console.log("type: actual income", response.data.actual_income);
-    console.log("type: actual expense", response.data.actual_expenses);
+    // console.log("API Response:", response.data);
+    // console.log("type: month goal", response.data.monthly_income_goal);
+    // console.log("type: month expense", response.data.monthly_expense_goal);
+    // console.log("type: actual income", response.data.actual_income);
+    // console.log("type: actual expense", response.data.actual_expenses);
 
     setBudgetUserData((prevData) => ({
       ...(prevData || {}),
@@ -708,7 +708,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 };
 
 
-  //Function to Check if Goals were accomplished or exceeded
   const checkIfIncomeOrExpenseAchieved = (incomeGoal, expenseGoal, incomeActual, expenseActual) => {
 
     const totalIncome = incomeActual.map((person) => person.amount).reduce((a, b) => a + b, 0);

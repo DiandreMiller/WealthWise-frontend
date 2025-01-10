@@ -55,7 +55,7 @@ const AppContent = () => {
   const signUpUser = async (userData) => {
     try {
       const response = await axios.post(`${backEndUrl}/sign-up`, userData);
-      console.log('Sign-up response:', response.data);
+      // console.log('Sign-up response:', response.data);
       
       if (response.data && response.data.message === "User created") {
         return response.data.user; 
@@ -201,7 +201,7 @@ const loginUser = async (userData) => {
           Cookies.set('token', token, { expires: expirationDate, secure: true, sameSite: 'strict' });
           // console.log('Token:', token);
           Cookies.set('userID', response.userId, { expires: expirationDate, secure: true, sameSite: 'strict' });
-          console.log('userId in app.js:', userId);
+          // console.log('userId in app.js:', userId);
           login(token);
           setUserId(response.userId);
           if (!hasRegisteredPasskey) {

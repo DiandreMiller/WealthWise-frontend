@@ -12,7 +12,8 @@ const BudgetSectionComponent = ({
   userData,
 }) => {
 
-  // console.log('budgetUserData:', budgetUserData);
+  console.log("Rendering with budgetUserData:", budgetUserData);
+
 
   const [disposableIncome, setDisposableIncome] = useState(0);
 
@@ -32,7 +33,7 @@ const BudgetSectionComponent = ({
       setDisposableIncome(0);
     }
 
-  },[expenseUser, userData])
+  },[expenseUser, userData, budgetUserData])
 
 
   const isBudgetEmpty = 

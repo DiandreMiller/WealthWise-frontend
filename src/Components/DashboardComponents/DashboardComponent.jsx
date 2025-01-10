@@ -45,6 +45,7 @@ const DashboardComponent = () => {
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseUser, setExpenseUser] = useState({ expenses: [] });
   const [expenseCategories, setExpenseCategories] = useState('');
+  const [updateExpenseCategories, setUpdateExpenseCategories] = useState('');
   const [isRecurringExpense, setIsRecurringExpense] = useState(null);
   const [filteredExpense, setFilteredExpense] = useState([]);
   const [isEditingExpense, setIsEditingExpense] = useState(false);
@@ -379,10 +380,10 @@ const addExpense = async () => {
       created_at: new Date().toISOString(),
     });
 
-    // console.log("Response add expense:", response.data);
+    console.log("Response add expense:", response.data);
 
     setExpenseUser((prevData) => {
-      // console.log("prevData before adding expense:", prevData);
+      console.log("prevData before adding expense:", prevData);
 
       const newExpense = {
         id: response.data.id,
@@ -395,6 +396,8 @@ const addExpense = async () => {
         created_at: new Date().toISOString(),
         User: prevData?.User || null,
       };
+
+      console.log('newExpense:', newExpense);
 
       return {
         ...prevData,
@@ -418,7 +421,7 @@ const addExpense = async () => {
 };
 
 //Function to update Expense
-const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
+const updateExpense = async (expenseId, updatedAmount, updatedCategory, updateExpenseCategories, isRecurringExpense) => {
   // console.log(`[${new Date().toISOString()}] Triggered updateExpense with expenseId: ${expenseId}`);
   if (!expenseId || isNaN(parseFloat(updatedAmount)) || updatedAmount <= 0 || updatedCategory.trim() === "") {
     alert("Please provide valid expense details.");
@@ -430,36 +433,73 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory) => {
     const response = await axios.put(`${backEndUrl}/users/${userId}/expenses/${expenseId}`, {
       amount: DOMPurify.sanitize(updatedAmount),
       category: DOMPurify.sanitize(updatedCategory),
-      category_type: expenseCategories,
+      category_type: updateExpenseCategories,
       is_recurring: isRecurringExpense ? true : false,
     });
 
+    console.log('response:', response.data)
+    console.log('expenseId:', expenseId);
+    console.log('updatedAmount:', updatedAmount);
+    console.log('updatedCategory type:', updateExpenseCategories);
+    console.log('updatedCategory:', updatedCategory);
+    console.log('updateExpenseCategories:', updateExpenseCategories);
+
     const updatedExpense = response.data;
 
-    setExpenseUser(prevData => {
-      if (!prevData || !Array.isArray(prevData.expenses)) {
-        console.error("Invalid expense data:", prevData);
-        return prevData;
+    console.log('updatedExpense10:', updatedExpense);
+    // setExpenseUser(prevData => {
+    //   if (!prevData || !Array.isArray(prevData.expenses)) {
+    //     console.error("Invalid expense data:", prevData);
+    //     return prevData;
+    //   }
+
+    //   // const updatedExpenses = prevData.expenses.map(expense =>
+    //   //   expense.id === expenseId
+    //   //     ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type, is_recurring: updateEditedExpense.is_recurring }
+    //   //     : expense
+    //   // );
+
+    //   const updatedExpenses = prevData.expenses.map((expense) => {
+    //     console.log('expenseid1:',  expense.id === expenseId);
+    //     if(expense.id === expenseId) {
+    //      return {...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type, is_recurring: updateEditedExpense.is_recurring }
+    //     }
+      
+    //     return expense
+    //   })
+    //   console.log('updatedExpenses1:', updatedExpenses);
+
+    //   // console.log(`[${new Date().toISOString()}] Updated local expense state:`, updatedExpenses);
+    //   return {
+    //     ...prevData,
+    //     expenseUser: updatedExpenses,
+
+    //   };
+    // });
+
+    const updatedExpenses = expenseUser.expenses.map((expense) => {
+      console.log("expenseid1:", expense.id === expenseId);
+      if (expense.id === expenseId) {
+        return {
+          ...expense,
+          amount: updatedExpense.amount,
+          category: updatedExpense.category,
+          category_type: updatedExpense.category_type,
+          is_recurring: updatedExpense.is_recurring,
+        };
       }
-
-      const updatedExpenses = prevData.expenses.map(expense =>
-        expense.id === expenseId
-          ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type, is_recurring: updateEditedExpense.is_recurring }
-          : expense
-      );
-
-      // console.log(`[${new Date().toISOString()}] Updated local expense state:`, updatedExpenses);
-      return {
-        ...prevData,
-        expenses: updatedExpenses,
-      };
+      return expense;
     });
 
-    setUpdateEditedExpense(previous => !previous);
+    console.log('updatedExpenses12:', updatedExpenses);
+
+    setExpenseUser({ expenses: [...updatedExpenses] });
+    
+    // setUpdateEditedExpense(previous => !previous);
     // console.log(`[${new Date().toISOString()}] State update: updateEditedExpense toggled`);
 
     alert("Expense updated successfully!");
-    setIsEditingExpense(false);
+    // setIsEditingExpense(false);
   } catch (error) {
     console.error("Error updating expense:", error);
     alert("There was an error updating your expense. Please try again.");
@@ -1250,7 +1290,7 @@ useEffect(() => {
             <ExpenseEditModal 
               expense={expenseToEdit}
               onClose={() => setIsEditingExpense(false)} 
-              onSave={updateExpense}
+              // onSave={updateExpense}
               onSubmit={(id, amount, category, category_type, is_recurring) => updateExpense(id, amount, category, category_type, is_recurring)}
 
             />

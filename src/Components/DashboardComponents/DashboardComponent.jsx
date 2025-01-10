@@ -654,8 +654,8 @@ const handleEditBudget = (budget) => {
  
 // Function to update budget
 const updateBudget = async (budgetId, updatedBudgetData) => {
-  // console.log("Budget data being sent to updateBudget:", updatedBudgetData);
-  // console.log("budgetId:", budgetId);
+  console.log("Budget data being sent to updateBudget:", updatedBudgetData);
+  console.log("budgetId:", budgetId);
 
   try {
     const requestData = {
@@ -666,10 +666,10 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       // disposable_income: parseFloat(updatedBudgetData.monthly_income_goal) - parseFloat(updatedBudgetData.monthly_expense_goal),
     };
 
-    // console.log("Request Data budget:", requestData);
+    console.log("Request Data budget:", requestData);
 
-    await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData);
-    // console.log("Response Data:", response.data);
+    const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData);
+    console.log("Response Data:", response.data);
 
   
     setTimeout(async () => {
@@ -804,7 +804,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     
     
     setFilteredIncome(filteredIncomes);
-    console.log('filteredIncomes:', filteredIncomes);
+    // console.log('filteredIncomes:', filteredIncomes);
     const totalIncome = filteredIncomes.reduce((total, income) => total + income.amount, 0);
     setCurrentMonthIncome(totalIncome);
 }, [currentMonth, userData]);
@@ -825,7 +825,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
        'July', 'August', 'September', 'October', 'November', 'December'];
   
        
-       console.log('dashboard:', currentMonth);
+      //  console.log('dashboard:', currentMonth);
   
        let monthBeforeCurrent = '';
   
@@ -837,7 +837,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         }
        }
        setGetPreviousMonth(monthBeforeCurrent);
-       console.log('monthBeforeCurrent', monthBeforeCurrent);
+      //  console.log('monthBeforeCurrent', monthBeforeCurrent);
     }
     previousMonth();
   },)
@@ -944,11 +944,11 @@ useEffect(() => {
       return userData.date_received.slice(5,7) === monthNumber;
     })
 
-    console.log('testest:', userData);
+    // console.log('testest:', userData);
 
     const totalIncomeForPreviousMonth = filteredIncomeFromPreviousMonth.map((cost) => cost.amount).reduce((a,b) => a + b, 0);
     setPreviousMonthIncome(totalIncomeForPreviousMonth);
-    console.log('previousMonthIncome:', previousMonthIncome);
+    // console.log('previousMonthIncome:', previousMonthIncome);
   };
 
   previousMonthIncomeFunction();
@@ -958,9 +958,9 @@ useEffect(() => {
 //Check if income is recurring
 useEffect(() => {
   const recurringIncome = () => {
-    console.log("userData before filtering:", userData);
+    // console.log("userData before filtering:", userData);
     const incomeThatIsRecurring = userData.filter((income) => income.is_recurring);
-    console.log('test11:', incomeThatIsRecurring);
+    // console.log('test11:', incomeThatIsRecurring);
 
     // console.log('id:', expenseUser.expenses.map((test) => test.id))
 
@@ -971,7 +971,7 @@ useEffect(() => {
     const endMonth = 11; 
 
     const generateMonthlyIncome = (income) => {
-      console.log('generate Income function invoked:')
+      // console.log('generate Income function invoked:');
       const startDate = new Date(income.date_received);
       if (isNaN(startDate)) {
         console.error(`Invalid date_received for income:`, income);
@@ -982,7 +982,7 @@ useEffect(() => {
       const startMonth = startDate.getMonth();
     
       const recurringIncomeEntries = [];
-      console.log('entries before data:', recurringIncomeEntries);
+      // console.log('entries before data:', recurringIncomeEntries);
     
       for (let year = startYear; year <= currentYear; year++) {
         const start = year === startYear ? startMonth : 0;
@@ -998,7 +998,7 @@ useEffect(() => {
           });
         }
       }
-      console.log('recurringIncomeEntries1:', recurringIncomeEntries);
+      // console.log('recurringIncomeEntries1:', recurringIncomeEntries);
       return recurringIncomeEntries;
     };
 
@@ -1013,8 +1013,8 @@ useEffect(() => {
     });
 
   
-    console.log("Entries for February:", februaryEntries);
-    console.log("Updated Recurring Income:", updatedRecurringIncome);
+    // console.log("Entries for February:", februaryEntries);
+    // console.log("Updated Recurring Income:", updatedRecurringIncome);
 
       // Filter for March Test
       const marchEntries = updatedRecurringIncome.filter((entry) => {
@@ -1022,10 +1022,10 @@ useEffect(() => {
         return month === 1; 
       });
 
-      console.log('marchEntries:', marchEntries);
+      // console.log('marchEntries:', marchEntries);
 
     if (processedRecurringIncome) {
-      console.log('processedRecurringIncome:', processedRecurringIncome);
+      // console.log('processedRecurringIncome:', processedRecurringIncome);
       return;
     } 
 
@@ -1045,16 +1045,16 @@ useEffect(() => {
 //Check if expense is recurring
 useEffect(() => {
   const recurringExpenses = () => {
-    console.log("expenses before filtering:", expenseUser.expenses);
+    // console.log("expenses before filtering:", expenseUser.expenses);
     const expenseThatIsRecurring = expenseUser.expenses.filter((expense) => expense.is_recurring);
-    console.log('expenseUser.expenses', expenseThatIsRecurring);
+    // console.log('expenseUser.expenses', expenseThatIsRecurring);
 
     const today = new Date();
     const currentYear = today.getFullYear();
     const endMonth = 11; 
 
     const generateMonthlyExpense = (expense) => {
-      console.log('generate expense function invoked:')
+      // console.log('generate expense function invoked:')
       const startDate = new Date(expense.date_incurred
       );
       if (isNaN(startDate)) {
@@ -1066,7 +1066,7 @@ useEffect(() => {
       const startMonth = startDate.getMonth();
     
       const recurringExpenseEntries = [];
-      console.log('entries before data:', recurringExpenseEntries);
+      // console.log('entries before data:', recurringExpenseEntries);
     
       for (let year = startYear; year <= currentYear; year++) {
         const start = year === startYear ? startMonth : 0;
@@ -1082,7 +1082,7 @@ useEffect(() => {
           });
         }
       }
-      console.log('recurringExpenseEntries1:', recurringExpenseEntries);
+      // console.log('recurringExpenseEntries1:', recurringExpenseEntries);
       return recurringExpenseEntries;
     };
 
@@ -1095,8 +1095,8 @@ useEffect(() => {
     });
 
   
-    console.log("Entries for February expense:", februaryEntries);
-    console.log("Updated Recurring Expense:", updatedRecurringExpense);
+    // console.log("Entries for February expense:", februaryEntries);
+    // console.log("Updated Recurring Expense:", updatedRecurringExpense);
 
       // Filter for March Test
       const marchEntries = updatedRecurringExpense.filter((entry) => {
@@ -1104,10 +1104,10 @@ useEffect(() => {
         return month === 2; 
       });
 
-      console.log('marchEntries expenses:', marchEntries);
+      // console.log('marchEntries expenses:', marchEntries);
 
       if (processedRecurringExpense) {
-        console.log('processedRecurringExpense:', processedRecurringExpense);
+        // console.log('processedRecurringExpense:', processedRecurringExpense);
         return;
       } 
 

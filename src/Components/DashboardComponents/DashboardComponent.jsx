@@ -60,7 +60,8 @@ const DashboardComponent = () => {
   const [isEditingBudget, setIsEditingBudget] = useState(false);
   const [budgetToEdit, setBudgetToEdit] = useState(null);
   const [refreshBudget, setRefreshBudget] = useState(false);
-  const [showBudgetEditModal, setShowBudgetEditModal] = useState(false);
+  const [showBudgetEditModal, setShowBudgetEditModal] = useState(false); 
+
 
   //Month
 

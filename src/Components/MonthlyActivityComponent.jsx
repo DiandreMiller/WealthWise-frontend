@@ -37,17 +37,7 @@ MonthlyActivityComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthIncome: PropTypes.number.isRequired, 
     currentMonthExpenses: PropTypes.number.isRequired, 
-    getPreviousMonth: PropTypes.string.isRequired,
-    filteredIncome: PropTypes.arrayOf(PropTypes.shape({
-        category: PropTypes.string.isRequired,
-        amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-    })).isRequired,
-    filteredExpense: PropTypes.arrayOf(PropTypes.shape({
-        category_type: PropTypes.string.isRequired,
-        amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
-    })).isRequired,
-    previousMonthExpenses: PropTypes.number.isRequired,
-    previousMonthIncome: PropTypes.number.isRequired
+    getPreviousMonth: PropTypes.string.isRequired
 };
 
 export default MonthlyActivityComponent;

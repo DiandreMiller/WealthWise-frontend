@@ -44,7 +44,7 @@ const SpecificMonthExpenseComponent = ({
             </p>
             <div className="mt-4">
                 <p className="text-2xl font-bold text-red-600">
-                    ${currentMonthExpenses}
+                    ${Number(currentMonthExpenses).toFixed(2)}
                 </p>
             </div>
             <button

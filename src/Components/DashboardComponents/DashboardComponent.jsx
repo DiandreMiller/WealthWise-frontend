@@ -903,7 +903,7 @@ const getSpecificMonthExpense = useCallback(() => {
     });
 
     setFilteredExpense(filteredExpenses);
-    const totalExpenses = filteredExpenses.reduce((total, expenses) => total + expenses.amount, 0);
+    const totalExpenses = filteredExpenses.reduce((total, expenses) => parseFloat(total) + parseFloat(expenses.amount), 0);
     setCurrentMonthExpenses(totalExpenses);
 }, [currentMonth, expenseUser]);
 

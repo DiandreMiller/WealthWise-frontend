@@ -654,8 +654,7 @@ const handleEditBudget = (budget) => {
  
 // Function to update budget
 const updateBudget = async (budgetId, updatedBudgetData) => {
-  console.log("Budget data being sent to updateBudget:", updatedBudgetData);
-  console.log("budgetId:", budgetId);
+  console.log('update budget involked')
 
   try {
     const requestData = {
@@ -671,13 +670,20 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     const response = await axios.put(`${backEndUrl}/users/${userId}/budget/${budgetId}`, requestData);
     console.log("Response Data:", response.data);
 
+
+    console.log("Entering setTimeout block for GET request");
   
     setTimeout(async () => {
-      const response = await axios.get(`${backEndUrl}/users/${userId}/budget/${budgetId}`);
-      setBudgetUserData(response.data);
-      console.log("Updated budgetUserData (from GET):", response.data);
+      try {
+        console.log("GET request started for updated budget");
+        const response1 = await axios.get(`${backEndUrl}/users/${userId}/budget/${budgetId}`);
+        setBudgetUserData(response1.data);
+        console.log("Updated budgetUserData (from GET):", response1.data);
+      } catch (error) {
+        console.error("Error fetching updated budget (GET request failed):", error.response || error.message || error);
+      }
     }, 500);
-
+    
   //   setBudgetUserData({
   //     budget_id: response.data.budget_id,
   //     user_id: response.data.user_id,

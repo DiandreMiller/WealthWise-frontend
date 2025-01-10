@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
 
+  console.log('userError:', userError); 
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -116,13 +118,13 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
               {formik.errors.dateOfBirth && <p className="text-red-500">{formik.errors.dateOfBirth}</p>}
             </div>
           )}
-          {isLogin && (
+          {/* {isLogin && (
             <div className="mb-4">
               <Link to="/forgot-password" className="text-blue-400 hover:underline text-sm">
                 Forgot Password?
               </Link>
             </div>
-          )}
+          )} */}
           <button
             type="submit"
             className={`${isLogin ? 'bg-blue-500 hover:bg-blue-600' : 'bg-green-500 hover:bg-green-600'} text-white font-bold py-2 px-4 rounded w-full`}

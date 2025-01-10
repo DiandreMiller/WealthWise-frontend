@@ -87,8 +87,14 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, filter
 };
 
 SpecificMonthIncomeComponent.propTypes = {
-    currentMonth: PropTypes.string.isRequired, 
-    currentMonthIncome: PropTypes.number.isRequired, 
+    currentMonth: PropTypes.string.isRequired,
+    currentMonthIncome: PropTypes.number.isRequired,
+    filteredIncome: PropTypes.arrayOf(PropTypes.shape({
+        category: PropTypes.string.isRequired,
+        amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+    })).isRequired,
+    getPreviousMonth: PropTypes.string.isRequired,
+    previousMonthIncome: PropTypes.number.isRequired
 };
 
 export default SpecificMonthIncomeComponent;

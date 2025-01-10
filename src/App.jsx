@@ -55,7 +55,7 @@ const AppContent = () => {
   const signUpUser = async (userData) => {
     try {
       const response = await axios.post(`${backEndUrl}/sign-up`, userData);
-      // console.log('Sign-up response:', response.data);
+      console.log('Sign-up response:', response.data);
       
       if (response.data && response.data.message === "User created") {
         return response.data.user; 
@@ -73,7 +73,7 @@ const loginUser = async (userData) => {
   try {
     const response = await axios.post(`${backEndUrl}/sign-in`, userData);
     // console.log('response:', response);
-    // console.log('message:', response.data.message);
+    console.log('message:', response.data.message);
     if (response.data && response.data.message === "Sign in successful") {
       // console.log('Login response App.js:', response.data);
       return {
@@ -87,8 +87,10 @@ const loginUser = async (userData) => {
       throw new Error("Login failed. Please try again."); 
     }
   } catch (error) {
-    console.error('Error during login:', error);
-    throw error.response?.data?.message || error.message; 
+    console.error('Login error:', error);
+    const errorMessage = error.response?.data?.error || 'Invalid Credentials. Please try again.';
+    setUserError(errorMessage); 
+    console.log('Updated userError state:', errorMessage);
   }
 };
 
@@ -213,7 +215,7 @@ const loginUser = async (userData) => {
         }
       } catch (error) {
         console.error('Error submitting data:', error);
-        setUserError(error.response?.data?.error || 'Invalid Credentials. Please try again.');
+        // setUserError(error.response?.data?.error);
       }
     },
   });

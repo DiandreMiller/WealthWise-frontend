@@ -45,7 +45,6 @@ const DashboardComponent = () => {
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseUser, setExpenseUser] = useState({ expenses: [] });
   const [expenseCategories, setExpenseCategories] = useState('');
-  const [updateExpenseCategories, setUpdateExpenseCategories] = useState('');
   const [isRecurringExpense, setIsRecurringExpense] = useState(null);
   const [filteredExpense, setFilteredExpense] = useState([]);
   const [isEditingExpense, setIsEditingExpense] = useState(false);
@@ -88,7 +87,7 @@ const DashboardComponent = () => {
       try{
         const response = await axios.get(`${backEndUrl}/users/${userId}`);
         const userObject = response.data;
-        // console.log('userObject:', userObject);
+      
         if(userObject) {
             const name = userObject.username
             const length = name.length;
@@ -247,13 +246,6 @@ const DashboardComponent = () => {
         return;
     }
 
-    // console.log("Selected category Dashboard:", incomeCategory);
-    // console.log("Preparing to add income with the following details:");
-    // console.log("Description:", incomeDescription);
-    // console.log("Amount:", amount);
-    // console.log("Category:", incomeCategory);
-    // console.log("Selected Category before POST:", incomeCategory);
-
 
     const dateReceived = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
 
@@ -351,7 +343,7 @@ const DashboardComponent = () => {
 
  // Function to add expense
 const addExpense = async () => {
-  // console.log('user data Expense check:', expenseUser);
+
   const amount = parseFloat(expenseAmount);
 
   if (isNaN(amount) || amount <= 0 || expenseDescription.trim() === "") {
@@ -361,12 +353,6 @@ const addExpense = async () => {
 
   const dateIncurred = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
 
-  // console.log("Attempting to add expense with details:", {
-  //   userId,
-  //   amount,
-  //   category: expenseDescription,
-  //   dateIncurred,
-  // });
 
   try {
     const response = await axios.post(`${backEndUrl}/users/${userId}/expenses`, {
@@ -695,7 +681,6 @@ const handleEditBudget = (budget) => {
  
 // Function to update budget
 const updateBudget = async (budgetId, updatedBudgetData) => {
-  // console.log('update budget involked')
 
   try {
     const requestData = {
@@ -841,9 +826,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 
     const filteredIncomes = userData.filter((income) => {
       const incomeMonth = new Date(`${income.date_received}T00:00:00Z`).toLocaleString("en-US", { month: "long", timeZone: "UTC" }).toLowerCase();
-      // console.log('Raw Date:', income.date_received);
-      // console.log('Parsed Date:', new Date(`${income.date_received}T00:00:00Z`).toISOString());
-      // console.log('Parsed Month (UTC):', incomeMonth);
       return currentMonth.toLowerCase() === incomeMonth;
     });
 
@@ -851,7 +833,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     
     
     setFilteredIncome(filteredIncomes);
-    // console.log('filteredIncomes:', filteredIncomes);
     const totalIncome = filteredIncomes.reduce((total, income) => total + income.amount, 0);
     setCurrentMonthIncome(totalIncome);
 }, [currentMonth, userData]);
@@ -871,8 +852,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
       const allMonths = ['January', 'February', 'March', 'April', 'May', 'June',
        'July', 'August', 'September', 'October', 'November', 'December'];
   
-       
-      //  console.log('dashboard:', currentMonth);
   
        let monthBeforeCurrent = '';
   
@@ -884,7 +863,6 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
         }
        }
        setGetPreviousMonth(monthBeforeCurrent);
-      //  console.log('monthBeforeCurrent', monthBeforeCurrent);
     }
     previousMonth();
   },)
@@ -991,11 +969,9 @@ useEffect(() => {
       return userData.date_received.slice(5,7) === monthNumber;
     })
 
-    // console.log('testest:', userData);
 
     const totalIncomeForPreviousMonth = filteredIncomeFromPreviousMonth.map((cost) => cost.amount).reduce((a,b) => a + b, 0);
     setPreviousMonthIncome(totalIncomeForPreviousMonth);
-    // console.log('previousMonthIncome:', previousMonthIncome);
   };
 
   previousMonthIncomeFunction();

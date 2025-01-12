@@ -37,7 +37,11 @@ MonthlyActivityComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthIncome: PropTypes.number.isRequired, 
     currentMonthExpenses: PropTypes.number.isRequired, 
-    getPreviousMonth: PropTypes.string.isRequired
+    getPreviousMonth: PropTypes.string.isRequired,
+    previousMonthIncome: PropTypes.number.isRequired,
+    previousMonthExpenses: PropTypes.number.isRequired,
+    filteredIncome: PropTypes.array.isRequired,
+    filteredExpense: PropTypes.array.isRequired,
 };
 
 export default MonthlyActivityComponent;

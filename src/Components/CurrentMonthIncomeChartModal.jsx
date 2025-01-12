@@ -158,7 +158,8 @@ CurrentMonthChartIncomeModal.propTypes = {
     userData: PropTypes.array.isRequired,
     getPreviousMonth: PropTypes.string.isRequired,
     incomeComparedToLastMonth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    isIncomeMore: PropTypes.bool
+    isIncomeMore: PropTypes.bool,
+    previousMonthIncome: PropTypes.number.isRequired
 };
 
 export default CurrentMonthChartIncomeModal;

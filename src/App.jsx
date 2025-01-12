@@ -29,6 +29,8 @@ import Dashboard from './Pages/Dashboard';
 import RegisterPasskey from './Pages/RegisterPasskey';
 import TestComponent from './Components/TestComponent';
 import PlaceHolderSubmittedContactUs from './Pages/PlaceHolderSubmittedContactUs';
+import ForgotPassword1 from './Pages/ForgotPassword1';
+import ResetPassword from './Pages/ResetPassword';
 
 
 const AppContent = () => {
@@ -248,7 +250,8 @@ const loginUser = async (userData) => {
       <Routes>
         <Route element={<Home />} path='/' />
         <Route element={<About />} path='/about' />
-        {/* <Route element={<ForgotPasswordPage />} path='/forgot-password' /> */}
+        <Route element={<ForgotPassword1 />} path='/forgot-password' />
+        <Route element={<ResetPassword />} path='/reset-password' />
         <Route element={<Contact />} path='/contact' />
         <Route element={<LearnMore />} path='/learn-more' />
         <Route

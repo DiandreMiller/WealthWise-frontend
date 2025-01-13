@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import wealthWise from '../assets/wealthWise.png';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = ({ onLogOut, toggleState, userId, isLogin }) => {
+const Navbar = ({ onLogOut, toggleState, userId }) => {
   const navigate = useNavigate();
 
   console.log('userId:', userId);
@@ -71,7 +71,7 @@ const Navbar = ({ onLogOut, toggleState, userId, isLogin }) => {
               userId ? 'bg-red-500 text-white' : 'bg-[rgb(59,129,246)] text-white'
             }`}
           >
-            {userId && isLogin ? 'Logout' : 'Login'}
+            {userId ? 'Logout' : 'Login'}
           </button>
         </div>
       </div>
@@ -83,7 +83,6 @@ Navbar.propTypes = {
   onLogOut: PropTypes.func.isRequired,
   toggleState: PropTypes.func.isRequired,
   userId: PropTypes.string, 
-  isLogin: PropTypes.string,
 };
 
 export default Navbar;

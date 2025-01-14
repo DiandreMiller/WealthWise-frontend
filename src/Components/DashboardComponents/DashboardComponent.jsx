@@ -742,8 +742,10 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 
   const checkIfIncomeOrExpenseAchieved = (incomeGoal, expenseGoal, incomeActual, expenseActual) => {
 
-    const totalIncome = incomeActual.map((person) => person.amount).reduce((a, b) => a + b, 0);
-    const totalExpense = expenseActual.expenses.map((person) => person.amount).reduce((a, b) => a + b, 0);
+    // const totalIncome = incomeActual.map((person) => person.amount).reduce((a, b) => a + b, 0);
+    const totalIncome = currentMonthIncome;
+    // const totalExpense = expenseActual.expenses.map((person) => person.amount).reduce((a, b) => a + b, 0);
+    const totalExpense = currentMonthExpenses;
   
     const monthlyIncomeGoal = incomeGoal.monthly_income_goal;
     const monthlyExpenseGoal = expenseGoal.monthly_expense_goal;

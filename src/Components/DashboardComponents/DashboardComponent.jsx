@@ -740,28 +740,7 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 };
 
 
-  const checkIfIncomeOrExpenseAchieved = (incomeGoal, expenseGoal, incomeActual, expenseActual) => {
-
-    // const totalIncome = incomeActual.map((person) => person.amount).reduce((a, b) => a + b, 0);
-    const totalIncome = currentMonthIncome;
-    // const totalExpense = expenseActual.expenses.map((person) => person.amount).reduce((a, b) => a + b, 0);
-    const totalExpense = currentMonthExpenses;
-  
-    const monthlyIncomeGoal = incomeGoal.monthly_income_goal;
-    const monthlyExpenseGoal = expenseGoal.monthly_expense_goal;
-  
-    if (totalIncome >= monthlyIncomeGoal && totalExpense <= monthlyExpenseGoal) {
-      return "Income & Expense";
-    } else if (totalIncome >= monthlyIncomeGoal) {
-      return "Income";
-    } else if (totalExpense <= monthlyExpenseGoal) {
-      return "Expense";
-    } else {
-      return null; 
-    }
-  };
-
-  //Get goal achieved
+  // Get goal achieved
   useEffect(() => {
 
     const goalAchieved = checkIfIncomeOrExpenseAchieved(budgetUserData, budgetUserData, userData || [], expenseUser)
@@ -772,6 +751,44 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     }
 
   },[budgetUserData, userData, expenseUser])
+
+  //Check if income or expense goal achieved
+  const checkIfIncomeOrExpenseAchieved = (incomeGoal, expenseGoal) => {
+    const totalIncome = currentMonthIncome;
+    const totalExpense = currentMonthExpenses;
+    
+    if (totalIncome >= incomeGoal.monthly_income_goal && totalExpense <= expenseGoal.monthly_expense_goal) {
+      return "Income & Expense";
+    }
+    if (totalIncome >= incomeGoal.monthly_income_goal) {
+      return "Income";
+    }
+    if (totalExpense <= expenseGoal.monthly_expense_goal) {
+      return "Expense";
+    }
+    return null;
+  };
+
+  
+  useEffect(() => {
+    if (!loading && budgetUserData && userData.length > 0 && expenseUser.expenses.length > 0) {
+      const goalAchieved = checkIfIncomeOrExpenseAchieved(
+        budgetUserData, budgetUserData, userData, expenseUser
+      );
+  
+      if (goalAchieved && !goalProcessedRef.current) {
+        setShowGoalModal(true);
+        goalProcessedRef.current = true;
+      }
+    }
+  }, [budgetUserData, userData, expenseUser, loading]);
+ 
+  
+  //Goal Processed
+  useEffect(() => {
+    goalProcessedRef.current = false;
+  }, [budgetUserData]);
+  
 
   //Close modal
   const handleCloseModal = () => {

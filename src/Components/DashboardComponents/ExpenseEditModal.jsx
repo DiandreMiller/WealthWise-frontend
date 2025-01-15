@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import DOMPurify from 'dompurify';
 
 const ExpenseEditModal = ({ expense, onClose, onSubmit }) => {
   const [newAmount, setNewAmount] = useState(Number(expense.amount));
@@ -40,6 +41,11 @@ const ExpenseEditModal = ({ expense, onClose, onSubmit }) => {
     onClose();
   };
 
+  const handleNewCategory = (event) => {
+    const sanitizedSource = DOMPurify.sanitize(event.target.value);
+    setNewCategory(sanitizedSource);
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
       <div className="bg-black text-white p-6 rounded-lg shadow-lg w-96">
@@ -51,7 +57,7 @@ const ExpenseEditModal = ({ expense, onClose, onSubmit }) => {
               type="text"
               id="category"
               value={newCategory}
-              onChange={(event) => setNewCategory(event.target.value)}
+              onChange={handleNewCategory}
               className="w-full border border-white bg-black text-white rounded-lg p-2 mt-2"
               required
             />
@@ -129,7 +135,9 @@ ExpenseEditModal.propTypes = {
   expense: PropTypes.shape({
     id: PropTypes.string.isRequired,
     amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    category: PropTypes.string.isRequired,  
+    category: PropTypes.string.isRequired,
+    category_type: PropTypes.string,
+    is_recurring: PropTypes.bool,
   }).isRequired,
   onClose: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

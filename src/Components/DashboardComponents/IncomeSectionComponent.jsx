@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import DOMPurify from 'dompurify';
 
 const IncomeSectionComponent = ({
   isAddingIncome,
@@ -34,6 +35,16 @@ const IncomeSectionComponent = ({
     'other'
   ];
 
+  const handleDescriptionChange = (event) => {
+    const sanitizedDescription = DOMPurify.sanitize(event.target.value);
+    setIncomeDescription(sanitizedDescription);
+  }
+
+  const handleAmountChange = (event) => {
+    const sanitizedAmount = DOMPurify.sanitize(event.target.value);
+    setIncomeAmount(sanitizedAmount);
+  }
+
   
 
   return (
@@ -45,28 +56,22 @@ const IncomeSectionComponent = ({
             type="text"
             placeholder="Income Source"
             value={incomeDescription}
-            onChange={(e) => {
-              // console.log("Income description updated:", e.target.value);
-              setIncomeDescription(e.target.value);
-            }}
+            onChange={handleDescriptionChange}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="number"
             placeholder="Amount"
             value={incomeAmount}
-            onChange={(e) => {
-              // console.log("Income amount updated:", e.target.value);
-              setIncomeAmount(e.target.value);
-            }}
+            onChange={handleAmountChange}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           
           <div>
             <select
               value={incomeCategory === null ? "" : incomeCategory}
-              onChange={(e) => {
-                const selectedCategory = e.target.value === "" ? null : e.target.value;
+              onChange={(event) => {
+                const selectedCategory = event.target.value === "" ? null : event.target.value;
                 // console.log("Selected category in dropdown:", selectedCategory);
                 setIncomeCategory(selectedCategory);
               }}
@@ -87,8 +92,8 @@ const IncomeSectionComponent = ({
           <div>
               <select
                 value={isRecurringIncome === null ? "" : isRecurringIncome ? "Yes" : "No"}
-                onChange={(e) => {
-                  const selectedValue = e.target.value === "Yes" ? true : e.target.value === "No" ? false : null;
+                onChange={(event) => {
+                  const selectedValue = event.target.value === "Yes" ? true : event.target.value === "No" ? false : null;
                   // console.log("Is recurring income:", selectedValue);
                   setIsRecurringIncome(selectedValue);
                 }}

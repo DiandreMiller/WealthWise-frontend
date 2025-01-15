@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import DOMPurify from 'dompurify';
 
 const ExpenseSectionComponent = ({
   isAddingExpense,
@@ -39,6 +40,16 @@ const ExpenseSectionComponent = ({
     'other',
   ];
 
+  const handleDescriptionChange = (event) => {
+    const sanitizedDescription = DOMPurify.sanitize(event.target.value);
+    setExpenseDescription(sanitizedDescription);
+  }
+
+  const handleAmountChange = (event) => {
+    const sanitizedAmount = DOMPurify.sanitize(event.target.value);
+    setExpenseAmount(sanitizedAmount);
+  }
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
       <h2 className="text-xl font-semibold text-gray-700 mb-4">Expenses</h2>
@@ -48,23 +59,23 @@ const ExpenseSectionComponent = ({
             type="text"
             placeholder="Expense Description"
             value={expenseDescription}
-            onChange={(e) => setExpenseDescription(e.target.value)}
+            onChange={handleDescriptionChange}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
           <input
             type="number"
             placeholder="Amount"
             value={expenseAmount}
-            onChange={(e) => setExpenseAmount(e.target.value)}
+            onChange={handleAmountChange}
             className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
           <div>
             <select
               value={isRecurringExpense === null ? "" : isRecurringExpense ? "Yes" : "No"}
-              onChange={(e) => {
+              onChange={(event) => {
                 const selectedValue =
-                  e.target.value === "Yes" ? true : e.target.value === "No" ? false : null;
+                  event.target.value === "Yes" ? true : event.target.value === "No" ? false : null;
                 // console.log("Is this expense recurring:", selectedValue);
                 setIsRecurringExpense(selectedValue);
               }}
@@ -82,8 +93,8 @@ const ExpenseSectionComponent = ({
           <div>
             <select
               value={expenseCategories || ""}
-              onChange={(e) => {
-                const selectedCategory = e.target.value || null;
+              onChange={(event) => {
+                const selectedCategory = event.target.value || null;
                 // console.log("Selected expense category:", selectedCategory);
                 setExpenseCategories(selectedCategory);
               }}

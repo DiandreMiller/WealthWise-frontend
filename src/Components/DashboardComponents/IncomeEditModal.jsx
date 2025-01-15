@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import DOMPurify from 'dompurify';
 
 const IncomeEditModal = ({ income, onClose, onSubmit }) => {
   const [newAmount, setNewAmount] = useState(income.amount);
@@ -28,11 +29,22 @@ const IncomeEditModal = ({ income, onClose, onSubmit }) => {
     'other',
   ];
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
     onSubmit(income.id, newAmount, newSource, newCategory, isRecurring);
     onClose();
   };
+
+  const handleNewSource = (event) => {
+    const sanitizedSource = DOMPurify.sanitize(event.target.value);
+    setNewSource(sanitizedSource);
+  }
+
+  const handleNewAmount = (event) => {
+    const sanitizedAmount = DOMPurify.sanitize(event.target.value);
+    setNewAmount(sanitizedAmount);
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
@@ -47,7 +59,7 @@ const IncomeEditModal = ({ income, onClose, onSubmit }) => {
               type="text"
               id="source"
               value={newSource}
-              onChange={(event) => setNewSource(event.target.value)}
+              onChange={handleNewSource}
               className="w-full border border-white bg-black text-white rounded-lg p-2 mt-2"
               required
             />
@@ -60,7 +72,7 @@ const IncomeEditModal = ({ income, onClose, onSubmit }) => {
               type="number"
               id="amount"
               value={newAmount}
-              onChange={(event) => setNewAmount(event.target.value)}
+              onChange={handleNewAmount}
               className="w-full border border-white bg-black text-white rounded-lg p-2 mt-2"
               required
             />

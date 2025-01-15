@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import DOMPurify from 'dompurify';
 
 const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) => {
   const [showPassword, setShowPassword] = useState(false);

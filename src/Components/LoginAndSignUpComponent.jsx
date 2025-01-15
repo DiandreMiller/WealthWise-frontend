@@ -29,6 +29,17 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
     }
   }
 
+  const sanitizeAndHandleChange = (event) => {
+    const sanitizedValue = DOMPurify.sanitize(event.target.value);
+    formik.handleChange({
+      target: {
+        name: event.target.name,
+        value: sanitizedValue,
+      },
+    });
+  };
+
+
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white ${!isLogin ? 'mt-12' : ''}`}>
       <div className="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md">
@@ -44,7 +55,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
                 required
                 type="text"
                 name="username"
-                onChange={formik.handleChange}
+                onChange={sanitizeAndHandleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.username}
                 className="border border-gray-600 rounded p-3 w-full bg-gray-700 text-white"
@@ -60,7 +71,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
               required
               type="email"
               name="email"
-              onChange={formik.handleChange}
+              onChange={sanitizeAndHandleChange}
               value={formik.values.email}
               className="border border-gray-600 rounded p-3 w-full bg-gray-700 text-white"
               placeholder="Enter your email"
@@ -74,7 +85,7 @@ const LoginAndSignUpComponent = ({ formik, userError, toggleState, isLogin }) =>
                 required
                 type="text"
                 name="phoneNumber"
-                onChange={formik.handleChange}
+                onChange={sanitizeAndHandleChange}
                 onBlur={formik.handleBlur} 
                 value={formik.values.phoneNumber}
                 className="border border-gray-600 rounded p-3 w-full bg-gray-700 text-white"

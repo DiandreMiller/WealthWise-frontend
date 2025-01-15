@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import DOMPurify from 'dompurify';
 
 const ForgotPasswordComponent = () => {
 
@@ -41,6 +42,7 @@ const ForgotPasswordComponent = () => {
             setIsSubmitting(false);
         }
     };
+    
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -70,7 +72,7 @@ const ForgotPasswordComponent = () => {
                             id="email"
                             name="email"
                             value={email}
-                            onChange={(event) => setEmail(event.target.value)}
+                            onChange={(event) => setEmail(DOMPurify.sanitize(event.target.value))}
                             required
                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-opacity-50"
                             placeholder="Enter your email"

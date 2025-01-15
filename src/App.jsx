@@ -227,6 +227,8 @@ const loginUser = async (userData) => {
 
     // Logout function
     const handleLogout = () => {
+      Cookies.remove('token', { secure: true, sameSite: 'strict' });
+      Cookies.remove('userID', { secure: true, sameSite: 'strict' });
       logout(); 
       reset(); 
       setUserId(null);

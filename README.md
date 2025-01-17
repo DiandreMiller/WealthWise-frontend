@@ -88,3 +88,5 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
     VITE_REACT_APP_BACKEND_API=http://localhost:4444
 
 5. Happy Hacking!!!!
+
+//Research how to exclude the user id from the url

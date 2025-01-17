@@ -196,6 +196,7 @@ const loginUser = async (userData) => {
         // console.log('Login response:', response);
   
         const { token, expiresIn, hasRegisteredPasskey } = response;
+        console.log('token:', token);
   
         if (token) {
           if (!expiresIn) {

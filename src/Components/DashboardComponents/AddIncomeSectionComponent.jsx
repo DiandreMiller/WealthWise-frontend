@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 const AddIncomeSectionComponent = ({
   userData,
@@ -11,74 +12,212 @@ const AddIncomeSectionComponent = ({
   setShowAllIncome,
 }) => {
 
+  const [showYears, setShowYears] = useState(false);
+  const [uniqueYears, setUniqueYears] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [filteredIncome, setFilteredIncome] = useState(userData);
+
+  console.log('userData:', userData);
+
+  const handleYearClick = (year) => {
+    if (selectedYear === year) {
+      setSelectedYear(null); 
+      setFilteredIncome(userData); 
+    } else {
+      setSelectedYear(year);
+      setFilteredIncome(
+        userData.filter(
+          (income) => Number(income.date_received.slice(0, 4)) === year
+        )
+      );
+    }
+  };
+
+  const filterIncomeByMonth = (event) => {
+
+    const monthMap = new Map([
+      [1, 'January'],
+      [2, 'February'],
+      [3, 'March'],
+      [4, 'April'],
+      [5, 'May'],
+      [6, 'June'],
+      [7, 'July'],
+      [8, 'August'],
+      [9, 'September'],
+      [10, 'October'],
+      [11, 'November'],
+      [12, 'December']
+    ])
+
+    const incomeForMonth = userData.filter((income) => {
+      const month = Number(income.date_received.slice(5,7));
+      return month === event.target.value;
+      
+    })
+
+    const getMonth = Number(incomeForMonth[0].date_received.slice(5,7));
+    console.log('getMonth:', typeof getMonth);
+
+    
+    let wordMonth = '';
+   
+
+    for(let [keys, values] of monthMap) {
+      if(getMonth === keys) {
+        wordMonth += values
+      }
+    }
+
+    return wordMonth;
+  }
+
+  const allUserYears = () => {
+    console.log('userData in allUserYears:', userData)
+    const incomeYears = userData.map((income) => {
+      const year = Number(income.date_received.slice(0,4));
+      return year 
+    })
+
+    const uniqueYearsList = Array.from(new Set(incomeYears));
+
+    setUniqueYears(uniqueYearsList);
+    console.log('uniqueYearsList:', uniqueYearsList);
+    setShowYears(previous => !previous);
+  }
+
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
-         <h2 className="text-xl font-semibold text-gray-700 mb-4">Added Incomes</h2>
-          <table className="table-auto w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border border-gray-300 px-4 py-2 text-left text-gray-600">Source</th>
-                <th className="border border-gray-300 px-4 py-2 text-right text-gray-600">Income</th>
-                <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">Date Received</th>
-                <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-                {userData.length > 0 ? (
-                    userData
-                    .slice()
-                    .reverse()
-                    .slice(0, showAllIncome ? userData.length : 4)
-                    .map((income) => (
-                        <tr key={income.id} className="hover:bg-gray-50">
-                        <td className="border border-gray-300 px-4 py-2 text-gray-800">{income.source}</td>
-                        <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
-                            {formatCurrency(income.amount)}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
-                            {income.date_received}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-center">
-                            <button
-                            className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
-                            onClick={() => {
-                                setIncomeToEdit(income);
-                                setIsEditingIncome(true);
-                            }}
-                            >
-                            Edit
-                            </button>
-                            <button
-                            className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
-                            onClick={() => deleteIncome(income.id)}
-                            >
-                            Delete
-                            </button>
-                        </td>
-                        </tr>
-                    ))
-                ) : (
-                    <tr>
-                    <td colSpan="4" className="text-center text-gray-500">
-                        No income to display. Add Your Income!
-                    </td>
-                    </tr>
-                )}
-            </tbody>
-          </table>
+    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
+      <div className="relative mb-4">
+        <h2 className="text-2xl font-semibold text-gray-700 leading-none text-center">
+          Added Incomes
+        </h2>
+        <div
+          className="absolute top-0 right-0 text-black text-2xl cursor-pointer"
+          onClick={allUserYears}
+        >
+          &#x22EE;
+        </div>
+      </div>
+  
+      {showYears && (
+        <div
+          className={`absolute top-0 right-0 w-1/3 h-full bg-white shadow-xl rounded-l-lg p-6 border-l border-gray-300 z-30 transform ${
+            showYears ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300 ease-in-out`}
+        >
+          <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
+          <ul className="space-y-3">
+            {uniqueYears.map((year) => (
+              <li
+                className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
+                  selectedYear === year
+                    ? "bg-green-200 text-green-700"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                } transition-colors`}
+                key={year}
+                onClick={() => handleYearClick(year)}
+              >
+                {year}
+              </li>
+            ))}
+          </ul>
+          <button
+            className="mt-6 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+            onClick={allUserYears}
+          >
+            Close
+          </button>
+        </div>
+      )}
+  
+      <table className="table-auto w-full border-collapse border border-gray-300 mt-4">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="border border-gray-300 px-4 py-2 text-left text-gray-600">
+              Source
+            </th>
+            <th className="border border-gray-300 px-4 py-2 text-right text-gray-600">
+              Income
+            </th>
+            <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">
+              Date Received
+            </th>
+            <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {userData.length > 0 ? (
+            userData
+              .filter((income) =>
+                selectedYear ? income.date_received.startsWith(selectedYear) : true
+              )
+              .slice()
+              .reverse()
+              .slice(0, showAllIncome ? userData.length : 4)
+              .map((income) => (
+                <tr key={income.id} className="hover:bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 text-gray-800">
+                    {income.source}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
+                    {formatCurrency(income.amount)}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
+                    {income.date_received}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    <button
+                      className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
+                      onClick={() => {
+                        setIncomeToEdit(income);
+                        setIsEditingIncome(true);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
+                      onClick={() => deleteIncome(income.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+          ) : (
+            <tr>
+              <td colSpan="4" className="text-center text-gray-500">
+                No income to display. Add Your Income!
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+  
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">
-       Total Income: {totalIncome(userData)}
-     </div>
-
-  <button
-    className="mt-4 text-blue-500 hover:underline"
-    onClick={() => setShowAllIncome((prevState) => !prevState)}
-  >
-    {showAllIncome ? "See Less" : "See More"}
-  </button>
+        Total Income:{" "}
+        {totalIncome(
+          userData.filter((income) =>
+            selectedYear ? income.date_received.startsWith(selectedYear) : true
+          )
+        )}
+      </div>
+  
+      <button
+        className="mt-4 text-blue-500 hover:underline"
+        onClick={() => setShowAllIncome((prevState) => !prevState)}
+      >
+        {showAllIncome ? "See Less" : "See More"}
+      </button>
     </div>
   );
+  
+  
+  
 };
 
 AddIncomeSectionComponent.propTypes = {

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 const AddExpenseSectionComponent = ({
   expenseUser,
@@ -10,20 +11,172 @@ const AddExpenseSectionComponent = ({
   showAllExpense,
   setShowAllExpense,
 }) => {
+
   const expenses = expenseUser?.expenses || []; 
 
-  // const dateFormatted = (date) => {
-  //   const year = date.slice(0,4);
-  //   const month = date.slice(5,7);
-  //   const day = date.slice(9,10)
+  const [showYears, setShowYears] = useState(false);
+  const [uniqueYears, setUniqueYears] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [filteredExpense, setFilteredExpense] = useState(expenses);
 
-  //   return `${month}-${day}-${year}`
-  // }
 
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  useEffect(() => {
+    let updatedExpenses = expenseUser.expenses;
+  
+    if (selectedYear !== null) {
+      updatedExpenses = updatedExpenses.filter(
+        (income) => Number(income.date_incurred.slice(0, 4)) === selectedYear
+      );
+    }
+  
+    if (selectedMonth !== null) {
+      updatedExpenses = updatedExpenses.filter(
+        (income) => Number(income.date_incurred.slice(5, 7)) - 1 === selectedMonth
+      );
+    }
+  
+    setFilteredExpense(updatedExpenses);
+  }, [expenseUser.expenses, selectedYear, selectedMonth]);
+
+  const handleYearClick = (year) => {
+    if (selectedYear === year) {
+      setSelectedYear(null); 
+      setFilteredExpense(expenses); 
+    } else {
+      setSelectedYear(year);
+      setFilteredExpense(
+        expenses.filter(
+          (expense) => Number(expense.date_incurred.slice(0, 4)) === year
+        )
+      );
+    }
+  };
+
+  const handleMonthClick = (monthIndex) => {
+    if (selectedMonth === monthIndex) {
+      setSelectedMonth(null);
+      setFilteredExpense((previous) =>
+        selectedYear
+          ? expenses.filter((expense) =>
+              expense.date_incurred.startsWith(selectedYear.toString())
+            )
+          : expenses
+      );
+    } else {
+      setSelectedMonth(monthIndex);
+      setFilteredExpense((previous) =>
+        expenses.filter((expense) => {
+          const expenseYear = Number(expense.date_incurred.slice(0, 4));
+          const expenseMonth = Number(expense.date_incurred.slice(5, 7)) - 1;
+          return (
+            (selectedYear ? expenseYear === selectedYear : true) &&
+            expenseMonth === monthIndex
+          );
+        })
+      );
+    }
+  };
+
+  const allUserYears = () => {
+    console.log('userData in allUserYears:', expenses);
+    const expenseYears = expenses.map((income) => {
+      const year = Number(income.date_incurred.slice(0,4));
+      return year 
+    })
+
+    const uniqueYearsList = Array.from(new Set(expenseYears));
+
+    setUniqueYears(uniqueYearsList);
+    console.log('uniqueYearsList:', uniqueYearsList);
+    setShowYears(previous => !previous);
+  }
+
+console.log('expenseUser:', expenseUser.expenses);
+ 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200">
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Added Expenses</h2>
-      <table className="table-auto w-full border-collapse border border-gray-300">
+    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
+      <div className="relative mb-4">
+        <h2 className="text-xl font-semibold text-gray-700 leading-none text-center">
+          Added Expenses
+        </h2>
+        <div
+          className="absolute top-0 right-0 text-black text-2xl cursor-pointer"
+          onClick={allUserYears}>
+          &#x22EE;
+        </div>
+      </div>
+  
+      {showYears && (
+        <div
+          className={`absolute top-0 right-0 w-1/3 h-full bg-white shadow-xl rounded-l-lg border-l border-gray-300 z-30 transform ${
+            showYears ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300 ease-in-out`}>
+          <div className="overflow-y-auto h-full p-6">
+            <button
+              className="absolute top-2 right-2 bg-red-500 text-white rounded-sm w-6 h-6 flex items-center justify-center hover:bg-red-600"
+              onClick={allUserYears}>
+              &times;
+            </button>
+            <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
+            <ul className="space-y-3">
+              {uniqueYears.map((year) => (
+                <li
+                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
+                    selectedYear === year
+                      ? "bg-green-200 text-green-700"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  } transition-colors`}
+                  key={year}
+                  onClick={() => handleYearClick(year)}
+                >
+                  {year}
+                </li>
+              ))}
+            </ul>
+  
+            <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Months</h3>
+            <ul className="space-y-3">
+              {months.map((month, index) => (
+                <li
+                  key={month}
+                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
+                    selectedMonth === index
+                      ? "bg-blue-200 text-blue-700"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  }`}
+                  onClick={() => handleMonthClick(index)}
+                >
+                  {month}
+                </li>
+              ))}
+            </ul>
+            <button
+              className="mt-6 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+              onClick={allUserYears}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+  
+      <table className="table-auto w-full border-collapse border border-gray-300 mt-4">
         <thead className="bg-gray-100">
           <tr>
             <th className="border border-gray-300 px-4 py-2 text-left text-gray-600">Source</th>
@@ -33,53 +186,59 @@ const AddExpenseSectionComponent = ({
           </tr>
         </thead>
         <tbody>
-            {expenses.length > 0 ? (
-                expenses
-                .slice()
-                .reverse()
-                .slice(0, showAllExpense ? expenses.length : 4)
-                .map((expense) => (
-                    <tr key={expense.id} className="hover:bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-2 text-gray-800">{expense.category}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
-                        {formatCurrency(expense.amount)}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
-                        {/* {dateFormatted(expense.date_incurred)} */}
-                        {expense.date_incurred}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                        <button
-                        className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
-                        onClick={() => {
-                            setExpenseToEdit(expense);
-                            setIsEditingExpense(true);
-                        }}
-                        >
-                        Edit
-                        </button>
-                        <button
-                        className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
-                        onClick={() => deleteExpense(expense.id)}
-                        >
-                        Delete
-                        </button>
-                    </td>
-                    </tr>
-                ))
-            ) : (
-                <tr>
-                <td colSpan="4" className="text-center text-gray-500">
-                    No expenses to display. Add Your Expenses!
-                </td>
+          {expenses.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="text-center text-gray-500">
+                No expenses to display. Add Your Expenses!
+              </td>
+            </tr>
+          ) : filteredExpense.length > 0 ? (
+            filteredExpense
+              .slice()
+              .reverse()
+              .slice(0, showAllExpense ? filteredExpense.length : 4)
+              .map((expense) => (
+                <tr key={expense.id} className="hover:bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 text-gray-800">
+                    {expense.category}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
+                    {formatCurrency(expense.amount)}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
+                    {expense.date_incurred}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    <button
+                      className="text-sm bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition-colors mr-2"
+                      onClick={() => {
+                        setExpenseToEdit(expense);
+                        setIsEditingExpense(true);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="text-sm bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition-colors"
+                      onClick={() => deleteExpense(expense.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
-            )}
+              ))
+          ) : (
+            <tr>
+              <td colSpan="4" className="text-center text-gray-500">
+                No expenses to display for the time period selected.
+              </td>
+            </tr>
+          )}
         </tbody>
-
       </table>
-
+  
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">
-        Total Expenses: {totalExpenses(expenses)}
+        Total Expenses: {totalExpenses(filteredExpense)}
       </div>
       <button
         className="mt-4 text-blue-500 hover:underline"
@@ -89,6 +248,7 @@ const AddExpenseSectionComponent = ({
       </button>
     </div>
   );
+  
 };
 
 AddExpenseSectionComponent.propTypes = {

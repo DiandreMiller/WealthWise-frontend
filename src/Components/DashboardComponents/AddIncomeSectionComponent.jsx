@@ -113,11 +113,6 @@ const AddIncomeSectionComponent = ({
     setShowYears(previous => !previous);
   }
 
-    //Sort data by created at
-    const sortedData = userData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    console.log('Sorted Data:', sortedData);
-  
-
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
       <div className="relative mb-4">
@@ -212,6 +207,7 @@ const AddIncomeSectionComponent = ({
           ) : filteredIncome.length > 0 ? (
             filteredIncome
               .slice()
+              .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
               .slice(0, showAllIncome ? filteredIncome.length : 4)
               .map((income) => (
                 <tr key={income.id} className="hover:bg-gray-50">

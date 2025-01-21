@@ -21,6 +21,7 @@ const AddExpenseSectionComponent = ({
   const [filteredExpense, setFilteredExpense] = useState(expenses);
 
 
+  //Display all months so the user can filter by month
   const months = [
     "January",
     "February",
@@ -36,6 +37,7 @@ const AddExpenseSectionComponent = ({
     "December",
   ];
 
+  //Update expenses
   useEffect(() => {
     let updatedExpenses = expenseUser.expenses;
   
@@ -54,6 +56,8 @@ const AddExpenseSectionComponent = ({
     setFilteredExpense(updatedExpenses);
   }, [expenseUser.expenses, selectedYear, selectedMonth]);
 
+
+  //User to filter by year
   const handleYearClick = (year) => {
     if (selectedYear === year) {
       setSelectedYear(null); 
@@ -68,6 +72,7 @@ const AddExpenseSectionComponent = ({
     }
   };
 
+  //User to filter by month
   const handleMonthClick = (monthIndex) => {
     if (selectedMonth === monthIndex) {
       setSelectedMonth(null);
@@ -93,6 +98,7 @@ const AddExpenseSectionComponent = ({
     }
   };
 
+  //Display all years user used app
   const allUserYears = () => {
     console.log('userData in allUserYears:', expenses);
     const expenseYears = expenses.map((income) => {
@@ -106,6 +112,10 @@ const AddExpenseSectionComponent = ({
     console.log('uniqueYearsList:', uniqueYearsList);
     setShowYears(previous => !previous);
   }
+
+  //Sort data by created at
+  const sortedData = expenses.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+  console.log('expenses sorted data:', sortedData);
 
 console.log('expenseUser:', expenseUser.expenses);
  
@@ -195,7 +205,6 @@ console.log('expenseUser:', expenseUser.expenses);
           ) : filteredExpense.length > 0 ? (
             filteredExpense
               .slice()
-              .reverse()
               .slice(0, showAllExpense ? filteredExpense.length : 4)
               .map((expense) => (
                 <tr key={expense.id} className="hover:bg-gray-50">

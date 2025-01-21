@@ -18,6 +18,7 @@ const AddIncomeSectionComponent = ({
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [filteredIncome, setFilteredIncome] = useState(userData);
 
+  //Display all months so the user can filter by month
   const months = [
     "January",
     "February",
@@ -35,6 +36,7 @@ const AddIncomeSectionComponent = ({
 
   console.log('userData:', userData);
 
+  //Update income
   useEffect(() => {
     let updatedIncome = userData;
   
@@ -54,6 +56,7 @@ const AddIncomeSectionComponent = ({
   }, [userData, selectedYear, selectedMonth]);
   
 
+  //User to filter by year
   const handleYearClick = (year) => {
     if (selectedYear === year) {
       setSelectedYear(null); 
@@ -69,6 +72,7 @@ const AddIncomeSectionComponent = ({
   };
 
 
+  //User to filter by month
   const handleMonthClick = (monthIndex) => {
     if (selectedMonth === monthIndex) {
       setSelectedMonth(null);
@@ -94,6 +98,7 @@ const AddIncomeSectionComponent = ({
     }
   };
 
+  //Display all years user used app
   const allUserYears = () => {
     console.log('userData in allUserYears:', userData)
     const incomeYears = userData.map((income) => {
@@ -107,6 +112,11 @@ const AddIncomeSectionComponent = ({
     console.log('uniqueYearsList:', uniqueYearsList);
     setShowYears(previous => !previous);
   }
+
+    //Sort data by created at
+    const sortedData = userData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    console.log('Sorted Data:', sortedData);
+  
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
@@ -202,7 +212,6 @@ const AddIncomeSectionComponent = ({
           ) : filteredIncome.length > 0 ? (
             filteredIncome
               .slice()
-              .reverse()
               .slice(0, showAllIncome ? filteredIncome.length : 4)
               .map((income) => (
                 <tr key={income.id} className="hover:bg-gray-50">

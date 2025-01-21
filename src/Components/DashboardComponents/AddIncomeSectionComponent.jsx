@@ -112,7 +112,7 @@ const AddIncomeSectionComponent = ({
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
       <div className="relative mb-4">
-        <h2 className="text-2xl font-semibold text-gray-700 leading-none text-center">
+        <h2 className="text-xl font-semibold text-gray-700 leading-none text-center">
           Added Incomes
         </h2>
         <div

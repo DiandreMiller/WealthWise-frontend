@@ -113,9 +113,6 @@ const AddExpenseSectionComponent = ({
     setShowYears(previous => !previous);
   }
 
-  //Sort data by created at
-  const sortedData = expenses.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-  console.log('expenses sorted data:', sortedData);
 
 console.log('expenseUser:', expenseUser.expenses);
  
@@ -206,6 +203,7 @@ console.log('expenseUser:', expenseUser.expenses);
             filteredExpense
               .slice()
               .slice(0, showAllExpense ? filteredExpense.length : 4)
+              .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
               .map((expense) => (
                 <tr key={expense.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">

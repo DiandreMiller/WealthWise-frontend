@@ -68,10 +68,10 @@ const Navbar = ({ onLogOut, toggleState, userId, signInSuccessfulMessage }) => {
           <button
             onClick={handleAuthButtonClick}
             className={`px-4 py-2 font-medium rounded-md ${
-              userId && signInSuccessfulMessage ? 'bg-red-500 text-white' : 'bg-[rgb(59,129,246)] text-white'
+              userId  ? 'bg-red-500 text-white' : 'bg-[rgb(59,129,246)] text-white'
             }`}
           >
-            {userId && signInSuccessfulMessage ? 'Logout' : 'Login'}
+            {userId ? 'Logout' : 'Login'}
           </button>
         </div>
       </div>

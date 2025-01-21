@@ -108,7 +108,6 @@ const AddIncomeSectionComponent = ({
     setShowYears(previous => !previous);
   }
 
-
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
       <div className="relative mb-4">
@@ -117,8 +116,7 @@ const AddIncomeSectionComponent = ({
         </h2>
         <div
           className="absolute top-0 right-0 text-black text-2xl cursor-pointer"
-          onClick={allUserYears}
-        >
+          onClick={allUserYears}>
           &#x22EE;
         </div>
       </div>
@@ -195,7 +193,13 @@ const AddIncomeSectionComponent = ({
           </tr>
         </thead>
         <tbody>
-          {filteredIncome.length > 0 ? (
+          {userData.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="text-center text-gray-500">
+                No income to display. Add Your Income!
+              </td>
+            </tr>
+          ) : filteredIncome.length > 0 ? (
             filteredIncome
               .slice()
               .reverse()
@@ -243,7 +247,6 @@ const AddIncomeSectionComponent = ({
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">
         Total Income: {totalIncome(filteredIncome)}
       </div>
-  
       <button
         className="mt-4 text-blue-500 hover:underline"
         onClick={() => setShowAllIncome((prevState) => !prevState)}
@@ -252,8 +255,6 @@ const AddIncomeSectionComponent = ({
       </button>
     </div>
   );
-  
-  
   
   
   

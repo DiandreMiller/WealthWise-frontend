@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const AddIncomeSectionComponent = ({
   userData,
@@ -15,9 +15,44 @@ const AddIncomeSectionComponent = ({
   const [showYears, setShowYears] = useState(false);
   const [uniqueYears, setUniqueYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
   const [filteredIncome, setFilteredIncome] = useState(userData);
 
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   console.log('userData:', userData);
+
+  useEffect(() => {
+    let updatedIncome = userData;
+  
+    if (selectedYear !== null) {
+      updatedIncome = updatedIncome.filter(
+        (income) => Number(income.date_received.slice(0, 4)) === selectedYear
+      );
+    }
+  
+    if (selectedMonth !== null) {
+      updatedIncome = updatedIncome.filter(
+        (income) => Number(income.date_received.slice(5, 7)) - 1 === selectedMonth
+      );
+    }
+  
+    setFilteredIncome(updatedIncome);
+  }, [userData, selectedYear, selectedMonth]);
+  
 
   const handleYearClick = (year) => {
     if (selectedYear === year) {
@@ -33,44 +68,31 @@ const AddIncomeSectionComponent = ({
     }
   };
 
-  const filterIncomeByMonth = (event) => {
 
-    const monthMap = new Map([
-      [1, 'January'],
-      [2, 'February'],
-      [3, 'March'],
-      [4, 'April'],
-      [5, 'May'],
-      [6, 'June'],
-      [7, 'July'],
-      [8, 'August'],
-      [9, 'September'],
-      [10, 'October'],
-      [11, 'November'],
-      [12, 'December']
-    ])
-
-    const incomeForMonth = userData.filter((income) => {
-      const month = Number(income.date_received.slice(5,7));
-      return month === event.target.value;
-      
-    })
-
-    const getMonth = Number(incomeForMonth[0].date_received.slice(5,7));
-    console.log('getMonth:', typeof getMonth);
-
-    
-    let wordMonth = '';
-   
-
-    for(let [keys, values] of monthMap) {
-      if(getMonth === keys) {
-        wordMonth += values
-      }
+  const handleMonthClick = (monthIndex) => {
+    if (selectedMonth === monthIndex) {
+      setSelectedMonth(null);
+      setFilteredIncome((previous) =>
+        selectedYear
+          ? userData.filter((income) =>
+              income.date_received.startsWith(selectedYear.toString())
+            )
+          : userData
+      );
+    } else {
+      setSelectedMonth(monthIndex);
+      setFilteredIncome((previous) =>
+        userData.filter((income) => {
+          const incomeYear = Number(income.date_received.slice(0, 4));
+          const incomeMonth = Number(income.date_received.slice(5, 7)) - 1;
+          return (
+            (selectedYear ? incomeYear === selectedYear : true) &&
+            incomeMonth === monthIndex
+          );
+        })
+      );
     }
-
-    return wordMonth;
-  }
+  };
 
   const allUserYears = () => {
     console.log('userData in allUserYears:', userData)
@@ -103,32 +125,51 @@ const AddIncomeSectionComponent = ({
   
       {showYears && (
         <div
-          className={`absolute top-0 right-0 w-1/3 h-full bg-white shadow-xl rounded-l-lg p-6 border-l border-gray-300 z-30 transform ${
+          className={`absolute top-0 right-0 w-1/3 h-full bg-white shadow-xl rounded-l-lg border-l border-gray-300 z-30 transform ${
             showYears ? "translate-x-0" : "translate-x-full"
           } transition-transform duration-300 ease-in-out`}
         >
-          <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
-          <ul className="space-y-3">
-            {uniqueYears.map((year) => (
-              <li
-                className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
-                  selectedYear === year
-                    ? "bg-green-200 text-green-700"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                } transition-colors`}
-                key={year}
-                onClick={() => handleYearClick(year)}
-              >
-                {year}
-              </li>
-            ))}
-          </ul>
-          <button
-            className="mt-6 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-            onClick={allUserYears}
-          >
-            Close
-          </button>
+          <div className="overflow-y-auto h-full p-6">
+            <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
+            <ul className="space-y-3">
+              {uniqueYears.map((year) => (
+                <li
+                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
+                    selectedYear === year
+                      ? "bg-green-200 text-green-700"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  } transition-colors`}
+                  key={year}
+                  onClick={() => handleYearClick(year)}
+                >
+                  {year}
+                </li>
+              ))}
+            </ul>
+  
+            <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Months</h3>
+            <ul className="space-y-3">
+              {months.map((month, index) => (
+                <li
+                  key={month}
+                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
+                    selectedMonth === index
+                      ? "bg-blue-200 text-blue-700"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  }`}
+                  onClick={() => handleMonthClick(index)}
+                >
+                  {month}
+                </li>
+              ))}
+            </ul>
+            <button
+              className="mt-6 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+              onClick={allUserYears}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
   
@@ -150,14 +191,11 @@ const AddIncomeSectionComponent = ({
           </tr>
         </thead>
         <tbody>
-          {userData.length > 0 ? (
-            userData
-              .filter((income) =>
-                selectedYear ? income.date_received.startsWith(selectedYear) : true
-              )
+          {filteredIncome.length > 0 ? (
+            filteredIncome
               .slice()
               .reverse()
-              .slice(0, showAllIncome ? userData.length : 4)
+              .slice(0, showAllIncome ? filteredIncome.length : 4)
               .map((income) => (
                 <tr key={income.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">
@@ -191,7 +229,7 @@ const AddIncomeSectionComponent = ({
           ) : (
             <tr>
               <td colSpan="4" className="text-center text-gray-500">
-                No income to display. Add Your Income!
+                There is no income to display for the time period selected.
               </td>
             </tr>
           )}
@@ -199,12 +237,7 @@ const AddIncomeSectionComponent = ({
       </table>
   
       <div className="mt-4 text-right font-semibold text-xl text-gray-700">
-        Total Income:{" "}
-        {totalIncome(
-          userData.filter((income) =>
-            selectedYear ? income.date_received.startsWith(selectedYear) : true
-          )
-        )}
+        Total Income: {totalIncome(filteredIncome)}
       </div>
   
       <button
@@ -215,6 +248,8 @@ const AddIncomeSectionComponent = ({
       </button>
     </div>
   );
+  
+  
   
   
   

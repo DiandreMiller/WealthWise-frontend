@@ -180,8 +180,7 @@ console.log('expenseUser:', expenseUser.expenses);
                   ? "bg-blue-200 text-blue-700"
                   : "bg-gray-100 hover:bg-gray-200 text-gray-700"
               }`}
-              onClick={() => handleCategoryClick(category)}
-            >
+              onClick={() => handleCategoryClick(category)}>
               {category}
             </li>
           ))}
@@ -219,38 +218,40 @@ console.log('expenseUser:', expenseUser.expenses);
               &times;
             </button>
             <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
-            <ul className="space-y-3">
-              {uniqueYears.map((year) => (
-                <li
-                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
-                    selectedYear === year
-                      ? "bg-green-200 text-green-700"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  } transition-colors`}
-                  key={year}
-                  onClick={() => handleYearClick(year)}
-                >
-                  {year}
-                </li>
-              ))}
-            </ul>
+            <div className="relative">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
+                value={selectedYear !== null ? selectedYear : ""}
+                onChange={(e) => handleYearClick(Number(e.target.value))}>
+                <option value="" disabled>
+                  Select a year
+                </option>
+                {uniqueYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+
   
             <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Months</h3>
-            <ul className="space-y-3">
-              {months.map((month, index) => (
-                <li
-                  key={month}
-                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
-                    selectedMonth === index
-                      ? "bg-blue-200 text-blue-700"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  }`}
-                  onClick={() => handleMonthClick(index)}
-                >
-                  {month}
-                </li>
-              ))}
-            </ul>
+            <div className="relative">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
+                value={selectedMonth !== null ? selectedMonth : ""}
+                onChange={(e) => handleMonthClick(Number(e.target.value))}
+              >
+                <option value="" disabled>
+                  Select a month
+                </option>
+                {months.map((month, index) => (
+                  <option key={index} value={index}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Categories</h3>
             

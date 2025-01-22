@@ -89,7 +89,7 @@ const AddExpenseSectionComponent = ({
   const handleMonthClick = (monthIndex) => {
     if (selectedMonth === monthIndex) {
       setSelectedMonth(null);
-      setFilteredExpense((previous) =>
+      setFilteredExpense(() =>
         selectedYear
           ? expenses.filter((expense) =>
               expense.date_incurred.startsWith(selectedYear.toString())
@@ -98,7 +98,7 @@ const AddExpenseSectionComponent = ({
       );
     } else {
       setSelectedMonth(monthIndex);
-      setFilteredExpense((previous) =>
+      setFilteredExpense(() =>
         expenses.filter((expense) => {
           const expenseYear = Number(expense.date_incurred.slice(0, 4));
           const expenseMonth = Number(expense.date_incurred.slice(5, 7)) - 1;
@@ -125,6 +125,13 @@ const AddExpenseSectionComponent = ({
     console.log('uniqueYearsList:', uniqueYearsList);
     setShowYears(previous => !previous);
   }
+
+  const expensesCategoryTypes = expenses.filter((expense) => expense.category_type);
+  const allCategories = Array.from(new Set(expenses.map((expense) => expense.category_type))); 
+  console.log('expensesCategoryTypes:', expensesCategoryTypes);
+  console.log('allCategories:', allCategories);
+
+
 
 
 console.log('expenseUser:', expenseUser.expenses);

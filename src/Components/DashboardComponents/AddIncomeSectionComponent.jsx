@@ -87,7 +87,7 @@ const AddIncomeSectionComponent = ({
   const handleMonthClick = (monthIndex) => {
     if (selectedMonth === monthIndex) {
       setSelectedMonth(null);
-      setFilteredIncome((previous) =>
+      setFilteredIncome(() =>
         selectedYear
           ? userData.filter((income) =>
               income.date_received.startsWith(selectedYear.toString())
@@ -96,7 +96,7 @@ const AddIncomeSectionComponent = ({
       );
     } else {
       setSelectedMonth(monthIndex);
-      setFilteredIncome((previous) =>
+      setFilteredIncome(() =>
         userData.filter((income) => {
           const incomeYear = Number(income.date_received.slice(0, 4));
           const incomeMonth = Number(income.date_received.slice(5, 7)) - 1;
@@ -124,6 +124,10 @@ const AddIncomeSectionComponent = ({
     setShowYears(previous => !previous);
   }
 
+  const incomeCategoryTypes = userData.filter((income) => income.category);
+  const allIncomeCategories = Array.from(new Set(userData.map((income) => income.category)));  
+  console.log('incomeCategoryTypes:', incomeCategoryTypes);
+  console.log('allIncomeCategories:', allIncomeCategories);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">

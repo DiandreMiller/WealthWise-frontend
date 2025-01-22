@@ -18,7 +18,9 @@ const AddExpenseSectionComponent = ({
   const [uniqueYears, setUniqueYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [showRecurringOnly, setShowRecurringOnly] = useState(false);
   const [filteredExpense, setFilteredExpense] = useState(expenses);
+  
 
 
   //Display all months so the user can filter by month
@@ -52,9 +54,20 @@ const AddExpenseSectionComponent = ({
         (income) => Number(income.date_incurred.slice(5, 7)) - 1 === selectedMonth
       );
     }
+
+    if(showRecurringOnly) {
+      updatedExpenses = updatedExpenses.filter(
+        (expenses) => expenses.is_recurring
+      )
+    }
   
     setFilteredExpense(updatedExpenses);
-  }, [expenseUser.expenses, selectedYear, selectedMonth]);
+  }, [expenseUser.expenses, selectedYear, selectedMonth, showRecurringOnly]);
+
+  //Toggle Recurring Expenses
+  const toggleRecurringExpenses = () => {
+    setShowRecurringOnly((previous) => !previous);
+  }
 
 
   //User to filter by year
@@ -114,6 +127,8 @@ const AddExpenseSectionComponent = ({
   }
 
 
+  const recurringExpenses = expenseUser.expenses.filter((expense) => expense.is_recurring);
+  console.log('recurringExpenses:', recurringExpenses);
 console.log('expenseUser:', expenseUser.expenses);
  
   return (
@@ -127,6 +142,18 @@ console.log('expenseUser:', expenseUser.expenses);
           onClick={allUserYears}>
           &#x22EE;
         </div>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={showRecurringOnly}
+            onChange={toggleRecurringExpenses}
+            className="form-checkbox h-5 w-5 text-blue-600"
+          />
+          <span className="text-gray-700">Show Recurring Expenses Only</span>
+        </label>
       </div>
   
       {showYears && (

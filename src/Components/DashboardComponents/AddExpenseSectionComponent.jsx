@@ -18,7 +18,9 @@ const AddExpenseSectionComponent = ({
   const [uniqueYears, setUniqueYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [showRecurringOnly, setShowRecurringOnly] = useState(false);
+  const [showCategoryFilter, setShowCategoryFilter] = useState(false);
   const [filteredExpense, setFilteredExpense] = useState(expenses);
   
 
@@ -55,6 +57,13 @@ const AddExpenseSectionComponent = ({
       );
     }
 
+    if (selectedCategory !== null && selectedCategory !== "") {
+      updatedExpenses = updatedExpenses.filter(
+        (expense) => expense.category_type === selectedCategory
+      );
+    }
+    
+
     if(showRecurringOnly) {
       updatedExpenses = updatedExpenses.filter(
         (expenses) => expenses.is_recurring
@@ -62,7 +71,7 @@ const AddExpenseSectionComponent = ({
     }
   
     setFilteredExpense(updatedExpenses);
-  }, [expenseUser.expenses, selectedYear, selectedMonth, showRecurringOnly]);
+  }, [expenseUser.expenses, selectedYear, selectedMonth, showRecurringOnly, selectedCategory]);
 
   //Toggle Recurring Expenses
   const toggleRecurringExpenses = () => {
@@ -132,6 +141,14 @@ const AddExpenseSectionComponent = ({
   console.log('allCategories:', allCategories);
 
 
+//Toggle categories
+const toggleCategoryFilter = () => {
+  setShowCategoryFilter((previous) => !previous);
+}
+
+const handleCategoryClick = (category) => {
+  setSelectedCategory((prevCategory) => (prevCategory === category ? null : category));
+};
 
 
 console.log('expenseUser:', expenseUser.expenses);
@@ -148,6 +165,35 @@ console.log('expenseUser:', expenseUser.expenses);
           &#x22EE;
         </div>
       </div>
+
+      {showCategoryFilter && (
+      <div
+        className="absolute top-12 right-0 w-64 bg-white shadow-lg rounded-lg border border-gray-300 p-4 z-40"
+      >
+        <h3 className="text-gray-800 font-bold text-lg mb-2">Filter by Category</h3>
+        <ul className="space-y-2">
+          {allCategories.map((category) => (
+            <li
+              key={category}
+              className={`cursor-pointer px-4 py-2 rounded-md ${
+                selectedCategory === category
+                  ? "bg-blue-200 text-blue-700"
+                  : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+              }`}
+              onClick={() => handleCategoryClick(category)}
+            >
+              {category}
+            </li>
+          ))}
+        </ul>
+        <button
+          className="mt-4 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+          onClick={toggleCategoryFilter}
+        >
+          Close
+        </button>
+      </div>
+    )}
 
       <div className="flex items-center justify-between mb-4">
         <label className="flex items-center space-x-2">
@@ -205,6 +251,26 @@ console.log('expenseUser:', expenseUser.expenses);
                 </li>
               ))}
             </ul>
+
+            <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Categories</h3>
+            
+            <div className="relative">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
+                value={selectedCategory || ""}
+                onChange={(event) => handleCategoryClick(event.target.value)}>
+                  <option value="" disabled>
+                    Select an expense category
+                  </option>
+                <option value="">All Categories</option>
+                {allCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <button
               className="mt-6 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
               onClick={allUserYears}

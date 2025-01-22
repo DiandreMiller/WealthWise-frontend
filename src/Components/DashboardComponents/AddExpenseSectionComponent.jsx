@@ -179,11 +179,6 @@ console.log('expenseUser:', expenseUser.expenses);
             showYears ? "translate-x-0" : "translate-x-full"
           } transition-transform duration-300 ease-in-out`}>
           <div className="overflow-y-auto h-full p-6">
-            <button
-              className="absolute top-2 right-2 bg-red-500 text-white rounded-sm w-6 h-6 flex items-center justify-center hover:bg-red-600"
-              onClick={allUserYears}>
-              &times;
-            </button>
             <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
             <div className="relative">
               <select

@@ -16,6 +16,7 @@ const AddIncomeSectionComponent = ({
   const [uniqueYears, setUniqueYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [showRecurringOnly, setShowRecurringOnly] = useState(false);
   const [filteredIncome, setFilteredIncome] = useState(userData);
 
@@ -53,13 +54,20 @@ const AddIncomeSectionComponent = ({
       );
     }
 
+    if(selectedCategory !== null && selectedCategory !== '') {
+      updatedIncome = updatedIncome.filter(
+        (income) => income.category === selectedCategory
+      );
+    }
+
     if(showRecurringOnly) {
       updatedIncome = updatedIncome.filter(
         (income) => income.is_recurring);
     }
+
   
     setFilteredIncome(updatedIncome);
-  }, [userData, selectedYear, selectedMonth, showRecurringOnly]);
+  }, [userData, selectedYear, selectedMonth, showRecurringOnly, selectedCategory]);
 
   //Toggle is recurring income
   const toggleRecurringIncome = () => {
@@ -124,6 +132,11 @@ const AddIncomeSectionComponent = ({
     setShowYears(previous => !previous);
   }
 
+
+const handleCategoryClick = (category) => {
+  setSelectedCategory((prevCategory) => (prevCategory === category ? null : category));
+};
+
   const incomeCategoryTypes = userData.filter((income) => income.category);
   const allIncomeCategories = Array.from(new Set(userData.map((income) => income.category)));  
   console.log('incomeCategoryTypes:', incomeCategoryTypes);
@@ -141,6 +154,7 @@ const AddIncomeSectionComponent = ({
           &#x22EE;
         </div>
       </div>
+
 
       <div className="flex items-center justify-between mb-4">
         <label className="flex items-center space-x-2">
@@ -165,39 +179,58 @@ const AddIncomeSectionComponent = ({
               onClick={allUserYears}>
               &times;
             </button>
+
             <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
-            <ul className="space-y-3">
-              {uniqueYears.map((year) => (
-                <li
-                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
-                    selectedYear === year
-                      ? "bg-green-200 text-green-700"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  } transition-colors`}
-                  key={year}
-                  onClick={() => handleYearClick(year)}
-                >
-                  {year}
-                </li>
-              ))}
-            </ul>
+            <div className="relative">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
+                value={selectedYear !== null ? selectedYear : ""}
+                onChange={(e) => handleYearClick(Number(e.target.value))}>
+                <option value="" disabled>
+                  Select a year
+                </option>
+                {uniqueYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
   
             <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Months</h3>
-            <ul className="space-y-3">
-              {months.map((month, index) => (
-                <li
-                  key={month}
-                  className={`text-base font-medium px-4 py-2 rounded-md cursor-pointer ${
-                    selectedMonth === index
-                      ? "bg-blue-200 text-blue-700"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  }`}
-                  onClick={() => handleMonthClick(index)}
-                >
-                  {month}
-                </li>
-              ))}
-            </ul>
+            <div className="relative">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
+                value={selectedMonth !== null ? selectedMonth : ""}
+                onChange={(event) => handleMonthClick(Number(event.target.value))} >
+                <option value="" disabled>
+                  Select a month
+                </option>
+                {months.map((month, index) => (
+                  <option key={index} value={index}>
+                    {month}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Categories</h3>
+            <div className="relative">
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
+                value={selectedCategory || ""}
+                onChange={(event) => handleCategoryClick(event.target.value)}>
+                  <option value="" disabled>
+                    Select an expense category
+                  </option>
+                <option value="">All Categories</option>
+                {allIncomeCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
             <button
               className="mt-6 w-full py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
               onClick={allUserYears}

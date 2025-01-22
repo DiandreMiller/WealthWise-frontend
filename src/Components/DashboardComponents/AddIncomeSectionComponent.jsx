@@ -124,11 +124,6 @@ const AddIncomeSectionComponent = ({
     setShowYears(previous => !previous);
   }
 
-  // const isRecurringIncome = () => {
-    const recurringIncome = userData.filter((income) => income.is_recurring);
-  // }
-
-  console.log('recurringIncome:', recurringIncome);
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">

@@ -127,8 +127,6 @@ const AddExpenseSectionComponent = ({
   }
 
 
-  const recurringExpenses = expenseUser.expenses.filter((expense) => expense.is_recurring);
-  console.log('recurringExpenses:', recurringExpenses);
 console.log('expenseUser:', expenseUser.expenses);
  
   return (

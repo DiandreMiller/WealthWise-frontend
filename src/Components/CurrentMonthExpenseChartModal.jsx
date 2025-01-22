@@ -114,7 +114,7 @@ const CurrentMonthExpenseChartModal = ({
 
             <div>
                 <h3 className="text-lg font-semibold text-gray-700">
-                    You've Spent ${currentMonthExpenses} so far in {currentMonth}
+                    You've Spent ${currentMonthExpenses.toFixed(2)} so far in {currentMonth}
                 </h3>
                 <p className="text-xs text-gray-700 mt-4 flex items-center justify-center">
                     You are spending{' '}

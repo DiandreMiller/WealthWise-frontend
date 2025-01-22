@@ -16,6 +16,7 @@ const AddIncomeSectionComponent = ({
   const [uniqueYears, setUniqueYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [showRecurringOnly, setShowRecurringOnly] = useState(false);
   const [filteredIncome, setFilteredIncome] = useState(userData);
 
   //Display all months so the user can filter by month
@@ -51,9 +52,19 @@ const AddIncomeSectionComponent = ({
         (income) => Number(income.date_received.slice(5, 7)) - 1 === selectedMonth
       );
     }
+
+    if(showRecurringOnly) {
+      updatedIncome = updatedIncome.filter(
+        (income) => income.is_recurring);
+    }
   
     setFilteredIncome(updatedIncome);
-  }, [userData, selectedYear, selectedMonth]);
+  }, [userData, selectedYear, selectedMonth, showRecurringOnly]);
+
+  //Toggle is recurring income
+  const toggleRecurringIncome = () => {
+    setShowRecurringOnly((previous) => !previous);
+  }
   
 
   //User to filter by year
@@ -113,6 +124,12 @@ const AddIncomeSectionComponent = ({
     setShowYears(previous => !previous);
   }
 
+  // const isRecurringIncome = () => {
+    const recurringIncome = userData.filter((income) => income.is_recurring);
+  // }
+
+  console.log('recurringIncome:', recurringIncome);
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
       <div className="relative mb-4">
@@ -124,6 +141,18 @@ const AddIncomeSectionComponent = ({
           onClick={allUserYears}>
           &#x22EE;
         </div>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
+        <label className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={showRecurringOnly}
+            onChange={toggleRecurringIncome}
+            className="form-checkbox h-5 w-5 text-blue-600"
+          />
+          <span className="text-gray-700">Show Recurring Income Only</span>
+        </label>
       </div>
   
       {showYears && (

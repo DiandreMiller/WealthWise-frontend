@@ -188,7 +188,7 @@ const DashboardComponent = () => {
 
 
   // Function to update income
-  const updateIncome = async (incomeId, updatedAmount, updatedSource) => {
+  const updateIncome = async (incomeId, updatedAmount, updatedSource, updatedCategory, updatedIsRecurring) => {
     if (!incomeId || isNaN(parseFloat(updatedAmount)) || updatedAmount <= 0 || updatedSource.trim() === "") {
       alert("Please provide valid income details.");
       return;
@@ -199,12 +199,15 @@ const DashboardComponent = () => {
       const response = await axios.put(`${backEndUrl}/users/${userId}/income/${incomeId}`, {
         amount: DOMPurify.sanitize(updatedAmount),
         source: DOMPurify.sanitize(updatedSource),
-        category: incomeCategory,
-        is_recurring: isRecurringIncome
+        category: updatedCategory,
+        is_recurring: updatedIsRecurring ? true : false,
+        // category: incomeCategory,
+        // is_recurring: isRecurringIncome
+        
       });
   
       const updatedIncome = response.data;
-      // console.log("Updated income:", updatedIncome);
+      console.log("Updated income:", updatedIncome);
   
       setUserData(prevData => {
 
@@ -215,7 +218,7 @@ const DashboardComponent = () => {
 
         const updatedIncomes = prevData.income.map(income =>
           income.id === incomeId
-            ? { ...income, amount: updatedIncome.amount, source: updatedIncome.source, category: updatedIncome.category, is_recurring: updateIncome.is_recurring }
+            ? { ...income, amount: updatedIncome.amount, source: updatedIncome.source, category: updatedIncome.category, is_recurring: updatedIncome.is_recurring }
             : income
         );
   
@@ -224,6 +227,8 @@ const DashboardComponent = () => {
           income: updatedIncomes,
         };
       });
+
+      console.log('updatedIncomes:', updatedIncome);
 
       setUpdateEditedIncome(previous => !previous);
       // console.log('UpdateEditedIncome:', updateEditedIncome);
@@ -431,37 +436,6 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory, updateEx
     // console.log('updateExpenseCategories:', updateExpenseCategories);
 
     const updatedExpense = response.data;
-
-    // console.log('updatedExpense10:', updatedExpense);
-    // setExpenseUser(prevData => {
-    //   if (!prevData || !Array.isArray(prevData.expenses)) {
-    //     console.error("Invalid expense data:", prevData);
-    //     return prevData;
-    //   }
-
-    //   // const updatedExpenses = prevData.expenses.map(expense =>
-    //   //   expense.id === expenseId
-    //   //     ? { ...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type, is_recurring: updateEditedExpense.is_recurring }
-    //   //     : expense
-    //   // );
-
-    //   const updatedExpenses = prevData.expenses.map((expense) => {
-    //     console.log('expenseid1:',  expense.id === expenseId);
-    //     if(expense.id === expenseId) {
-    //      return {...expense, amount: updatedExpense.amount, category: updatedExpense.category, category_type: updatedExpense.category_type, is_recurring: updateEditedExpense.is_recurring }
-    //     }
-      
-    //     return expense
-    //   })
-    //   console.log('updatedExpenses1:', updatedExpenses);
-
-    //   // console.log(`[${new Date().toISOString()}] Updated local expense state:`, updatedExpenses);
-    //   return {
-    //     ...prevData,
-    //     expenseUser: updatedExpenses,
-
-    //   };
-    // });
 
     const updatedExpenses = expenseUser.expenses.map((expense) => {
       console.log("expenseid1:", expense.id === expenseId);

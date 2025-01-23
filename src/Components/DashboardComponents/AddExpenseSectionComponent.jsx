@@ -21,6 +21,7 @@ const AddExpenseSectionComponent = ({
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showRecurringOnly, setShowRecurringOnly] = useState(false);
   const [filteredExpense, setFilteredExpense] = useState(expenses);
+  const [sortOrder, setSortOrder] = useState('asc');
   
 
 
@@ -145,6 +146,17 @@ const handleCategoryClick = (category) => {
   setSelectedCategory((prevCategory) => (prevCategory === category ? null : category));
 };
 
+const toggleSortOrder = () => {
+  setSortOrder((previousOrder) => (previousOrder === 'asc' ? 'desc' : 'asc'));
+};
+
+const sortedExpense = filteredExpense.slice().sort((a, b) => {
+  if (sortOrder === 'asc') {
+    return new Date(a.date_incurred) - new Date(b.date_incurred);
+  } else {
+    return new Date(b.date_incurred) - new Date(a.date_incurred);
+  }
+});
 
 console.log('expenseUser:', expenseUser.expenses);
  
@@ -179,11 +191,6 @@ console.log('expenseUser:', expenseUser.expenses);
             showYears ? "translate-x-0" : "translate-x-full"
           } transition-transform duration-300 ease-in-out`}>
           <div className="overflow-y-auto h-full p-6">
-            <button
-              className="absolute top-2 right-2 bg-red-500 text-white rounded-sm w-6 h-6 flex items-center justify-center hover:bg-red-600"
-              onClick={allUserYears}>
-              &times;
-            </button>
             <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
             <div className="relative">
               <select
@@ -252,7 +259,10 @@ console.log('expenseUser:', expenseUser.expenses);
           <tr>
             <th className="border border-gray-300 px-4 py-2 text-left text-gray-600">Source</th>
             <th className="border border-gray-300 px-4 py-2 text-right text-gray-600">Expense</th>
-            <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">Date Incurred</th>
+            <th onClick={toggleSortOrder} className="border border-gray-300 px-4 py-2 text-center text-gray-600">
+              Date Incurred
+              {sortOrder === 'asc' ? ' ▲' : ' ▼'}
+              </th>
             <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">Actions</th>
           </tr>
         </thead>
@@ -263,11 +273,11 @@ console.log('expenseUser:', expenseUser.expenses);
                 No expenses to display. Add Your Expenses!
               </td>
             </tr>
-          ) : filteredExpense.length > 0 ? (
-            filteredExpense
-              .slice()
-              .slice(0, showAllExpense ? filteredExpense.length : 4)
-              .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+          ) : sortedExpense.length > 0 ? (
+            sortedExpense
+              // .slice()
+              .slice(0, showAllExpense ? sortedExpense.length : 4)
+              // .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
               .map((expense) => (
                 <tr key={expense.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">

@@ -19,6 +19,7 @@ const AddIncomeSectionComponent = ({
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showRecurringOnly, setShowRecurringOnly] = useState(false);
   const [filteredIncome, setFilteredIncome] = useState(userData);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   //Display all months so the user can filter by month
   const months = [
@@ -142,6 +143,18 @@ const handleCategoryClick = (category) => {
   console.log('incomeCategoryTypes:', incomeCategoryTypes);
   console.log('allIncomeCategories:', allIncomeCategories);
 
+  const toggleSortOrder = () => {
+    setSortOrder((previousOrder) => (previousOrder === 'asc' ? 'desc' : 'asc'));
+  };
+  
+  const sortedIncome = filteredIncome.slice().sort((a, b) => {
+    if (sortOrder === 'asc') {
+      return new Date(a.date_received) - new Date(b.date_received);
+    } else {
+      return new Date(b.date_received) - new Date(a.date_received);
+    }
+  });
+
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
       <div className="relative mb-4">
@@ -201,6 +214,7 @@ const handleCategoryClick = (category) => {
                 <option value="" disabled>
                   Select a month
                 </option>
+                <option value="">All Months</option>
                 {months.map((month, index) => (
                   <option key={index} value={index}>
                     {month}
@@ -245,8 +259,9 @@ const handleCategoryClick = (category) => {
             <th className="border border-gray-300 px-4 py-2 text-right text-gray-600">
               Income
             </th>
-            <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">
+            <th onClick={toggleSortOrder} className="border border-gray-300 px-4 py-2 text-center text-gray-600">
               Date Received
+              {sortOrder === 'asc' ? ' ▲' : ' ▼'}
             </th>
             <th className="border border-gray-300 px-4 py-2 text-center text-gray-600">
               Actions
@@ -260,11 +275,9 @@ const handleCategoryClick = (category) => {
                 No income to display. Add Your Income!
               </td>
             </tr>
-          ) : filteredIncome.length > 0 ? (
-            filteredIncome
-              .slice()
-              .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
-              .slice(0, showAllIncome ? filteredIncome.length : 4)
+          ) : sortedIncome.length > 0 ? (
+            sortedIncome
+              .slice(0, showAllIncome ? sortedIncome.length : 4)
               .map((income) => (
                 <tr key={income.id} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 text-gray-800">

@@ -238,9 +238,7 @@ const DashboardComponent = () => {
     } catch (error) {
       console.error("Error updating income:", error);
       alert("There was an error updating your income. Please try again.");
-    } finally {
-      alert('Income successfully updated!')
-    }
+    } 
   };
   
 
@@ -476,12 +474,13 @@ const deleteExpense = async (expenseId) => {
       return;
     }
 
+  //Confirm before allowing user to delete expense  
   const confirmDelete = window.confirm('Are you sure you want to delete this expense? This action cannot be undone.');
 
   if(!confirmDelete) {
     return;
   }
-  
+
     try {
       //Delete expense 
       await axios.delete(`${backEndUrl}/users/${userId}/expenses/${expenseId}`);

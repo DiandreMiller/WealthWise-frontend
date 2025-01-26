@@ -259,7 +259,7 @@ const handleCategoryClick = (category) => {
             <th className="border border-gray-300 px-4 py-2 text-right text-gray-600">
               Income
             </th>
-            <th onClick={toggleSortOrder} className="border border-gray-300 px-4 py-2 text-center text-gray-600">
+            <th onClick={toggleSortOrder} className="border border-gray-300 px-4 py-2 text-center text-gray-600 cursor-pointer">
               Date Received
               {sortOrder === 'asc' ? ' ▲' : ' ▼'}
             </th>

@@ -259,7 +259,7 @@ console.log('expenseUser:', expenseUser.expenses);
           <tr>
             <th className="border border-gray-300 px-4 py-2 text-left text-gray-600">Source</th>
             <th className="border border-gray-300 px-4 py-2 text-right text-gray-600">Expense</th>
-            <th onClick={toggleSortOrder} className="border border-gray-300 px-4 py-2 text-center text-gray-600">
+            <th onClick={toggleSortOrder} className="border border-gray-300 px-4 py-2 text-center text-gray-600 cursor-pointer">
               Date Incurred
               {sortOrder === 'asc' ? ' ▲' : ' ▼'}
               </th>

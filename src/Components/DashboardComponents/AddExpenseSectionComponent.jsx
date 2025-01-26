@@ -21,7 +21,7 @@ const AddExpenseSectionComponent = ({
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showRecurringOnly, setShowRecurringOnly] = useState(false);
   const [filteredExpense, setFilteredExpense] = useState(expenses);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortOrder, setSortOrder] = useState('desc');
   
 
 

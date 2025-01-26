@@ -19,7 +19,7 @@ const AddIncomeSectionComponent = ({
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showRecurringOnly, setShowRecurringOnly] = useState(false);
   const [filteredIncome, setFilteredIncome] = useState(userData);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortOrder, setSortOrder] = useState('desc');
 
   //Display all months so the user can filter by month
   const months = [

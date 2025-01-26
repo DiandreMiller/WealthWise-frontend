@@ -7,7 +7,6 @@ const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMon
     previousMonthExpenses, previousMonthIncome}) => {
 
 
-    // console.log('current month:', currentMonth);
     return (
         <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
             <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">

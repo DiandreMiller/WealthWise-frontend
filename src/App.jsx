@@ -42,8 +42,6 @@ const AppContent = () => {
   const [userId, setUserId] = useState(null);
   const { login, logout, reset } = useAuth();
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
-  // console.log('backEndUrl:', backEndUrl);
-  const [signInSuccessfulMessage, setSignInSuccessfulMessage] = useState('');
 
 
   useEffect(() => {
@@ -79,7 +77,6 @@ const loginUser = async (userData) => {
     console.log('message:', response.data.message);
     if (response.data && response.data.message === "Sign in successful") {
       // console.log('Login response App.js:', response.data);
-      setSignInSuccessfulMessage(response.data.message);
       return {
         token: response.data.token,
         userId: response.data.user.id,
@@ -251,7 +248,7 @@ const loginUser = async (userData) => {
 
   return (
     <>
-      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} signInSuccessfulMessage={signInSuccessfulMessage} />
+      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} />
       <Routes>
         <Route element={<Home />} path='/' />
         <Route element={<About />} path='/about' />

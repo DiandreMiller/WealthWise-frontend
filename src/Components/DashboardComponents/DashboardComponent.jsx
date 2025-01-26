@@ -475,6 +475,13 @@ const deleteExpense = async (expenseId) => {
       alert("Invalid expense ID.");
       return;
     }
+
+  const confirmDelete = window.confirm('Are you sure you want to delete this expense? This action cannot be undone.');
+
+  if(!confirmDelete) {
+    return;
+  }
+  
     try {
       //Delete expense 
       await axios.delete(`${backEndUrl}/users/${userId}/expenses/${expenseId}`);

@@ -308,6 +308,14 @@ const DashboardComponent = () => {
         alert("Invalid income ID.");
         return;
       }
+
+    //Confirm before allowing user to delete income
+    const confirmDelete = window.confirm('Are you sure you want to delete this income? This action cannont be undone');
+
+    if(!confirmDelete) {
+      return;
+    }
+
       try {
         await axios.delete(`${backEndUrl}/users/${userId}/income/${incomeId}`);
 

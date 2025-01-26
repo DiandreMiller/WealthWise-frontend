@@ -10,19 +10,6 @@ const BudgetEditModal = ({ budget, onClose, onSubmit }) => {
     
   });
 
-  // console.log("Form data before submitting:", formData);
-
-
-  // console.log("Budget passed to BudgetEditModal:", budget);
-  // console.log("Parsed Budget Data:", {
-  //   ...budget,
-  //   monthly_income_goal: parseFloat(budget.monthly_income_goal),
-  //   monthly_expense_goal: parseFloat(budget.monthly_expense_goal),
-  //   actual_income: parseFloat(budget.actual_income),
-  //   actual_expenses: parseFloat(budget.actual_expenses),
-  // });
-  
-
 
   const handleChange = (event) => {
     const { id, value } = event.target;

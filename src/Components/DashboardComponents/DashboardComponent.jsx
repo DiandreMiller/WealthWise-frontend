@@ -295,6 +295,8 @@ const DashboardComponent = () => {
     } catch (error) {
         console.error("Error adding income:", error);
         alert("There was an error adding your income. Please try again.");
+    } finally {
+      alert('Income Has Been Successfully Added');
     }
 };
 

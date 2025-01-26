@@ -42,9 +42,6 @@ const BudgetSectionComponent = ({
     !budgetUserData.actual_income &&
     !budgetUserData.actual_expenses;
 
-    // console.log('budgetUserData:', budgetUserData);
-    // console.log('user data amount budget section:', userData.map((person) => person.amount));
-    // console.log('user expense amount budget section:', expenseUser.expenses.map((person) => person.amount))
 
     const handleCreateBudget = () => {
       const initialBudget = {
@@ -57,13 +54,7 @@ const BudgetSectionComponent = ({
       setBudgetToEdit(initialBudget); 
       setIsEditingBudget(true); 
     };
-
-    
-    
-     
-
-    
-    
+ 
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">

@@ -238,6 +238,8 @@ const DashboardComponent = () => {
     } catch (error) {
       console.error("Error updating income:", error);
       alert("There was an error updating your income. Please try again.");
+    } finally {
+      alert('Income successfully updated!')
     }
   };
   
@@ -292,12 +294,12 @@ const DashboardComponent = () => {
         setIncomeCategory("");
         setIsAddingIncome(false);
         setIsRecurringIncome(false);
+        alert('Income Has Been Successfully Added');
     } catch (error) {
         console.error("Error adding income:", error);
         alert("There was an error adding your income. Please try again.");
-    } finally {
-      alert('Income Has Been Successfully Added');
-    }
+    } 
+    
 };
 
   // Function to delete income
@@ -407,6 +409,7 @@ const addExpense = async () => {
     setExpenseDescription("");
     setExpenseAmount("");
     setIsAddingExpense(false);
+    alert("Your expense has been successfully added!");
   } catch (error) {
     console.error("Error adding expense:", error);
     alert("There was an error adding your expense. Please try again.");
@@ -430,13 +433,6 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory, updateEx
       is_recurring: isRecurringExpense ? true : false,
     });
 
-    // console.log('response:', response.data)
-    // console.log('expenseId:', expenseId);
-    // console.log('updatedAmount:', updatedAmount);
-    // console.log('updatedCategory type:', updateExpenseCategories);
-    // console.log('updatedCategory:', updatedCategory);
-    // console.log('updateExpenseCategories:', updateExpenseCategories);
-
     const updatedExpense = response.data;
 
     const updatedExpenses = expenseUser.expenses.map((expense) => {
@@ -457,9 +453,6 @@ const updateExpense = async (expenseId, updatedAmount, updatedCategory, updateEx
 
     setExpenseUser({ expenses: [...updatedExpenses] });
     
-    // setUpdateEditedExpense(previous => !previous);
-    // console.log(`[${new Date().toISOString()}] State update: updateEditedExpense toggled`);
-
     alert("Expense updated successfully!");
     // setIsEditingExpense(false);
   } catch (error) {

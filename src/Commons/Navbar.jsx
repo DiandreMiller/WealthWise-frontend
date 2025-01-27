@@ -68,7 +68,7 @@ const Navbar = ({ onLogOut, toggleState, userId, darkMode, toggleDarkMode }) => 
           <button
             onClick={handleAuthButtonClick}
             className={`px-4 py-2 font-medium rounded-md ${
-              userId  ? 'bg-red-500 text-white' : 'bg-[rgb(59,129,246)] text-white'
+              userId  ? 'hover:bg-red-600 bg-red-500 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
             {userId ? 'Logout' : 'Login'}

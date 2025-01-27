@@ -269,12 +269,12 @@ const loginUser = async (userData) => {
       <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} 
       darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Routes>
-        <Route element={<Home />} path='/' />
-        <Route element={<About />} path='/about' />
-        <Route element={<ForgotPassword1 />} path='/forgot-password' />
-        <Route element={<ResetPassword />} path='/reset-password' />
-        <Route element={<Contact />} path='/contact' />
-        <Route element={<LearnMore />} path='/learn-more' />
+        <Route element={<Home darkMode={darkMode} />} path='/' />
+        <Route element={<About darkMode={darkMode} />} path='/about' />
+        <Route element={<ForgotPassword1 darkMode={darkMode} />} path='/forgot-password' />
+        <Route element={<ResetPassword darkMode={darkMode} />} path='/reset-password' />
+        <Route element={<Contact darkMode={darkMode} />} path='/contact' />
+        <Route element={<LearnMore darkMode={darkMode} />} path='/learn-more' />
         <Route
           element={<LoginAndSignUp userError={userError} formik={formik} toggleState={handleToggle} isLogin={isLogin} />}
           path='/login-signup'

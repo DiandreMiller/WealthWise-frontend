@@ -43,6 +43,24 @@ const AppContent = () => {
   const { login, logout, reset } = useAuth();
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
+  
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+  };
 
   useEffect(() => {
     const currentUserId = Cookies.get('userID');
@@ -248,7 +266,8 @@ const loginUser = async (userData) => {
 
   return (
     <>
-      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} />
+      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} 
+      darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       <Routes>
         <Route element={<Home />} path='/' />
         <Route element={<About />} path='/about' />
@@ -266,7 +285,7 @@ const loginUser = async (userData) => {
         />
         <Route element={<PlaceHolderSubmittedContactUs />} path='/thank-you-for-contacting-us' />
         <Route element={<TestComponent />} path='/test/:userId'/>
-        <Route element={<ProtectedRoute><Dashboard /></ProtectedRoute>} path='/dashboard/:userId' />
+        <Route element={<ProtectedRoute><Dashboard darkMode={darkMode} /></ProtectedRoute>} path='/dashboard/:userId' />
         <Route element={<FourOFour />} path='*' />
       </Routes>
       <Footer />

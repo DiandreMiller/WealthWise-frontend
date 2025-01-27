@@ -280,7 +280,7 @@ console.log('expenseUser:', expenseUser.expenses);
               .slice(0, showAllExpense ? sortedExpense.length : 4)
               // .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
               .map((expense) => (
-                <tr key={expense.id} className="hover:bg-gray-50">
+                <tr key={expense.id} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} `}>
                   <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {expense.category}
                   </td>

@@ -65,7 +65,7 @@ const CurrentMonthChartIncomeModal = ({
     currentMonthIncome, 
     getPreviousMonth, 
     incomeComparedToLastMonth, 
-    isIncomeMore 
+    isIncomeMore,
     darkMode
 }) => {
 

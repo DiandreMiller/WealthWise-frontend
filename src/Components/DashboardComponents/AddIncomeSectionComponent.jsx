@@ -184,12 +184,12 @@ const handleCategoryClick = (category) => {
   
       {showYears && (
         <div
-          className={`absolute top-0 right-0 w-1/3 h-full bg-white shadow-xl rounded-l-lg border-l border-gray-300 z-30 transform ${
+          className={`absolute top-0 right-0 w-1/3 h-full ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-xl rounded-l-lg border-l border-gray-300 z-30 transform ${
             showYears ? "translate-x-0" : "translate-x-full"
-          } transition-transform duration-300 ease-in-out`}>
+          }  transition-transform duration-300 ease-in-out`}>
           <div className="overflow-y-auto h-full p-6">
 
-            <h3 className="text-gray-800 font-bold text-lg mb-4">Years</h3>
+            <h3 className={`font-bold text-lg mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Years</h3>
             <div className="relative">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
@@ -206,7 +206,7 @@ const handleCategoryClick = (category) => {
               </select>
             </div>
   
-            <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Months</h3>
+            <h3 className={`font-bold text-lg mt-6 mb-4 ${darkMode ? 'text-white' : 'text-gray-800 '}`}>Months</h3>
             <div className="relative">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"
@@ -224,7 +224,7 @@ const handleCategoryClick = (category) => {
               </select>
             </div>
 
-            <h3 className="text-gray-800 font-bold text-lg mt-6 mb-4">Categories</h3>
+            <h3 className={`font-bold text-lg mt-6 mb-4 ${darkMode ? 'text-white' : 'text-gray-800 '}`}>Categories</h3>
             <div className="relative">
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white"

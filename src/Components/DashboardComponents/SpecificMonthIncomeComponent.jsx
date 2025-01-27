@@ -84,6 +84,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, filter
                             previousMonthIncome={previousMonthIncome}
                             incomeComparedToLastMonth={incomeComparison.percentage}
                             isIncomeMore={incomeComparison.isIncomeMore}
+                            darkMode={darkMode}
                         />
                     </div>
                 </div>

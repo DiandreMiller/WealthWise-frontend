@@ -85,6 +85,7 @@ const SpecificMonthExpenseComponent = ({
                             previousMonthExpenses={previousMonthExpenses}
                             spendingComparedToLastMonth={spendingComparison.percentage}
                             isSpendingMore={spendingComparison.isSpendingMore}
+                            darkMode={darkMode}
                         />
                     </div>
                 </div>

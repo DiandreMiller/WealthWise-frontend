@@ -284,7 +284,7 @@ const handleCategoryClick = (category) => {
                   <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {income.source}
                   </td>
-                  <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                  <td className={`border text-right border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {formatCurrency(income.amount)}
                   </td>
                   <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
@@ -319,7 +319,7 @@ const handleCategoryClick = (category) => {
         </tbody>
       </table>
   
-      <div className="mt-4 text-right font-semibold text-xl text-gray-700">
+      <div className={`mt-4 text-right font-semibold text-xl ${darkMode ? 'text-white' : 'text-gray-700'}`}>
         Total Income: {totalIncome(filteredIncome)}
       </div>
       <button

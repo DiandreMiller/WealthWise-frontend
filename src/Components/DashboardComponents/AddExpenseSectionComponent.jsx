@@ -10,6 +10,7 @@ const AddExpenseSectionComponent = ({
   deleteExpense,
   showAllExpense,
   setShowAllExpense,
+  darkMode,
 }) => {
 
   const expenses = expenseUser?.expenses || []; 
@@ -161,13 +162,13 @@ const sortedExpense = filteredExpense.slice().sort((a, b) => {
 console.log('expenseUser:', expenseUser.expenses);
  
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
+    <div className={`${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-300'} shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden`}>
       <div className="relative mb-4">
-        <h2 className="text-xl font-semibold text-gray-700 leading-none text-center">
+        <h2 className={`text-xl font-semibold leading-none text-center ${darkMode ? 'text-white' : 'text-gray-700'}`}>
           Added Expenses
         </h2>
         <div
-          className="absolute top-0 right-0 text-black text-2xl cursor-pointer"
+          className={`absolute top-0 right-0 text-2xl cursor-pointer ${darkMode ? 'text-white' : 'text-black'}`}
           onClick={allUserYears}>
           &#x22EE;
         </div>
@@ -181,7 +182,7 @@ console.log('expenseUser:', expenseUser.expenses);
             onChange={toggleRecurringExpenses}
             className="form-checkbox h-5 w-5 text-blue-600"
           />
-          <span className="text-gray-700">Show Recurring Expenses Only</span>
+          <span className={`${darkMode ? 'text-white' : 'text-gray-700'}`}>Show Recurring Expenses Only</span>
         </label>
       </div>
   
@@ -269,7 +270,7 @@ console.log('expenseUser:', expenseUser.expenses);
         <tbody>
           {expenses.length === 0 ? (
             <tr>
-              <td colSpan="4" className="text-center text-gray-500">
+              <td colSpan="4" className={`text-center ${darkMode ? 'text-white' : 'text-gray-500'}`}>
                 No expenses to display. Add Your Expenses!
               </td>
             </tr>
@@ -280,13 +281,13 @@ console.log('expenseUser:', expenseUser.expenses);
               // .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
               .map((expense) => (
                 <tr key={expense.id} className="hover:bg-gray-50">
-                  <td className="border border-gray-300 px-4 py-2 text-gray-800">
+                  <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {expense.category}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
+                  <td className={`border text-right border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {formatCurrency(expense.amount)}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
+                  <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {expense.date_incurred}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
@@ -310,7 +311,7 @@ console.log('expenseUser:', expenseUser.expenses);
               ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center text-gray-500">
+              <td colSpan="4" className={`text-center ${darkMode ? 'text-white' : 'text-gray-500'}`}>
                 No expenses to display for the time period selected.
               </td>
             </tr>
@@ -318,7 +319,7 @@ console.log('expenseUser:', expenseUser.expenses);
         </tbody>
       </table>
   
-      <div className="mt-4 text-right font-semibold text-xl text-gray-700">
+      <div className={`mt-4 text-right font-semibold text-xl ${darkMode ? 'text-white' : 'text-gray-700'}`}>
         Total Expenses: {totalExpenses(filteredExpense)}
       </div>
       <button
@@ -350,6 +351,7 @@ AddExpenseSectionComponent.propTypes = {
   deleteExpense: PropTypes.func.isRequired,
   showAllExpense: PropTypes.bool.isRequired,
   setShowAllExpense: PropTypes.func.isRequired,
+  darkMode: PropTypes.func.isRequired,
 };
 
 export default AddExpenseSectionComponent;

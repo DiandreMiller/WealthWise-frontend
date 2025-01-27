@@ -322,12 +322,13 @@ const handleCategoryClick = (category) => {
       <div className={`mt-4 text-right font-semibold text-xl ${darkMode ? 'text-white' : 'text-gray-700'}`}>
         Total Income: {totalIncome(filteredIncome)}
       </div>
+      {userData.length > 5 && (
       <button
         className="mt-4 text-blue-500 hover:underline"
-        onClick={() => setShowAllIncome((prevState) => !prevState)}
-      >
+        onClick={() => setShowAllIncome((prevState) => !prevState)}>
         {showAllIncome ? "See Less" : "See More"}
       </button>
+      )}
     </div>
   );
   

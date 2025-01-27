@@ -74,7 +74,7 @@ const Navbar = ({ onLogOut, toggleState, userId, darkMode, toggleDarkMode }) => 
             {userId ? 'Logout' : 'Login'}
           </button>
           <button className='bg-black hover-pointer' onClick={toggleDarkMode}>
-            {darkMode ? '☾' : '☀'}
+            {darkMode ? '☀' : '☾'}
           </button>
         </div>
       </div>
@@ -84,10 +84,10 @@ const Navbar = ({ onLogOut, toggleState, userId, darkMode, toggleDarkMode }) => 
 
 Navbar.propTypes = {
   onLogOut: PropTypes.func.isRequired,
+  toggleDarkMode: PropTypes.func.isRequired,
   toggleState: PropTypes.func.isRequired,
+  darkMode: PropTypes.func.isRequired,
   userId: PropTypes.string, 
-  signInSuccessfulMessage: PropTypes.string
-  
 };
 
 export default Navbar;

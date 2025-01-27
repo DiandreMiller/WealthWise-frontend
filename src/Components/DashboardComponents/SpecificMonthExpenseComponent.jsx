@@ -8,6 +8,7 @@ const SpecificMonthExpenseComponent = ({
     filteredExpense,
     getPreviousMonth,
     previousMonthExpenses,
+    darkMode,
 }) => {
     const [showExpenseChart, setShowExpenseChart] = useState(false);
     const [spendingComparison, setSpendingComparison] = useState({ percentage: 0, isSpendingMore: null });
@@ -35,11 +36,20 @@ const SpecificMonthExpenseComponent = ({
     }, [currentMonthExpenses, previousMonthExpenses]);
 
     return (
-        <div className="bg-white border border-gray-300 p-4 rounded-lg shadow-md hover:bg-red-50 transition-colors">
-            <h3 className="text-lg font-semibold text-gray-700">
+        <div
+            className={`group p-4 rounded-lg shadow-md border transition-colors hover:bg-red-50 ${
+                darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-300'
+            }`}>
+            <h3
+                className={`text-lg font-semibold transition-colors ${
+                    darkMode ? 'text-white group-hover:text-black' : 'text-gray-700 group-hover:text-black'
+                }`}>
                 {currentMonth}'s Expenses
             </h3>
-            <p className="text-gray-600 mt-2">
+            <p
+                className={`mt-2 transition-colors ${
+                    darkMode ? 'text-gray-400 group-hover:text-black' : 'text-gray-600 group-hover:text-black'
+                }`}>
                 Track all your expenses for {currentMonth}.
             </p>
             <div className="mt-4">
@@ -50,7 +60,7 @@ const SpecificMonthExpenseComponent = ({
             <button
                 className="mt-4 bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors"
                 onClick={toggleChart}>
-                {showExpenseChart ? 'Hide Chart' : 'View Chart'}
+                {showExpenseChart ? "Hide Chart" : "View Chart"}
             </button>
             {showExpenseChart && (
                 <div
@@ -58,7 +68,7 @@ const SpecificMonthExpenseComponent = ({
                     onClick={toggleChart}>
                     <div
                         className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg"
-                        onClick={event => event.stopPropagation()}>
+                        onClick={(event) => event.stopPropagation()}>
                         <button
                             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
                             onClick={toggleChart}>
@@ -81,6 +91,7 @@ const SpecificMonthExpenseComponent = ({
             )}
         </div>
     );
+    
 };
 
 SpecificMonthExpenseComponent.propTypes = {
@@ -94,6 +105,7 @@ SpecificMonthExpenseComponent.propTypes = {
     ).isRequired,
     getPreviousMonth: PropTypes.string.isRequired,
     previousMonthExpenses: PropTypes.number.isRequired,
+    darkMode: PropTypes.func.isRequired,
 };
 
 export default SpecificMonthExpenseComponent;

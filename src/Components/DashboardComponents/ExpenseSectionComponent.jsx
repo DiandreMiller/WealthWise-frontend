@@ -13,6 +13,7 @@ const ExpenseSectionComponent = ({
   setExpenseCategories,
   isRecurringExpense,
   setIsRecurringExpense,
+  darkMode
 }) => {
   const defaultExpenseCategories = [
     'housing',
@@ -51,8 +52,12 @@ const ExpenseSectionComponent = ({
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Expenses</h2>
+    // <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
+    <div
+      className={`shadow-lg rounded-lg p-6 border ${
+        darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+      <h2 className={`text-xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-700'}`}>Expenses</h2>
       {isAddingExpense ? (
         <div className="space-y-4">
           <input
@@ -151,6 +156,7 @@ ExpenseSectionComponent.propTypes = {
   setExpenseCategories: PropTypes.func.isRequired,
   isRecurringExpense: PropTypes.bool,
   setIsRecurringExpense: PropTypes.func.isRequired,
+  darkMode: PropTypes.func.isRequired,
 };
 
 export default ExpenseSectionComponent;

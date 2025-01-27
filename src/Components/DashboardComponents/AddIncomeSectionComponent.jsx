@@ -10,6 +10,7 @@ const AddIncomeSectionComponent = ({
   deleteIncome,
   showAllIncome,
   setShowAllIncome,
+  darkMode
 }) => {
 
   const [showYears, setShowYears] = useState(false);
@@ -156,9 +157,9 @@ const handleCategoryClick = (category) => {
   });
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden">
+    <div className={`${darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-300'} shadow-lg rounded-lg p-6 mt-6 border border-gray-200 relative overflow-hidden`}>
       <div className="relative mb-4">
-        <h2 className="text-xl font-semibold text-gray-700 leading-none text-center">
+        <h2 className={`text-xl font-semibold leading-none text-center ${darkMode ? 'text-white' : 'text-gray-700'}`}>
           Added Incomes
         </h2>
         <div
@@ -350,6 +351,7 @@ AddIncomeSectionComponent.propTypes = {
   deleteIncome: PropTypes.func.isRequired,
   showAllIncome: PropTypes.bool.isRequired,
   setShowAllIncome: PropTypes.func.isRequired,
+  darkMode: PropTypes.func.isRequired,
 };
 
 export default AddIncomeSectionComponent;

@@ -16,7 +16,7 @@ import MonthlyActivityComponent from "../MonthlyActivityComponent";
 
 
 
-const DashboardComponent = () => {
+const DashboardComponent = ({ darkMode }) => {
   //User ID
   const { userId } = useParams();
 

@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import wealthWise from "../assets/wealthWise.png";
 import { Link } from "react-router-dom";
 
-const HomeComponent = () => {
+const HomeComponent = ({ darkMode }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-[rgb(17,24,39)] text-white">
+    <div className={`flex flex-col min-h-screen ${darkMode ? 'bg-[rgb(17,24,39)] text-white' : 'bg-white text-black'}`}>
       {/* Header Section */}
       <header className="flex flex-col items-center justify-center pt-32">
         <img src={wealthWise} alt="WealthWise Logo" className="w-48 mb-6" />
@@ -41,5 +42,9 @@ const HomeComponent = () => {
     </div>
   );
 };
+
+HomeComponent.propTypes = {
+  darkMode: PropTypes.func.isRequired
+}
 
 export default HomeComponent;

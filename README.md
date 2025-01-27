@@ -71,8 +71,8 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 ### **Installation**
 1. Clone the repository:
    ```bash
-   git clone https://github.com/DiandreMiller/icapital-financial-planner-front-end.git
-   cd icapital-financial-planner-front-end
+   git clone https://github.com/DiandreMiller/WealthWise-frontend.git
+   cd WealthWise-frontend
 
 2. Install dependencies:
     ```bash

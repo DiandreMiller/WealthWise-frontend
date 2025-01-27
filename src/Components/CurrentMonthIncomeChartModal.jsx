@@ -66,6 +66,7 @@ const CurrentMonthChartIncomeModal = ({
     getPreviousMonth, 
     incomeComparedToLastMonth, 
     isIncomeMore 
+    darkMode
 }) => {
 
     const [activeIndex, setActiveIndex] = useState(null);
@@ -159,7 +160,8 @@ CurrentMonthChartIncomeModal.propTypes = {
     getPreviousMonth: PropTypes.string.isRequired,
     incomeComparedToLastMonth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     isIncomeMore: PropTypes.bool,
-    previousMonthIncome: PropTypes.number.isRequired
+    previousMonthIncome: PropTypes.number.isRequired,
+    darkMode: PropTypes.func.isRequired
 };
 
 export default CurrentMonthChartIncomeModal;

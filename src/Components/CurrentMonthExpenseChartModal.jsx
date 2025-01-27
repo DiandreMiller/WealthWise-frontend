@@ -51,6 +51,7 @@ const CurrentMonthExpenseChartModal = ({
     getPreviousMonth,
     spendingComparedToLastMonth,
     isSpendingMore,
+    darkMode,
 }) => {
     const [activeIndex, setActiveIndex] = useState(null);
 
@@ -143,6 +144,7 @@ CurrentMonthExpenseChartModal.propTypes = {
     previousMonthExpenses: PropTypes.number.isRequired,
     spendingComparedToLastMonth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     isSpendingMore: PropTypes.bool,
+    darkMode: PropTypes.func.isRequired,
 };
 
 export default CurrentMonthExpenseChartModal;

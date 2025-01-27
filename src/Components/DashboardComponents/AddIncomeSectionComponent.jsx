@@ -163,7 +163,7 @@ const handleCategoryClick = (category) => {
           Added Incomes
         </h2>
         <div
-          className="absolute top-0 right-0 text-black text-2xl cursor-pointer"
+          className={`absolute top-0 right-0 text-2xl cursor-pointer ${darkMode ? 'text-white' : 'text-black'}`}
           onClick={allUserYears}>
           &#x22EE;
         </div>
@@ -178,7 +178,7 @@ const handleCategoryClick = (category) => {
             onChange={toggleRecurringIncome}
             className="form-checkbox h-5 w-5 text-blue-600"
           />
-          <span className="text-gray-700">Show Recurring Income Only</span>
+          <span className={`${darkMode ? 'text-white' : 'text-gray-700'}`}>Show Recurring Income Only</span>
         </label>
       </div>
   
@@ -272,7 +272,7 @@ const handleCategoryClick = (category) => {
         <tbody>
           {userData.length === 0 ? (
             <tr>
-              <td colSpan="4" className="text-center text-gray-500">
+              <td colSpan="4" className={`text-center ${darkMode ? 'text-white' : 'text-gray-500'}`}>
                 No income to display. Add Your Income!
               </td>
             </tr>
@@ -280,14 +280,14 @@ const handleCategoryClick = (category) => {
             sortedIncome
               .slice(0, showAllIncome ? sortedIncome.length : 4)
               .map((income) => (
-                <tr key={income.id} className="hover:bg-gray-50">
-                  <td className="border border-gray-300 px-4 py-2 text-gray-800">
+                <tr key={income.id} className={`${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} `}>
+                  <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {income.source}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-right text-gray-800">
+                  <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {formatCurrency(income.amount)}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center text-gray-800">
+                  <td className={`border border-gray-300 px-4 py-2 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
                     {income.date_received}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
@@ -311,7 +311,7 @@ const handleCategoryClick = (category) => {
               ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center text-gray-500">
+              <td colSpan="4" className={`text-center ${darkMode ? 'text-white' : 'text-gray-500'}`}>
                 There is no income to display for the time period selected.
               </td>
             </tr>

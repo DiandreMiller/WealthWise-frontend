@@ -10,6 +10,7 @@ const BudgetSectionComponent = ({
   setIsEditingBudget,
   expenseUser,
   userData,
+  darkMode
 }) => {
 
   // console.log("Rendering with budgetUserData:", budgetUserData);
@@ -57,18 +58,20 @@ const BudgetSectionComponent = ({
  
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Budget</h2>
+    <div  className={`shadow-lg rounded-lg p-6 border ${
+      darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+    }`}>
+      <h2 className={`text-xl  mb-4 font-semibold ${darkMode ? 'text-white' : 'text-gray-700'}`}>Budget</h2>
       {budgetUserData ? (
         <div>
           {/* Display Budget Details */}
-          <p className="text-gray-600">
+          <p className={`${darkMode ? 'text-white' : 'text-gray-700'}`}>
             Income Goal: <strong className="text-green-600">{formatCurrency(budgetUserData.monthly_income_goal)}</strong>
           </p>
-          <p className="text-gray-600">
+          <p className={`${darkMode ? 'text-white' : 'text-gray-700'}`}>
             Expense Goal: <strong className="text-red-600">{formatCurrency(budgetUserData.monthly_expense_goal)}</strong>
           </p>
-          <p className="text-gray-600">
+          <p className={`${darkMode ? 'text-white' : 'text-gray-700'}`}>
             Actual Income: <strong className="text-green-600">
               {formatCurrency(
                 userData.reduce((a, b) => a + b.amount, 0)
@@ -76,12 +79,12 @@ const BudgetSectionComponent = ({
             </strong>
           </p>
 
-          <p className="text-gray-600">
+          <p className={`${darkMode ? 'text-white' : 'text-gray-700'}`}>
             Actual Expenses: <strong className="text-red-600">{formatCurrency(
                 expenseUser.expenses.reduce((a,b) => a + b.amount, 0)
             )}</strong>
           </p>
-          <p className="text-gray-600 mb-4">
+          <p className={`${darkMode ? 'text-white' : 'text-gray-700'} mb-4`}>
             Disposable Income: <strong className="text-blue-600">{formatCurrency(disposableIncome)}</strong>
           </p>
           {/* Create or Update Budget Button */}
@@ -135,6 +138,7 @@ BudgetSectionComponent.propTypes = {
       amount: PropTypes.number.isRequired,
     })
   ).isRequired,
+  darkMode: PropTypes.func.isRequired,
 };
 
 export default BudgetSectionComponent;

@@ -4,12 +4,14 @@ import SpecificMonthIncomeComponent from "./DashboardComponents/SpecificMonthInc
 
 const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMonthExpenses, 
     filteredIncome, filteredExpense, getPreviousMonth, 
-    previousMonthExpenses, previousMonthIncome}) => {
+    previousMonthExpenses, previousMonthIncome, darkMode}) => {
 
 
     return (
-        <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+        <div className={`shadow-lg rounded-lg p-6 border border-gray-200 ${
+      darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+    }`}>
+            <h2 className={`text-2xl font-bold mb-4 text-center ${darkMode ? 'text-white': 'text-gray-800'}`}>
                 {currentMonth}'s Activity
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -18,13 +20,14 @@ const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMon
                     filteredIncome={filteredIncome}
                     getPreviousMonth={getPreviousMonth}
                     previousMonthIncome={previousMonthIncome}
+                    darkMode={darkMode}
                     />
                 <SpecificMonthExpenseComponent currentMonth={currentMonth} 
                     currentMonthExpenses={currentMonthExpenses}
                     filteredExpense={filteredExpense}
                     getPreviousMonth={getPreviousMonth}
                     previousMonthExpenses={previousMonthExpenses}
-
+                    darkMode={darkMode}
                 />
             </div>
         </div>
@@ -41,6 +44,7 @@ MonthlyActivityComponent.propTypes = {
     previousMonthExpenses: PropTypes.number.isRequired,
     filteredIncome: PropTypes.array.isRequired,
     filteredExpense: PropTypes.array.isRequired,
+    darkMode: PropTypes.func.isRequired,
 };
 
 export default MonthlyActivityComponent;

@@ -12,8 +12,10 @@ const IncomeSectionComponent = ({
   addIncome,
   setIsAddingIncome,
   isRecurringIncome,
-  setIsRecurringIncome
+  setIsRecurringIncome,
+  darkMode
 }) => {
+  
   const incomeCategories = [
     'salary', 
     'rental', 
@@ -48,8 +50,11 @@ const IncomeSectionComponent = ({
   
 
   return (
-    <div className="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Income</h2>
+    <div
+      className={`shadow-lg rounded-lg p-6 border ${
+        darkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+      <h2 className={`text-xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-700'}`}>Income</h2>
       {isAddingIncome ? (
         <div className="space-y-4">
           <input
@@ -160,6 +165,7 @@ IncomeSectionComponent.propTypes = {
   setIsAddingIncome: PropTypes.func.isRequired,
   isRecurringIncome: PropTypes.bool.isRequired,
   setIsRecurringIncome: PropTypes.func.isRequired,
+  darkMode: PropTypes.func.isRequired,
 };
 
 export default IncomeSectionComponent;

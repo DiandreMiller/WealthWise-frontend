@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
@@ -12,7 +13,6 @@ import AddExpenseSectionComponent from "./AddExpenseSectionComponent";
 import BudgetEditModal from './BudgetEditModal';
 import IncomeOrExpenseGoalAchievedModal from "./IncomeOrExpenseGoalAchievedModal";
 import MonthlyActivityComponent from "../MonthlyActivityComponent";
-
 
 
 
@@ -641,7 +641,6 @@ const createBudget = async (budgetData) => {
 };
 
 
-
 //Edit Budget Modal
 const handleEditBudget = (budget) => {
   // console.log("Budget received in handleEditBudget:", budget);
@@ -1166,10 +1165,13 @@ useEffect(() => {
 
 
   return (
-    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg mt-24">
-      <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
+    <div className={`container mx-auto p-6 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'} rounded-lg shadow-lg mt-24`}>
+      <div className={`container mx-auto p-6 ${darkMode ? 'bg-gray-900' : 'bg-gray-100'} rounded-lg shadow-lg`}>
         <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Financial Dashboard</h1>
+          <h1 className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+              Financial Dashboard
+          </h1>
+
           <h1 className="text-xl text-blue-600">Welcome {userName}</h1>
         </header>
 
@@ -1190,6 +1192,7 @@ useEffect(() => {
          setIncomeCategory={setIncomeCategory}
          isRecurringIncome={isRecurringIncome}
          setIsRecurringIncome={setIsRecurringIncome}
+         darkMode={darkMode}
         />
 
         {/* Expense Section */}
@@ -1205,6 +1208,7 @@ useEffect(() => {
             setExpenseCategories={setExpenseCategories}
             isRecurringExpense={isRecurringExpense}
             setIsRecurringExpense={setIsRecurringExpense}
+            darkMode={darkMode}
         />
 
         {/* Budget Section */}
@@ -1216,6 +1220,7 @@ useEffect(() => {
           handleEditBudget={handleEditBudget}
           setBudgetToEdit={setBudgetToEdit}
           setIsEditingBudget={setIsEditingBudget}
+          darkMode={darkMode}
         />
 
       </main>
@@ -1244,7 +1249,7 @@ useEffect(() => {
         getPreviousMonth={getPreviousMonth}
         previousMonthExpenses={previousMonthExpenses}
         previousMonthIncome={previousMonthIncome}
-        
+        darkMode={darkMode}
        />
     </div>
   
@@ -1258,6 +1263,7 @@ useEffect(() => {
         deleteIncome={deleteIncome}
         showAllIncome={showAllIncome}
         setShowAllIncome={setShowAllIncome}
+        darkMode={darkMode}
       />
 
 
@@ -1292,6 +1298,7 @@ useEffect(() => {
           deleteExpense={deleteExpense}
           showAllExpense={showAllExpense}
           setShowAllExpense={setShowAllExpense}
+          darkMode={darkMode}
       />
  
        {/* Budget Edit Modal */}
@@ -1331,6 +1338,7 @@ useEffect(() => {
                 userData={userData || []}
                 expenseUser={expenseUser}
                 handleEditBudget={handleEditBudget}
+                darkMode={darkMode}
               />
             )}
           </div>
@@ -1339,6 +1347,10 @@ useEffect(() => {
   
  
 };
+
+DashboardComponent.propTypes = {
+  darkMode: PropTypes.func.isRequired
+}
 
 
 export default DashboardComponent;

@@ -65,14 +65,14 @@ const ExpenseSectionComponent = ({
             placeholder="Expense Description"
             value={expenseDescription}
             onChange={handleDescriptionChange}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
           />
           <input
             type="number"
             placeholder="Amount"
             value={expenseAmount}
             onChange={handleAmountChange}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
           />
 
           <div>
@@ -84,7 +84,7 @@ const ExpenseSectionComponent = ({
                 // console.log("Is this expense recurring:", selectedValue);
                 setIsRecurringExpense(selectedValue);
               }}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
               id="recurring-expense-dropdown"
             >
               <option value="" disabled>
@@ -103,7 +103,7 @@ const ExpenseSectionComponent = ({
                 // console.log("Selected expense category:", selectedCategory);
                 setExpenseCategories(selectedCategory);
               }}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
               id="expense-category-dropdown"
             >
               <option value="" disabled>

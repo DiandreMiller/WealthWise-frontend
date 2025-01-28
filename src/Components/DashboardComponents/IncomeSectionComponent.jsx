@@ -62,14 +62,14 @@ const IncomeSectionComponent = ({
             placeholder="Income Source"
             value={incomeDescription}
             onChange={handleDescriptionChange}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
           />
           <input
             type="number"
             placeholder="Amount"
             value={incomeAmount}
             onChange={handleAmountChange}
-            className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
           />
           
           <div>
@@ -80,7 +80,7 @@ const IncomeSectionComponent = ({
                 // console.log("Selected category in dropdown:", selectedCategory);
                 setIncomeCategory(selectedCategory);
               }}
-              className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
               id="dropdown">
               <option value="" disabled>
                 Select an income category
@@ -102,7 +102,7 @@ const IncomeSectionComponent = ({
                   // console.log("Is recurring income:", selectedValue);
                   setIsRecurringIncome(selectedValue);
                 }}
-                className="w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className={`w-full border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-white`}
                 id="dropdown">
                 <option value="" disabled>
                   Is this income recurring?

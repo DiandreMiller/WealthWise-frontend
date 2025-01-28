@@ -1,8 +1,13 @@
 import PropTypes from 'prop-types';
 import wealthWise from '../assets/wealthWise.png';
 import { useNavigate } from 'react-router-dom';
+// import { UserContext } from '../Context/UserContext';
+// import { useContext } from 'react';
 
 const Navbar = ({ onLogOut, toggleState, userId, darkMode, toggleDarkMode }) => {
+
+  // const { userName } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   console.log('userId:', userId);
@@ -73,9 +78,11 @@ const Navbar = ({ onLogOut, toggleState, userId, darkMode, toggleDarkMode }) => 
           >
             {userId ? 'Logout' : 'Login'}
           </button>
-          <button className='bg-black hover-pointer' onClick={toggleDarkMode}>
-            {darkMode ? '☀' : '☾'}
-          </button>
+          {userId && (
+            <button className='bg-black hover-pointer' onClick={toggleDarkMode}>
+              {darkMode ? '☀' : '☾'}
+            </button>
+          )}
         </div>
       </div>
     </nav>

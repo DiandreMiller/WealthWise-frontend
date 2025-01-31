@@ -56,3 +56,8 @@ Used by many fintech apps for connecting user bank accounts to track income and 
 10. YNAB API:
 
 Developers can extend or create new functionalities for budgeting and financial planning.
+
+
+Encrypting Url:
+
+https://medium.com/@Mahdi_ramadhan/encrypting-user-ids-on-a-website-best-practices-and-techniques-dc48b4e8d8ee

@@ -89,4 +89,4 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 
 5. Happy Hacking!!!!
 
-To-Do fix recurring income
+To-Do fix recurring income starting friday

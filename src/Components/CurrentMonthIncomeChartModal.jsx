@@ -103,7 +103,7 @@ const CurrentMonthChartIncomeModal = ({
     }
 
     return (
-        <div>
+        <div className="">
             <div>
                 <h3 className="text-2xl font-semibold text-gray-700">
                     Here is a breakdown of your {currentMonth} income

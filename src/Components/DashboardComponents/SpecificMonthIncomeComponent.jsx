@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import CurrentMonthChartIncomeModal from "../CurrentMonthIncomeChartModal";
 
-const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, filteredIncome, getPreviousMonth, previousMonthIncome, darkMode }) => {
+const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, filteredIncome, getPreviousMonth, previousMonthIncome, darkMode, thisMonthIncomeEntries }) => {
     const [showIncomeChart, setShowIncomeChart] = useState(false);
     const [incomeComparison, setIncomeComparison] = useState({ percentage: 0, isIncomeMore: null });
 
@@ -51,7 +51,7 @@ const SpecificMonthIncomeComponent = ({ currentMonth, currentMonthIncome, filter
             </p>
             <div className="mt-4">
                 <p className="text-2xl font-bold text-green-600">
-                    ${currentMonthIncome.toFixed(2)}
+                    ${Number(currentMonthIncome.toFixed(2)) + thisMonthIncomeEntries}
                 </p>
             </div>
     

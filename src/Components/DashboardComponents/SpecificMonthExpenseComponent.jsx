@@ -8,6 +8,7 @@ const SpecificMonthExpenseComponent = ({
     filteredExpense,
     getPreviousMonth,
     previousMonthExpenses,
+    thisMonthExpensesEntries,
     darkMode,
 }) => {
     const [showExpenseChart, setShowExpenseChart] = useState(false);
@@ -54,7 +55,7 @@ const SpecificMonthExpenseComponent = ({
             </p>
             <div className="mt-4">
                 <p className="text-2xl font-bold text-red-600">
-                    ${Number(currentMonthExpenses).toFixed(2)}
+                    ${Number(currentMonthExpenses.toFixed(2)) + thisMonthExpensesEntries}
                 </p>
             </div>
             <button

@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import SpecificMonthExpenseComponent from "./DashboardComponents/SpecificMonthExpenseComponent";
 import SpecificMonthIncomeComponent from "./DashboardComponents/SpecificMonthIncomeComponent";
 
-const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMonthExpenses, 
-    filteredIncome, filteredExpense, getPreviousMonth, 
+const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome,thisMonthIncomeEntries, currentMonthExpenses, 
+    filteredIncome, filteredExpense, thisMonthExpensesEntries, getPreviousMonth, 
     previousMonthExpenses, previousMonthIncome, darkMode}) => {
 
 
@@ -21,12 +21,14 @@ const MonthlyActivityComponent = ({ currentMonth, currentMonthIncome, currentMon
                     getPreviousMonth={getPreviousMonth}
                     previousMonthIncome={previousMonthIncome}
                     darkMode={darkMode}
+                    thisMonthIncomeEntries={thisMonthIncomeEntries}
                     />
                 <SpecificMonthExpenseComponent currentMonth={currentMonth} 
                     currentMonthExpenses={currentMonthExpenses}
                     filteredExpense={filteredExpense}
                     getPreviousMonth={getPreviousMonth}
                     previousMonthExpenses={previousMonthExpenses}
+                    thisMonthExpensesEntries={thisMonthExpensesEntries}
                     darkMode={darkMode}
                 />
             </div>
@@ -39,9 +41,11 @@ MonthlyActivityComponent.propTypes = {
     currentMonth: PropTypes.string.isRequired, 
     currentMonthIncome: PropTypes.number.isRequired, 
     currentMonthExpenses: PropTypes.number.isRequired, 
+    thisMonthIncomeEntries: PropTypes.number.isRequired,
     getPreviousMonth: PropTypes.string.isRequired,
     previousMonthIncome: PropTypes.number.isRequired,
     previousMonthExpenses: PropTypes.number.isRequired,
+    thisMonthExpensesEntries: PropTypes.number.isRequired,
     filteredIncome: PropTypes.array.isRequired,
     filteredExpense: PropTypes.array.isRequired,
     darkMode: PropTypes.func.isRequired,

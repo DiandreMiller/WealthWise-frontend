@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 
-const ContactComponent = () => {
+const ContactComponent = ({ darkMode }) => {
 
     const navigate = useNavigate();
 
@@ -66,5 +67,9 @@ const ContactComponent = () => {
         </div>
     );
 };
+
+ContactComponent.propTypes = {
+    darkMode: PropTypes.func.isRequired
+ }
 
 export default ContactComponent;

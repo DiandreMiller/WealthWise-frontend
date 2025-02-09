@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import DOMPurify from 'dompurify';
@@ -37,6 +37,8 @@ const DashboardComponent = ({ darkMode }) => {
   const [isRecurringIncome, setIsRecurringIncome] = useState(null);
   const [previousMonthIncome, setPreviousMonthIncome] = useState(0);
   const [processedRecurringIncome, setProcessedRecurringIncome] = useState(false);
+  const [currentMonthIncomeNumberState, setCurrentMonthIncomeNumberState] = useState(null);
+  const [thisMonthIncomeEntries, setThisMonthIncomeEntries] = useState(0);
 
   //Expenses
   const [showAllExpense, setShowAllExpense] = useState(false);
@@ -53,6 +55,8 @@ const DashboardComponent = ({ darkMode }) => {
   const [currentMonthExpenses, setCurrentMonthExpenses] = useState(0);
   const [previousMonthExpenses, setPreviousMonthExpenses] = useState(0);
   const [processedRecurringExpense, setProcessedRecurringExpense] = useState(false);
+  const [currentMonthExpenseNumberState, setCurrentMonthExpenseNumberState] = useState(null);
+  const [thisMonthExpensesEntries, setThisMonthExpensesEntries] = useState(0);
 
   //Budget
   const [budgetUserData, setBudgetUserData] = useState({});
@@ -107,6 +111,7 @@ const DashboardComponent = ({ darkMode }) => {
     }
   },[backEndUrl, userId])
 
+
 //Get income
   useEffect(() => {
     const fetchUserIncome = async () => {
@@ -135,7 +140,6 @@ const DashboardComponent = ({ darkMode }) => {
     }
   }, [userId, backEndUrl, deletedIncome, updateEditedIncome]);
 
-  
 
   //Get Expense
   useEffect(() => {
@@ -300,7 +304,8 @@ const DashboardComponent = ({ darkMode }) => {
     
 };
 
-  // Function to delete income
+
+  // Function to delete income 
   const deleteIncome = async (incomeId) => {
     if (!incomeId) {
         alert("Invalid income ID.");
@@ -530,7 +535,7 @@ const deleteExpense = async (expenseId) => {
         };
 
         setBudgetUserData(formattedBudget);
-        // console.log('Budget User Data:', formattedBudget);
+        console.log('Budget User Data:', formattedBudget);
 
       } catch (error) {
         console.error('budget error:', error)
@@ -559,14 +564,14 @@ const createBudget = async (budgetData) => {
     actual_expenses = expenseUser?.expenses?.reduce((sum, expense) => sum + expense.amount, 0) || 0, 
   } = budgetData;
 
-  // console.log("=== createBudget Function Start ===");
-  // console.log("Received Budget Data:", budgetData);
-  // console.log("Parsed Values Before Validation:", {
-  //   monthly_income_goal,
-  //   monthly_expense_goal,
-  //   actual_income,
-  //   actual_expenses,
-  // });
+  console.log("=== createBudget Function Start ===");
+  console.log("Received Budget Data:", budgetData);
+  console.log("Parsed Values Before Validation:", {
+    monthly_income_goal,
+    monthly_expense_goal,
+    actual_income,
+    actual_expenses,
+  });
 
   // Validate inputs
   if (
@@ -596,13 +601,13 @@ const createBudget = async (budgetData) => {
 
   setLoading(true);
   try {
-    // console.log("Sending API Request to Create Budget...");
-    // console.log("API Request Payload:", {
-    //   monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
-    //   monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
-    //   actual_income: actual_income,
-    //   actual_expenses: actual_expenses,
-    // });
+    console.log("Sending API Request to Create Budget...");
+    console.log("API Request Payload:", {
+      monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
+      monthly_expense_goal: DOMPurify.sanitize(parseFloat(monthly_expense_goal)),
+      actual_income: actual_income,
+      actual_expenses: actual_expenses,
+    });
 
     const response = await axios.post(`${backEndUrl}/users/${userId}/budget`, {
       monthly_income_goal: DOMPurify.sanitize(parseFloat(monthly_income_goal)),
@@ -611,11 +616,11 @@ const createBudget = async (budgetData) => {
       actual_expenses: parseFloat(actual_expenses),
     });
 
-    // console.log("API Response:", response.data);
-    // console.log("type: month goal", response.data.monthly_income_goal);
-    // console.log("type: month expense", response.data.monthly_expense_goal);
-    // console.log("type: actual income", response.data.actual_income);
-    // console.log("type: actual expense", response.data.actual_expenses);
+    console.log("API Response:", response.data);
+    console.log("type: month goal", response.data.monthly_income_goal);
+    console.log("type: month expense", response.data.monthly_expense_goal);
+    console.log("type: actual income", response.data.actual_income);
+    console.log("type: actual expense", response.data.actual_expenses);
 
     setBudgetUserData((prevData) => ({
       ...(prevData || {}),
@@ -736,8 +741,11 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
 
   //Check if income or expense goal achieved
   const checkIfIncomeOrExpenseAchieved = (incomeGoal, expenseGoal) => {
-    const totalIncome = currentMonthIncome;
-    const totalExpense = currentMonthExpenses;
+    const totalIncome = Number(currentMonthIncome.toFixed(2));
+    console.log('check1:', totalIncome);
+    const totalExpense = Number(currentMonthExpenses.toFixed(2));
+    console.log('check2:', totalExpense );
+
     
     if (totalIncome >= incomeGoal.monthly_income_goal && totalExpense <= expenseGoal.monthly_expense_goal) {
       return "Income & Expense";
@@ -748,6 +756,10 @@ const updateBudget = async (budgetId, updatedBudgetData) => {
     if (totalExpense <= expenseGoal.monthly_expense_goal) {
       return "Expense";
     }
+
+    // if(totalIncome < incomeGoal.monthly_income_goal && totalExpense > expenseGoal.monthly_expense_goal) {
+    //   return null;
+    // }
     return null;
   };
 
@@ -984,9 +996,6 @@ useEffect(() => {
   const recurringIncome = () => {
     // console.log("userData before filtering:", userData);
     const incomeThatIsRecurring = userData.filter((income) => income.is_recurring);
-    // console.log('test11:', incomeThatIsRecurring);
-
-    // console.log('id:', expenseUser.expenses.map((test) => test.id))
 
 
     
@@ -1027,18 +1036,47 @@ useEffect(() => {
     };
 
     const updatedRecurringIncome = incomeThatIsRecurring.flatMap(generateMonthlyIncome);
+    
   
+    const monthMap = new Map([
+      ["Jan", 0],
+      ["Feb", 1],
+      ["Mar", 2],
+      ["Apr", 3],
+      ["May", 4],
+      ["Jun", 5],
+      ["Jul", 6],
+      ["Aug", 7],
+      ["Sep", 8],
+      ["Oct", 9],
+      ["Nov", 10],
+      ["Dec", 11]
+  ]);
+
+  const now = new Date();
+  const currentMonth = String(now).slice(4,8).trim();
+
+  let currentMonthNumber = 0;
+
+  for(let [keys, values] of monthMap) {
+    if(currentMonth === keys.trim()) {
+      currentMonthNumber = values;
+    }
+  }
+  
+    setCurrentMonthIncomeNumberState(currentMonthNumber);
 
 
-    // Filter for February Test
-    const februaryEntries = updatedRecurringIncome.filter((entry) => {
+    // Filter for current month
+    const currentMonthEntries = updatedRecurringIncome.filter((entry) => {
       const month = new Date(entry.date_received).getMonth(); 
-      return month === 1; 
+      return month === currentMonthNumber; 
     });
 
-  
-    // console.log("Entries for February:", februaryEntries);
-    // console.log("Updated Recurring Income:", updatedRecurringIncome);
+    console.log('currentMonthEntries:', currentMonthEntries);
+
+    const totalCurrentMonthRecurringEntries = currentMonthEntries.map((income) => income.amount).reduce((a,b) => a + b, 0);
+    setThisMonthIncomeEntries(totalCurrentMonthRecurringEntries);
 
       // Filter for March Test
       const marchEntries = updatedRecurringIncome.filter((entry) => {
@@ -1106,21 +1144,59 @@ useEffect(() => {
           });
         }
       }
-      // console.log('recurringExpenseEntries1:', recurringExpenseEntries);
+      console.log('recurringExpenseEntries1:', recurringExpenseEntries);
       return recurringExpenseEntries;
     };
 
     const updatedRecurringExpense = expenseThatIsRecurring.flatMap(generateMonthlyExpense);
+    console.log('updatedRecurringExpense:', updatedRecurringExpense);
 
-    // Filter for February Test
-    const februaryEntries = updatedRecurringExpense.filter((entry) => {
+    const monthMap = new Map([
+      ["Jan", 0],
+      ["Feb", 1],
+      ["Mar", 2],
+      ["Apr", 3],
+      ["May", 4],
+      ["Jun", 5],
+      ["Jul", 6],
+      ["Aug", 7],
+      ["Sep", 8],
+      ["Oct", 9],
+      ["Nov", 10],
+      ["Dec", 11]
+  ]);
+
+  const now = new Date();
+  const currentMonth = String(now).slice(4,8).trim();
+  console.log('currentMonthExpense:', currentMonth);
+
+  let currentMonthNumber = 0;
+  console.log('currentMonthNumber1:', currentMonthNumber);
+
+  for(let [keys, values] of monthMap) {
+    if(currentMonth === keys.trim()) {
+      currentMonthNumber = values;
+    }
+  }
+
+  console.log('currentMonthNumber2:', currentMonthNumber);
+  
+    setCurrentMonthExpenseNumberState(currentMonthNumber);
+    console.log('CurrentMonthExpenseNumberState:', currentMonthExpenseNumberState);
+
+    // Filter for current month
+    const currentMonthEntries = updatedRecurringExpense.filter((entry) => {
       const month = new Date(entry.date_incurred).getMonth(); 
-      return month === 1; 
+      return month === currentMonthNumber; 
     });
 
-  
-    // console.log("Entries for February expense:", februaryEntries);
-    // console.log("Updated Recurring Expense:", updatedRecurringExpense);
+    console.log('currentMonthEntriesExpenses:', currentMonthEntries);
+
+    const totalCurrentMonthRecurringEntries = currentMonthEntries.map((expense) => expense.amount).reduce((a,b) => a + b, 0);
+    setThisMonthExpensesEntries(totalCurrentMonthRecurringEntries);
+    console.log('thisMonthExpensesEntries:', thisMonthExpensesEntries);
+
+
 
       // Filter for March Test
       const marchEntries = updatedRecurringExpense.filter((entry) => {
@@ -1237,17 +1313,20 @@ useEffect(() => {
         )}
     </div>
 
+    {/* Monthly Activity */}
     <div>
       <MonthlyActivityComponent
         currentMonth={currentMonth}
         currentMonthIncome={currentMonthIncome}
         currentMonthExpenses={currentMonthExpenses}
         showAllIncome={showAllIncome}
+        thisMonthIncomeEntries={thisMonthIncomeEntries}
         userData={userData}
         filteredIncome={filteredIncome}
         filteredExpense={filteredExpense}
         getPreviousMonth={getPreviousMonth}
         previousMonthExpenses={previousMonthExpenses}
+        thisMonthExpensesEntries={thisMonthExpensesEntries}
         previousMonthIncome={previousMonthIncome}
         darkMode={darkMode}
        />

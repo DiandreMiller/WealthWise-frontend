@@ -1,6 +1,7 @@
 import wealthWise from '../assets/wealthWise.png';
+import PropTypes from 'prop-types';
 
-const AboutComponent = () => {
+const AboutComponent = ({ darkMode }) => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen text-white px-6 py-12"
@@ -64,5 +65,9 @@ const AboutComponent = () => {
     </div>
   );
 };
+
+AboutComponent.propTypes = {
+  darkMode: PropTypes.func.isRequired
+}
 
 export default AboutComponent;

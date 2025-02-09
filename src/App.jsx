@@ -12,7 +12,7 @@ import { AuthProvider, useAuth } from './authentication/AuthContext';
 import ProtectedRoute from './authentication/ProtectedRoute';
 import validationSchema from './Validations/validationSchema';
 import { base64ToArrayBuffer } from './utils/arrayBufferUtils';
-// import { signUpUser, loginUser } from './utils/authUtils';
+// import { UserProvider } from './Context/UserContext';
 
 // Commons
 import Navbar from './Commons/Navbar';
@@ -42,6 +42,9 @@ const AppContent = () => {
   const [userId, setUserId] = useState(null);
   const { login, logout, reset } = useAuth();
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
+
+  // const encodedUrl = btoa(userId);
+
 
   
   const [darkMode, setDarkMode] = useState(() => {
@@ -266,8 +269,12 @@ const loginUser = async (userData) => {
 
   return (
     <>
-      <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} 
-      darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+    
+      {/* <UserProvider> */}
+          <Navbar onLogOut={handleLogout} isLogin={isLogin} toggleState={handleToggle} userId={userId} 
+          darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      {/* </UserProvider> */}
+
       <Routes>
         <Route element={<Home darkMode={darkMode} />} path='/' />
         <Route element={<About darkMode={darkMode} />} path='/about' />
@@ -286,6 +293,7 @@ const loginUser = async (userData) => {
         <Route element={<PlaceHolderSubmittedContactUs />} path='/thank-you-for-contacting-us' />
         <Route element={<TestComponent />} path='/test/:userId'/>
         <Route element={<ProtectedRoute><Dashboard darkMode={darkMode} /></ProtectedRoute>} path='/dashboard/:userId' />
+        {/* <Route element={<ProtectedRoute><Dashboard darkMode={darkMode} /></ProtectedRoute>} path={`/dashboard/${encodedUrl}`} /> */}
         <Route element={<FourOFour />} path='*' />
       </Routes>
       <Footer />

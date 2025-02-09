@@ -8,6 +8,7 @@ const Navbar = ({ onLogOut, toggleState, userId, darkMode, toggleDarkMode }) => 
 
   // const { userName } = useContext(UserContext);
 
+
   const navigate = useNavigate();
 
   console.log('userId:', userId);

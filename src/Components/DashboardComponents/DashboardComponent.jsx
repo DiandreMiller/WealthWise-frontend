@@ -1225,7 +1225,7 @@ useEffect(() => {
 
   }
   recurringExpenses();
-},[expenseUser.expenses, processedRecurringExpense])
+},[expenseUser.expenses, processedRecurringExpense, currentMonthExpenseNumberState, thisMonthExpensesEntries])
 
 
 //If data is loading

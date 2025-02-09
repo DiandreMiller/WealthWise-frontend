@@ -56,7 +56,7 @@ Welcome to my **Budgeting and Investment Recommendation App**! This project aims
 ## Deployment
 The app is deployed with **frontend** and **backend** hosted separately. Links to live environments and deployment details will be provided here:
 
-- **Frontend**: [Frontend Deployment Link](https://icapital-frontend.netlify.app/)
+- **Frontend**: [Frontend Deployment Link](https://wealthwisefinancialplanner.netlify.app/)
 - **Backend**: [Backend Deployment Link](https://icapital-financial-planner-backend.onrender.com/)
 - **Trello**: [Trello Link](https://trello.com/b/0KZf9ePw/icapital)
 
@@ -89,4 +89,4 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 
 5. Happy Hacking!!!!
 
-To-Do fix recurring income starting friday
+To-Do fix recurring income and expenses for table

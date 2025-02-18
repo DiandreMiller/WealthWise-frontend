@@ -44,7 +44,6 @@ const AppContent = () => {
   const { login, logout, reset } = useAuth();
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
-  console.log('backEndUrl:', backEndUrl);
   // const encodedUrl = btoa(userId);
 
 

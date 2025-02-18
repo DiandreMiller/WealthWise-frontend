@@ -31,6 +31,7 @@ import TestComponent from './Components/TestComponent';
 import PlaceHolderSubmittedContactUs from './Pages/PlaceHolderSubmittedContactUs';
 import ForgotPassword1 from './Pages/ForgotPassword1';
 import ResetPassword from './Pages/ResetPassword';
+import FinancialComponent from './Components/FinancialComponent';
 
 
 const AppContent = () => {
@@ -43,6 +44,7 @@ const AppContent = () => {
   const { login, logout, reset } = useAuth();
   const backEndUrl = import.meta.env.VITE_REACT_APP_BACKEND_API;
 
+  console.log('backEndUrl:', backEndUrl);
   // const encodedUrl = btoa(userId);
 
 
@@ -282,6 +284,7 @@ const loginUser = async (userData) => {
         <Route element={<ResetPassword darkMode={darkMode} />} path='/reset-password' />
         <Route element={<Contact darkMode={darkMode} />} path='/contact' />
         <Route element={<LearnMore darkMode={darkMode} />} path='/learn-more' />
+        <Route element={<FinancialComponent />} path='/finances' />
         <Route
           element={<LoginAndSignUp userError={userError} formik={formik} toggleState={handleToggle} isLogin={isLogin} />}
           path='/login-signup'

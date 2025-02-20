@@ -994,8 +994,8 @@ useEffect(() => {
 //Check if income is recurring
 useEffect(() => {
   const recurringIncome = () => {
-    // console.log("userData before filtering:", userData);
     const incomeThatIsRecurring = userData.filter((income) => income.is_recurring);
+    console.log('incomeThatIsRecurring:', incomeThatIsRecurring);
 
 
     
@@ -1013,6 +1013,7 @@ useEffect(() => {
     
       const startYear = startDate.getFullYear();
       const startMonth = startDate.getMonth();
+      console.log('startMonth:', startMonth);
     
       const recurringIncomeEntries = [];
       // console.log('entries before data:', recurringIncomeEntries);
@@ -1065,7 +1066,9 @@ useEffect(() => {
   }
   
     setCurrentMonthIncomeNumberState(currentMonthNumber);
+    console.log('CurrentMonthIncomeNumberState:', currentMonthIncomeNumberState)
 
+    console.log('updatedRecurringIncome:', updatedRecurringIncome);
 
     // Filter for current month
     const currentMonthEntries = updatedRecurringIncome.filter((entry) => {
@@ -1102,7 +1105,68 @@ useEffect(() => {
   };
 
   recurringIncome();
-}, [userData, processedRecurringIncome, filteredIncome]); 
+}, [userData, processedRecurringIncome, filteredIncome, currentMonthIncomeNumberState]); 
+
+//Function to update income chart with recurring income
+const addIncomeRecurring = async () => {
+  const amount = parseFloat(incomeAmount);
+  
+ 
+
+  if (isNaN(amount) || amount <= 0 || incomeDescription.trim() === "" || !incomeCategory) {
+      alert("Please provide valid income description, amount and category.");
+      return;
+  }
+
+
+  const dateReceived = new Date().toLocaleDateString("en-CA"); // Format: YYYY-MM-DD
+
+
+  try {
+      const response = await axios.post(`${backEndUrl}/users/${userId}/income`, {
+          user_id: userId,
+          amount: DOMPurify.sanitize(amount.toFixed(2)), 
+          source: DOMPurify.sanitize(incomeDescription),
+          date_received: dateReceived,
+          created_at: new Date().toISOString(), 
+          category: DOMPurify.sanitize(incomeCategory),
+          is_recurring: isRecurringIncome
+      });
+
+      // console.log("Response add income:", response);
+
+      // Update user data 
+      setUserData((prevData) => {
+          // console.log("prevData:", prevData);
+          const newIncome = {
+              id: response.data.id, 
+              user_id: userId,
+              amount: parseFloat(amount.toFixed(2)),
+              source: incomeDescription,
+              date_received: dateReceived,
+              created_at: new Date().toISOString(),
+              category: incomeCategory,
+              is_recurring: isRecurringIncome,
+              User: prevData?.User || null, 
+          };
+
+          return [...prevData, newIncome]; 
+      });
+
+      // Reset form fields
+      setIncomeDescription("");
+      setIncomeAmount("");
+      setIncomeCategory("");
+      setIsAddingIncome(false);
+      setIsRecurringIncome(false);
+      alert('Income Has Been Successfully Added');
+  } catch (error) {
+      console.error("Error adding income:", error);
+      alert("There was an error adding your income. Please try again.");
+  } 
+  
+};
+
 
 //Check if expense is recurring
 useEffect(() => {
@@ -1264,6 +1328,7 @@ useEffect(() => {
          incomeAmount={incomeAmount}
          setIncomeAmount={setIncomeAmount}
          addIncome={addIncome}
+         addIncomeRecurring={addIncomeRecurring}
          incomeCategory={incomeCategory} 
          setIncomeCategory={setIncomeCategory}
          isRecurringIncome={isRecurringIncome}

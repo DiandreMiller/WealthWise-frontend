@@ -89,4 +89,4 @@ The app is deployed with **frontend** and **backend** hosted separately. Links t
 
 5. Happy Hacking!!!!
 
-To-Do fix recurring income and expenses for table
+To-Do fix recurring income and expenses for table.
